@@ -1,4 +1,4 @@
-@echo off
+﻿@echo off
 chcp 65001 >nul
 setlocal EnableExtensions
 title Instalar /designer-mestre v15 (Claude Code + Antigravity)
@@ -22,7 +22,6 @@ for %%D in ("%DEST_CLAUDE%" "%DEST_AGY%") do (
   mkdir "%%~D"
   copy /y "%ORIGEM%SKILL.md" "%%~D\SKILL.md" >nul
   if exist "%ORIGEM%README.md" copy /y "%ORIGEM%README.md" "%%~D\README.md" >nul
-  if exist "%ORIGEM%CREDITOS_HTML.md" copy /y "%ORIGEM%CREDITOS_HTML.md" "%%~D\CREDITOS_HTML.md" >nul
   for %%M in (modulos assets engines references figma_engine pen_engine) do (
     if exist "%ORIGEM%%%M" robocopy "%ORIGEM%%%M" "%%~D\%%M" /MIR /NFL /NDL /NJH /NJS /NP >nul
   )

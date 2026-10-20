@@ -11,7 +11,7 @@ Ativar com `/designer-mestre ref` (aliases: `referencia`, `moodboard`) ou quando
 ## 2. Onde salvar
 | O quê | Onde |
 |---|---|
-| Imagens de referência (cópias 1024 px) | `[Cliente]\Compartilhada\Referencias\KV_Inspiracao\[AAAA-MM]\` |
+| Imagens de referência (cópias 1024 px) | `[Cliente]\Compartilhada\Referências\KV_Inspiracao\[AAAA-MM]\` |
 | Prancha de conferência | mesma pasta, `_prancha_refs.jpg` |
 | Fichas + conversão para o KV + banco de ideias | `[Cliente]\_DESIGN\referencias.md` |
 | Referência universal (sem cliente) | não existe: toda ficha mora num cliente |
