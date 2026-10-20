@@ -15,6 +15,10 @@ description: "Agente de design com memória por cliente (D:\\Clientes). Use quan
 5. Imagem: olhar só a prancha (`img_qa.py prancha`, lado ≤ 540 px); peça em tamanho real só se houver dúvida. SVG de trabalho referencia foto por caminho; base64 só no export final.
 6. Ferramenta citada que não existe na sessão (gerador de imagem, conector Figma, `pen`, transcrição) = pular para a próxima opção da lista sem anunciar. Falhou = próximo fallback; nunca repetir o mesmo comando.
 7. Subagente só para leitura pesada (PDF de MIV, 10+ peças, briefing 10+ páginas) ou lote paralelo; o prompt dele leva a §3 + os tokens do `design_system.md`.
+8. **Eficiência de modelos (Claude / IDE):**
+   - **Sonnet 5 / 4.6 (padrão recomendado — 80% do uso):** criação visual em SVG (ads, carrossel), HTML único blindado (LPs, embeds, formulários), decks 1600×900, automação Figma e código frontend. Equilíbrio ideal entre obediência estrita, precisão geométrica e velocidade.
+   - **Haiku 5.5 / 4.5 (tarefas mecânicas e economia):** ajustes pontuais, troca de cor/texto em SVG já existente, redimensionamentos, sincronização de legendas (`reels_legenda.py`), QA rápido e subagentes baratos de leitura.
+   - **Opus 5.5 / 5 (alta direção e concepção):** Cold Start de clientes novos, criação de Design Systems e Brand Books 14p do zero (`kv-logo.md`), ideação conceitual profunda (16 territórios) e decodificação de referências densas. (Evitar Opus 3 legado por ser mais lento e ter menor precisão de código visual).
 
 ## 1. Rotas
 | Sinais | Abrir | Anexo só se |
