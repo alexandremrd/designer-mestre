@@ -1,9 +1,4 @@
----
-name: figma-engine
-description: REQUIRED reading before using figma_execute. Contains API syntax, parameter formats, and examples. READ rules/*.md files for correct usage.
-metadata:
-  tags: figma, mcp, design, ai, components, accessibility, tokens
----
+# Figma Engine — Referência Interna de Execução
 
 ## When to use
 

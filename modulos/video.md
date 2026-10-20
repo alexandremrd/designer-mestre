@@ -22,7 +22,7 @@ Legenda queimada no KV + overlay da marca + exportação 1080×1920. Todo o rest
 ### 2. Overlay
 1. Frame 9:16 no Figma do cliente (link do pedido ou `_DESIGN\templates\overlay_9x16.png`): exportar PNG 1080×1920 **com transparência** (`get_screenshot` não preserva alpha; preferir export do Figma ou montar via SVG).
 2. Sem frame: montar SVG 1080×1920 com moldura/gradiente/logo do `design_system.md`, renderizar PNG RGBA autonomamente no navegador headless da IDE e salvar em `Trabalho\`.
-3. A faixa de legenda fica em área de leitura: gradiente escuro sob ela, nunca sobre o rosto. Base da legenda em y ≤ 1470.
+3. A faixa de legenda fica em área de leitura: gradiente escuro sob ela, nunca sobre o rosto. O parâmetro `--y` marca a **base (linha inferior)** da legenda: manter `base ≤ 1470` no frame 1080×1920 (ex.: `--y 1380` ou `--y 1400` deixa margem de segurança acima da UI inferior do Reels).
 
 ### 3. Transcrição e sincronização (autônoma em cadeia, sem travar)
 A máquina escolhe o método disponível na sessão sem depender de serviços externos:
@@ -33,13 +33,14 @@ Nunca legendar a partir do roteiro sem conferir com a fala real.
 
 ### 4. Comando
 ```
-python "<PASTA_DO_AGENTE>\assets\reels_legenda.py" ^
+python "<AG>\assets\reels_legenda.py" ^
   --video "Original\x.mp4" --overlay "Trabalho\overlay.png" [--intro "Trabalho\intro.png" --intro-s 2] ^
   --fonte "<família exata do KV>" --fontsdir "<pasta com .ttf/.otf>" --tamanho 60 ^
   --cor <texto> --destaque <acento> --contorno <fundo escuro> --y 1380 ^
   --cortar-pausas 0.6 [--musica "Música\m.mp3" --musica-db -20] [--idioma pt] ^
   --out "Exportados\<nome do briefing>.mp4"
 ```
+- `--y 1380`: define a **base** da legenda (em px a partir do topo; no ASS `Alignment=2`, `MarginV = 1920 - y`). Seguro para Reels (`base ≤ 1470`; padrão do script: 1400).
 - 1ª rodada gera `<out>.srt`. Se o usuário corrigir uma palavra, rodar de novo com `--srt <out>.srt` (sem transcrever de novo).
 - `--palavras 3–4` e `--max-car 22–26` para Reels; `--caixa-alta` só se o KV pedir.
 - Saída: H.264 16 Mbps, AAC 192 k, voz normalizada a -16 LUFS.
@@ -60,7 +61,7 @@ python "<PASTA_DO_AGENTE>\assets\reels_legenda.py" ^
   - `• SOLUÇÃO (9–18 s)`: produto/serviço como resposta direta;
   - `• PROVA (19–24 s)`: resultado concreto, número confirmado ou demonstração visual;
   - `• CTA (25–30 s)`: ação única, clara e imperativa (máx. 2 frases faladas por bullet; variação A/B de teste troca **apenas** os primeiros 3 segundos do gancho).
-- **Voz Primeiro & Mixagem de Áudio Padrão:** gerar e aprovar a locução antes de cortar o visual (o áudio dita o tempo exato dos cortes e o respiro das legendas). Parâmetros vocais recomendados para PT-BR natural: estabilidade `0.45–0.55` (`0.40` em UGC para soar espontâneo), similaridade `0.75`, estilo/expressividade `0.20–0.35`, velocidade `1.05–1.10`. Mixagem final: **Voz em `-6 dB` (ou `-16 LUFS`) · Trilha em `-18 dB` a `-20 dB` · SFX em `-12 dB`**. Disparo de todos os renders de cena sempre em paralelo.
+- **Voz Primeiro & Mixagem de Áudio Padrão:** gerar e aprovar a locução antes de cortar o visual (o áudio dita o tempo exato dos cortes e o respiro das legendas). Parâmetros vocais recomendados para PT-BR natural: estabilidade `0.45–0.55` (`0.40` em UGC para soar espontâneo), similaridade `0.75`, estilo/expressividade `0.20–0.35`, velocidade `1.05–1.10`. Mixagem final: **Voz em `-16 LUFS` integrado · Trilha 12–14 dB abaixo da voz · SFX ~6 dB abaixo da voz**. Disparo de todos os renders de cena sempre em paralelo.
 - **Dramaturgia e Fórmula de Cena (obrigatória antes do prompt):**
   - **Fórmula da Cena (1 frase):** `Desejo + Obstáculo + Geometria Espacial (Foreground / Midground / Background) + Direção do Olhar + Ritmo`.
   - **Lei dos 3 Detalhes Físicos por Take:** todo plano deve declarar (1) pressão ambiental (vento, vapor, reflexo de chuva, luz rasante), (2) micro-ação física do corpo/produto, e (3) âncora sonora ou motivo visual.

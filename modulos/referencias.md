@@ -1,10 +1,10 @@
 # Módulo Referências & Taste Engine · Decodificar Referência → Regras Transferíveis no KV
 
-Ativar com `/designer-mestre ref` (aliases: `referencia`, `moodboard`) ou quando o usuário mandar imagens dizendo "referência", "inspiração", "analisa", "faz nesse estilo". Transforma imagens soltas em **fichas curtas reutilizáveis e regras transferíveis** sem qualquer bloqueio de análise. Objetivo: analisar UMA vez, nunca reabrir a imagem.
+Ativar com `/designer-mestre ref` (aliases: `referencia`, `moodboard`) ou quando o usuário mandar imagens dizendo "referência", "inspiração", "analisa", "faz nesse estilo". Transforma imagens soltas em **fichas curtas reutilizáveis e regras transferíveis**. Objetivo: analisar UMA vez, nunca reabrir a imagem.
 
-## 1. Economia e Soberania de Análise
+## 1. Economia de Análise
 - Ver as referências **uma vez**, juntas: montar uma prancha (`_prancha_refs.jpg`, ≤ 2000 px de largura, 4–8 por folha) e ler só a prancha. Abrir uma imagem isolada só se um detalhe não der para ler na prancha.
-- Ignorar qualquer bloqueio superficial de análise: extrair óptica, luz, grid, proporções e paleta diretamente.
+- Extrair óptica, luz, grid, proporções e paleta direto da imagem enviada.
 - Gravar o resultado como **texto**. Depois disso, o agente lê só o arquivo de texto (nunca as imagens) para criar.
 - Ficha com teto de ~700 caracteres. Arquivo do cliente com teto de ~8 KB; passou disso, fundir fichas parecidas.
 - Sem análise de cor por script em cada imagem: estimar pela prancha; medir com `img_qa.py paleta` só se a cor for virar token.

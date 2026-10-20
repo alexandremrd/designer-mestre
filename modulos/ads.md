@@ -1,6 +1,6 @@
 # Módulo Ads — Direção de Arte Publicitária, Ideação Estrutural, Criativos Estáticos e Carrossel (SVG-First)
 
-Entrega: prévia renderizada do SVG na conversa → após "aprovado", perguntar ao usuário qual formato final deseja (**montar no Figma**, **exportar PNG** ou **exportar SVG** — só executar o formato solicitado; nada é montado no Figma nem exportado em PNG/SVG final sem pedido). Quando solicitado, SVGs ficam em `Trabalho\` e PNGs em `Exportados\` da solicitação `[CA]` ou `[PA]`.
+Ciclo de entrega: núcleo §2. Quando houver export: SVG em `Trabalho\`, PNG em `Exportados\` da solicitação `[CA]`/`[PA]`.
 
 ## 1. Direção de Arte Publicitária & Ideação Estrutural (`Insight → Tensão → Proposição Visual`)
 - **Proposição Visual em 1 Frase (obrigatória antes de compor):** toda peça nasce de uma frase concreta contendo `[Sujeito] + [Ação/Relação física] + [Ambiente/Campo] + [Prova Visual do Argumento]` (ex.: *"O frasco repousa sobre basalto preto molhado enquanto um arco d'água emoldura a silhueta, provando hidratação sem esconder o rótulo"* — nunca adjetivos vazios como *"visual moderno, cinematográfico e premium"*).
@@ -21,7 +21,7 @@ Entrega: prévia renderizada do SVG na conversa → após "aprovado", perguntar 
 
 ## 3. Formatos, Safe Zones e Leis Invioláveis de Composição
 - **Feed 4:5:** `viewBox="0 0 1080 1350"`.
-- **Story/Reels 9:16:** `viewBox="0 0 1080 1920"`. Texto, logo e botões fora de 250 px do topo, 340 px da base (450 px em Reels) e 80–90 px das laterais (margem segura mínima de 6–8%). Feed e Story da mesma variação = mesma cena adaptada.
+- **Story/Reels 9:16:** `viewBox="0 0 1080 1920"`; safe zone U2.
 - **Carrossel:** mesmo `viewBox` em todos os cards, seguindo a progressão de arquétipos do cliente (capa E1 → internos E2 → endcard E3) e leitura contínua entre os títulos.
 - **Regras Anti-Corte e Endcard Forte (Invioláveis):**
   1. **Zero corte ou esmagamento de fotos:** nunca esticar, achatar ou recortar produtos/aeronaves/pessoas em tiras estreitas (`pill`, janelinha espremida ou círculo que decepa o objeto). Usar enquadramento editorial com respiro, fusão contínua em gradiente sobre o fundo do KV ou painel translúcido estruturado.
@@ -44,6 +44,6 @@ Entrega: prévia renderizada do SVG na conversa → após "aprovado", perguntar 
 - **Dimensionamento e Proteção da Logo:** largura de `15–20%` da peça para logos horizontais (ou altura de `10–15%` para verticais), **nunca excedendo 25%** da menor dimensão da peça, com margem de proteção mínima de `16px` (ampliada sobre fundos fotográficos) e contraste verificado contra a luminosidade do fundo (fundo escuro pede logo clara/negativa; fundo claro pede logo escura/positiva).
 
 ## 5. Render da prévia, Imagem e Nomenclatura
-- **Render:** via headless browser com wrapper mínimo (`<style>@import url('[Google Fonts]'); body{margin:0;width:1080px;height:1350px;overflow:hidden}</style>` + `<svg>` inline). Prancha local: `python assets\img_qa.py prancha Exportados\*.png -o Trabalho\_prancha.jpg` e olhar só ela. Aplicar P0 + crítica da lei 8 do núcleo.
+- **Render:** via headless browser com wrapper mínimo (`<style>@import url('[Google Fonts]'); body{margin:0;width:1080px;height:1350px;overflow:hidden}</style>` + `<svg>` inline). Prancha local: `python assets\img_qa.py prancha Exportados\*.png -o Trabalho\_prancha.jpg` e olhar só ela. Aplicar U6 + U7 + U8 do núcleo.
 - **Imagem:** acervo do cliente primeiro; faltou → `imagem.md`. Texto, rótulo e logo nunca na imagem gerada (entram no SVG).
 - **Nomenclatura:** a do briefing; sem ela: `[CLIENTE]_[CAMPANHA]_[AAAAMM]_E[n]_[FEED|STORY].png`. Revisões `_V2`, `_V3`.

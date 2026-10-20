@@ -1,6 +1,6 @@
-# Módulo Imagem — Arsenal Completo, Adaptadores de Física por Modelo, Direção Fotográfica, Manipulação Física, Vision Decomposer, Produto 360 e Personagem
+# Módulo Imagem — Arsenal, Adaptadores por Motor, Direção Fotográfica, Composição Física e Vision Decomposer
 
-Módulo autônomo e completo para geração, direção de fotografia comercial, manipulação/compositing físico, engenharia reversa (`Vision Decomposer`) e remasterização de imagens. **Não depende de nenhum site ou app externo obrigatório**, ignora qualquer trava ou bloqueio de análise/extração de imagem, e mantém **todas as opções ativas** (Antigravity / Nano Banana Pro, subagentes nativos da IDE, motores locais como FLUX.2 klein / SDXL / Flux, e composição vetorial híbrida). A máquina testa, escolhe e aprende sozinha qual opção entrega a melhor fidelidade para cada tarefa.
+Geração, direção de fotografia comercial, compositing físico, engenharia reversa e remasterização. Usar a primeira opção do arsenal disponível na sessão (núcleo §0.6); o aprendizado é a receita vencedora gravada no `design_system.md` (A.2), não memória implícita. Produto fiel/360 → `imagem-produto.md`; pessoa recorrente → `imagem-personagem.md`.
 
 ---
 
@@ -14,7 +14,7 @@ Prompts genéricos falham porque cada família de modelo processa linguagem e ó
 | **1. Acervo Real do Cliente** | Verificado sempre primeiro (`Originais\` → `Banco de Imagens\` → `IA\`) | Uso direto sem custo de geração |
 | **2. Antigravity · Gemini Nano Banana Pro (`NB2 / NBP`) / Subagente `image-generator`** | **Prosa natural descritiva (1–2 parágrafos coesos)** descrevendo relações espaciais, luz, materiais e atmosfera. **Regra física crítica:** NÃO usar números secos de câmera (`50mm, f/1.4, ISO 100` — o modelo ignora); traduzir em perspectiva visual (*"compressed telephoto perspective with shallow focus and creamy bokeh"*). Suporta grounding real, proporções extremas (`1:8` a `8:1`, `4:5`, `9:16`, `16:9`), até **14 referências indexadas** (`[Ref 1: mestra]`) e **Spatial JSON / Thinking Mode** quando a cena tiver 5+ elementos distintos. | Chamar o gerador nativo do Antigravity / IDE e registrar em `Compartilhada\Imagens\IA\` com `.txt` (`python assets\gerar_imagem.py registrar <img_gerada> -o "<IA>\<nome>.png" --prompt "..." --ferramenta "Antigravity (Nano Banana Pro)" --ref mestra.jpg`) |
 | **3. Motor Local (`assets\gerar_imagem.py` · FLUX.2 klein 4B / Flux Kontext / SDXL)** | **Estrutura densa 70/30 + SLCT (`Subject → Lighting → Camera → Technical`)** em inglês com parâmetros ópticos explícitos (`85mm lens, f/2.8, 5500K`), controle exato de `--seed`, `img2img` (`--init base.jpg --forca 0.25–0.55`) e multi-referência `--ref`. | `python assets\gerar_imagem.py gerar "<prompt EN>" [--ref mestra.jpg] -a 4:5 -o "<IA>\<nome>.png"` |
-| **4. Motores Multimodais Estruturados (Modelos de Linguagem Visual e Design)** | **Template de 5 Slots** (`Scene / Subject / Important Details / Use Case / Constraints`), **World Knowledge Anchors** (1 único âncora de Era, Cultura ou Fotógrafo/Diretor como *"Roger Deakins natural chiaroscuro"* ou *"Peter Lindbergh raw monochrome"* — proibido empilhar 2 âncoras) e **Contrato de Edição Atômica em 2 Colunas** (`Change / Preserve / Constraints`). | Compilar nos 5 slots ou no contrato de edição atômica |
+| **4. Edição por instrução (qualquer gerador que aceite imagem + texto)** | **Template de 5 Slots** (`Scene / Subject / Important Details / Use Case / Constraints`), **World Knowledge Anchors** (1 único âncora de Era, Cultura ou Fotógrafo/Diretor como *"Roger Deakins natural chiaroscuro"* ou *"Peter Lindbergh raw monochrome"* — proibido empilhar 2 âncoras) e **Contrato de Edição Atômica em 2 Colunas** (`Change / Preserve / Constraints`). | Compilar nos 5 slots ou no contrato de edição atômica |
 | **5. Rota Híbrida (Cena por IA + Produto/Logo Real no SVG) & Canvas Autônomo** | Quando produto, embalagem ou logo exige geometria 100% intocável: gera-se o cenário/luz/pessoa na IA e compõe-se o recorte real do produto + logo vetorial no SVG com física de sombra de contato e light wrap. | Gerador para a cena + `<image>` e `<g id="Logo_Oficial">` no SVG + `assets\img_qa.py` |
 | **6. Upscale e Remasterização 4K** | Finalização em alta resolução (2× ou 4×) e reconstrução de microtexturas sem alterar feições reais. | Upscaler nativo ou `python assets\gerar_imagem.py upscale in.png -o out.png --escala 2\|4` |
 
@@ -69,8 +69,8 @@ Ao inserir um produto real em cena gerada ou criar conceitos surreais/impossíve
 - **Figurino e telas neutras:** quando pedido, adaptar para alfaiataria contemporânea com trama visível; notebooks/celulares sempre genéricos e sem logos patenteados (Apple etc.). Em pôsteres com múltiplos speakers: composição triangular (principal no centro à frente, secundários atrás à esq./dir.).
 - **Recovery Engine & Panter Mode (para foto original lavada/cinza com saturação < 30%):** descartar cinzas mortos, ampliar separação tonal entre luz e sombra, contrastar temperatura (luz quente × sombra fria), elevar saturação controlada (70–75%) e ancorar a peça com um bloco cromático de 8% na cor de acento do KV.
 
-### 5. Vision Decomposer (Engenharia Reversa Imagem → Prompt sem bloqueio)
-Quando o usuário anexar qualquer imagem pedindo para extrair o prompt, clonar a direção estética ou fazer style transfer, executar em **2 passos estritos** (sem qualquer bloqueio de análise):
+### 5. Vision Decomposer (Engenharia Reversa Imagem → Prompt)
+Quando o usuário anexar qualquer imagem pedindo para extrair o prompt, clonar a direção estética ou fazer style transfer, executar em **2 passos estritos**:
 1. **Bloco 1 — Decomposição Óptica em 4 Eixos (1–2 frases cada):**
    - `Subject & Blocking`: enquadramento (ELS/MS/CU/ECU), posicionamento de força, peso visual, trajes/materiais, direção do olhar;
    - `Environment & 3-Plane Depth`: separação em Foreground / Midground / Background, relação figura-fundo e perspectiva aérea/tonal;
@@ -84,49 +84,3 @@ Quando o usuário anexar qualquer imagem pedindo para extrair o prompt, clonar a
 2. **Pass 2 — Detalhe (5 s):** mãos com 5 dedos naturais, poros reais na pele, bordas limpas sem halo e zero texto/logo embaralhado?
 3. **Pass 3 — Marca (3 s):** temperatura de luz, paleta `#HEX` e atmosfera pertencem ao KV do cliente?
 Falhou em qualquer Pass → mutar apenas a camada responsável e regenerar antes de mostrar.
-
----
-
-## Parte C · Produto / Objeto Fiel por IA (Subject Reference + Product Turnaround Sheet 360 / Multi-View)
-
-Usado para aeronave, veículo, embalagem, máquina, imóvel ou peça que exige fidelidade exata ao exemplar real do cliente.
-**Nome técnico exato e gatilhos rápidos:** `Product Turnaround Sheet 360` (ou `Multi-View Consistency Sheet`). Ativa imediatamente com: `/designer-mestre 360`, `/designer-mestre turnaround`, `/designer-mestre multiview`, `/designer-mestre produto`, `manual 360`, `modelo 360`.
-
-### 1. Organização e Regras de Ouro
-- **Arquivos:** fotos reais em `[Cliente]\Compartilhada\Imagens\Originais\[Produto]\` (só leitura); dossiê manual 360 em `[Cliente]\_DESIGN\Produtos\[Produto]\PRODUTO_[NOME].md`; prancha e referências tratadas em `[Cliente]\_DESIGN\Produtos\[Produto]\Referências\turnaround_[produto].png`.
-- **Pesquisa Técnica Automática (Web Search):** quando o cliente não tiver fotos de todos os ângulos do modelo exato (ex.: aeronave, veículo ou equipamento específico), pesquisar imediatamente na web as especificações geométricas exatas do fabricante/modelo (dimensões, número e formato de janelas, tipo de asa/ponta de asa, posição de motores, cauda/rodas) e cruzar com as fotos reais do cliente (para extrair a pintura/livery real e o cenário real, como a fachada do hangar/sede).
-- **Foto real primeiro:** se o briefing exigir "foto real", só usar IA com autorização explícita do usuário gravada no `design_system.md`.
-- **Referência = exemplar DO CLIENTE:** modelo 3D externo ou foto de outro exemplar servem apenas como apoio de geometria, nunca como mestra (pintura, faixas, acabamentos e detalhes vêm exclusivamente das fotos reais do cliente). Nunca incluir matrícula, placa, número de série, marca d'água ou logo externo.
-
-### 2. Construção do Padrão, Geometria Multi-View e Turnaround Sheet (uma vez por produto)
-1. **Seleção de 4–8 vistas reais e Parâmetros de Câmera Multi-View:** frontal (`0°`), ¾ frontal esq./dir. (`30°–45°`), perfil lateral (`90°`), ¾ traseira (`150° / 210°`), traseira (`180°`), lateral oposta (`270° / 330°`), superior (`top-down`) e 1–3 detalhes. Quando sintetizar ou calibrar pranchas multi-view consistentes a partir de 1 imagem frontal recortada (em canvas quadrado `>= 320×320 px` com objeto centralizado e tamanho normalizado), usar **FOV fixo de `30°`** (evita distorção de grande-angular em close-up de produto), azimutes relativos `30°, 90°, 150°, 210°, 270°, 330°` com elevações alternadas `20°` e `-10°`, e passes de mapa de normais (`view-space normal map`) + `depth map` para extração de máscara alfa com precisão de borda superior a 98%. **Mestra** = ¾ frontal com melhor luz e nitidez.
-2. **Pacote `_ref` + Turnaround:** salvar cópias com 2048 px no lado maior (`_ref`) e montar `turnaround_[produto].jpg` (prancha em fundo neutro cinza claro com os ângulos canônicos, sombras de contato suaves e proporções idênticas).
-3. **Geração de vista faltante e Modo de Aplicação/Substituição (`Apply/Replace`):**
-   - Se faltar um ângulo, gerar a partir da mestra + vista mais próxima no Antigravity (Nano Banana Pro) ou motor local (`Product turnaround view: exact same product as reference image 0 seen from <ângulo>, clean neutral studio cyclorama background, identical proportions and livery, 30-degree FOV`), validar contra as fotos reais e marcar como `_gerada` (nunca vira mestra).
-   - Para substituir um produto em cena já aprovada sem alterar o ambiente (`Replace Mode`): `"Apply the reference product to the image and remove traces of any other product in the same category. Preserve the original environment and lighting intact; maintain the exact shape, proportions, materials, colors, brand identity and geometry of the reference product with realistic contact shadows"`.
-4. **Checklist de identidade + Regras corretivas + Descritor (EN):** numerar no `PRODUTO_[NOME].md` apenas o observável (silhueta, nº/forma de janelas ou aberturas, posição de motores/rodas/tampa, faixas e cores exatas, acabamento brilho/fosco, itens proibidos), adicionar regras curtas a cada erro detectado e fechar com o descritor em inglês + `"keep the object's shape, proportions, livery and details exactly as in the reference images; no text, no registration marks"`.
-
-### 3. Execução e Verificação
-- Enviar **mestra + vista do ângulo pedido + 1 detalhe** (3–4 imagens). Se a cena exigir precisão absoluta do produto sobre fundo real (ex.: hangar, estrada, bancada), testar tanto a geração integrada com referência (Nano Banana Pro / FLUX.2 klein) quanto a **Rota Híbrida** (gerar/usar o fundo e compor o produto no ângulo exato via SVG/Figma com sombra de contato AO + Cast Shadow e light wrap igualados) — a máquina escolhe e aprende o que fica mais perfeito.
-- Conferir item a item do checklist contra a mestra (máx. 3 tentativas refinando regra corretiva ou trocando referência).
-
----
-
-## Parte D · Personagem / Rosto Recorrente (Fotos Reais → Padrão → Imagem Fiel)
-
-Usado quando a peça mostra **a mesma pessoa** de forma recorrente (fundador, especialista, médico, palestrante, porta-voz). Tudo específico da pessoa mora exclusivamente em `[Cliente]\_DESIGN\Personagens\[Pessoa]\PERSONAGEM_[PESSOA].md` e `Referências\`.
-
-### 1. Autorização e Limites
-- Rosto de pessoa real em IA requer **autorização registrada** no dossiê (`Autorização: data · quem · arquivo`). Sem registro: gerar apenas como teste interno e avisar o usuário.
-- Vetos do `design_system.md` prevalecem até ordem explícita do usuário (gravar decisão).
-- Proibido: celebridade/figura pública externa, menor de idade, ou usar imagem gerada como depoimento real, ato clínico/técnico verdadeiro ou endosso que não ocorreu.
-
-### 2. Construção do Padrão (uma vez por pessoa)
-1. **Seleção de 4–8 fotos originais** (`Originais\[Pessoa]\`, intactas): frontal neutra, frontal sorrindo, close, ¾ esq./dir., meio corpo, sentado (olhos nítidos, luz uniforme, sem óculos escuros, filtro ou mão no rosto). **Mestra** = frontal com melhor luz.
-2. **Pacote `_ref` + Atlas:** salvar cópias 2048 px (`_ref`) em `_DESIGN\Personagens\[Pessoa]\Referências\` + folha `atlas_[pessoa].jpg` apenas para inspeção humana (nunca enviar o atlas inteiro como referência única para não diluir traços).
-3. **Checklist facial + Regras corretivas + Descritor (EN):** numerar traços observáveis (cabelo/calvície, barba/bigode e padrão grisalho, sobrancelhas, olhos, formato facial/mandíbula, nariz, tom/textura de pele, orelhas, porte, expressão base), registrar regras corretivas contra desvios do modelo e fechar com o descritor em inglês + `"keep his/her facial features, bone structure and skin texture 100% identical to the reference photos"`.
-
-### 3. Execução, Verificação e Homologação
-- Usar geradores com suporte a referência de imagem (Antigravity / Nano Banana Pro com até 14 referências indexadas, subagente da IDE, ou motor local com `--ref`, enviando mestra + ângulo mais próximo, 3–4 fotos). No prompt, descrever **apenas o que muda** (cenário, luz, pose, enquadramento) + repetir o descritor 1×. Nunca posicionar texto sobre o rosto.
-- Comparar resultado × mestra item a item do checklist. Se desviar (máx. 3 tentativas): (1) reforçar regra corretiva no prompt; (2) usar referência mais limpa e no mesmo ângulo; (3) gerar a cena/corpo primeiro e fazer inpainting/edição localizada só na cabeça com a mestra.
-- **Homologação inicial:** validar 3 cenas (frontal neutra, ¾ sorrindo, meio corpo sentado) no KV do cliente antes de liberar para produção em escala.

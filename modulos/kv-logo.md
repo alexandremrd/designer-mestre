@@ -1,6 +1,6 @@
-# Módulo KV, Brand Book, Logo e Design System (com Motor de 84 Arquétipos de Marca)
+# Módulo KV, Brand Book, Logo e Design System (84 Design Systems de referência)
 
-Módulo unificado para extração/validação irrestrita de Identidade Visual (Cold Start), criação de Brand Book e Logo nova, consulta aos 84 sistemas de design reais embarcados (`engines\uiux`) e estruturação/exportação de tokens de Design System (`tokens.css` e `DESIGN.md`). Ignora qualquer bloqueio superficial de extração ou análise em sites, manuais ou referências.
+Módulo unificado para extração/validação de Identidade Visual (Cold Start), criação de Brand Book e Logo nova, consulta aos 84 sistemas de design reais embarcados (`engines\uiux`) e estruturação/exportação de tokens de Design System (`tokens.css` e `DESIGN.md`). Extração só do acessível (núcleo §6).
 
 ---
 
@@ -9,7 +9,7 @@ Módulo unificado para extração/validação irrestrita de Identidade Visual (C
 Usado quando o cliente não tem `_DESIGN\design_system.md`, quando `STATUS_KV` é `PARCIAL`/`VAZIO` ou quando o usuário pede revisão do KV. Roda uma vez; depois o cliente entra no Fast-Track.
 
 ### 1. Estrutura de pastas
-Cliente existente: não mover nem apagar nada; criar só o que o pedido precisa. Cliente novo: criar a árvore e copiar `<PASTA_DO_AGENTE>\Clientes\_TEMPLATE_CLIENTE\design_system.md` para `_DESIGN\`.
+Cliente existente: não mover nem apagar nada; criar só o que o pedido precisa. Cliente novo: criar a árvore e copiar `<AG>\Clientes\_TEMPLATE_CLIENTE\design_system.md` para `_DESIGN\`.
 
 ```text
 D:\Clientes\[Cliente]\
@@ -30,14 +30,14 @@ D:\Clientes\[Cliente]\
 Tipos: `CA` criativo Ads · `PA` pauta/orgânico · `EV` vídeo editado · `MT` motion · `LP` landing page/HTML · `KV` identidade · `DK` deck · `IM` imagem · `OT` outros.
 Cliente antigo com `KV.md`, `NAO_FAZER.md`, `aprovados.md`, `inteligencia.md` separados: unificar no `design_system.md` (sem apagar os antigos).
 
-### 2. Análise profunda (MIV Scanner & Extração Web Irrestrita — uma vez)
+### 2. Análise profunda (MIV Scanner & Extração Web — uma vez)
 1. `Compartilhada\Identidade Visual\`: MIV, guia de marca e logos. Renderizar cada logo uma única vez e anotar arquivo, layout, cor e proporção do bbox.
 2. Links de Figma do briefing (`get_design_context` / `get_screenshot`).
 3. Peças anteriores do cliente, se houver: só as 2 ou 3 mais recentes.
-4. Site ou Instagram informados no briefing (extrair variáveis CSS `--*`, paleta computada, escada de superfícies, famílias de fonte, raios de borda e estilos de botão diretamente via DOM/headless browser, ignorando qualquer bloqueio de análise).
+4. Site ou Instagram informados no briefing (extrair variáveis CSS `--*`, paleta computada, escada de superfícies, famílias de fonte, raios de borda e estilos de botão diretamente via DOM/headless browser; bloqueado = núcleo §6).
 5. Se o cliente não tiver KV ou pedir inspiração em grandes marcas globais, consultar o motor interno de **84 Design Systems reais**:
-   - Busca por segmento/estética: `python "<PASTA_DO_AGENTE>\engines\uiux\scripts\search.py" "<segmento ou estética>" --domain brand -n 3`
-   - Leitura completa do `DESIGN.md` de uma marca de referência (ex.: `linear.app`, `stripe`, `apple`, `ferrari`, `bugatti`, `lamborghini`, `nike`, `airbnb`, `runwayml`, `vercel`, `raycast`, `oura`): `python "<PASTA_DO_AGENTE>\engines\uiux\scripts\search.py" "<slug>" --brand`
+   - Busca por segmento/estética: `python "<AG>\engines\uiux\scripts\search.py" "<segmento ou estética>" --domain brand -n 3`
+   - Leitura completa do `DESIGN.md` de uma marca de referência (ex.: `linear.app`, `stripe`, `apple`, `ferrari`, `bugatti`, `lamborghini`, `nike`, `airbnb`, `runwayml`, `vercel`, `raycast`, `oura`): `python "<AG>\engines\uiux\scripts\search.py" "<slug>" --brand`
 6. Extrair e consolidar no `_DESIGN\design_system.md`:
    - conceito, sensação e símbolo;
    - versões da logo (nome · layout · cor · bbox);
@@ -86,7 +86,7 @@ Referência + logo + tipografia → análise → tokens → prévia para aprova�
 3. **Lei de Polaridade de Tracking Tipográfico:**
    - **Display (`display-xl` 56–112 px):** tracking progressivamente **negativo** (`-0.03em` a `-0.04em` / `-1.8px` a `-3.5px`) e line-height compacto (`0.95–1.10`).
    - **Body (`16–18 px`):** tracking neutro (`0` a `-0.05px`) e line-height confortável (`1.45–1.60`).
-   - **Eyebrow / Badges / Micro-labels (`10–13 px`):** tracking **positivo** (`+0.04em` a `+0.10em` / `+0.4px` a `+1.4px`), criando contraste taxonômico imediato contra os títulos de tracking negativo.
+   - **Eyebrow / Badges / Micro-labels (`10–13 px`):** tracking **positivo** (`+0.04em` a `+0.12em` / `+0.4px` a `+1.4px`), criando contraste taxonômico imediato contra os títulos de tracking negativo.
 4. **Tokens obrigatórios (camadas CSS):**
    - **A1 · obrigatórios da marca:** `--bg` `--fg` `--accent` `--font-display`.
    - **A2 · obrigatórios com padrão:** `--fg-2` `--surface` `--surface-2` `--border` `--success` `--error` `--font-body` `--radius` `--space-4` (16 px) `--motion-fast` (0.18 s).
@@ -113,6 +113,7 @@ colors:
   surface-1: "#..."
   surface-2: "#..."
   surface-3: "#..."
+  surface-4: "#..."
   hairline: "#..."
   hairline-strong: "#..."
   semantic-success: "#..."
