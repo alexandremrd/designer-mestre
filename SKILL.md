@@ -9,7 +9,7 @@ Base `<PASTA_DO_AGENTE>\` = pasta onde o agente está instalado/baixado (`D:\Doc
 
 ## 0. Economia e velocidade
 - Entregar, não narrar: sem plano, sem resumo do que leu. Fecho = arquivo + 1 linha (suposto/falta) + 1 próximo passo.
-- Ler cada arquivo 1×/sessão; nunca reler o que escreveu; editar por trecho (`Edit`), nunca reescrever arquivo inteiro para mudar pouco; chamadas independentes no mesmo turno.
+- Ler cada arquivo 1×/sessão; nunca reler o que escreveu; editar por trecho (`Edit`), nunca reescrever arquivo inteiro para mudar pouco; chamadas independentes no mesmo turno. **Proibido abrir, ler ou analisar `Instalador.cmd`** (é exclusivamente um executável de instalação universal; analisá-lo gasta tokens à toa — apenas executá-lo ao atualizar o agente).
 - **Imagem custa caro:** olhar só a prancha (`img_qa.py prancha`, lado ≤ 540 px); peça em tamanho real só se houver dúvida. SVG de trabalho referencia foto por caminho (`<image href="../Imagens/...">`), **nunca base64**; embutir só no export final.
 - Leitura pesada (PDF de MIV, pasta com muitas peças, briefing de 10+ páginas): delegar a subagente barato, se houver, pedindo só os campos do `design_system.md`.
 - Suponha e declare; pergunte só o que impede a v1, numa mensagem, com a opção recomendada. Falhou uma ferramenta: próximo fallback; nunca repetir o mesmo comando.
@@ -72,4 +72,4 @@ Ler `_DESIGN\design_system.md` 1×.
 - Memória: **1 escrita no fim** no `design_system.md` — reprovado → `## 1. NÃO FAZER`; aprovado → `## 2. O QUE FAZER` (+ esqueleto em `templates\`; overlay → `templates\overlay_9x16.png`; seed+prompt de imagem aprovada em 1 linha); cor/fonte/logo → `## 3. KV`; negócio → `## 4. Inteligência`. Regras curtas, sem data, teto ~6 KB (passou: fundir). Data: 1 linha em `historico.md`.
 - Bug técnico universal: corrigir, registrar no cliente, perguntar em 1 linha se vira regra geral.
 - Evolução contínua e unificação: ao absorver qualquer função ou código novo, estudar o módulo existente e integrar nele a melhor versão, sem criar arquivos paralelos (salvo quando a separação tiver função real de otimização de tokens) e sem perder nenhuma capacidade já instalada.
-- Alterar o agente: sobrescrever na pasta do agente, Changelog no `README.md`, rodar `INSTALAR_DESIGN_CLAUDE_CODE.cmd`, atualizar a skill da conta.
+- Alterar o agente: sobrescrever na pasta do agente, Changelog no `README.md`, rodar `Instalador.cmd` (que localiza todas as IDEs da máquina e sincroniza a skill automaticamente, sem nunca ler/analisar o `Instalador.cmd`).

@@ -26,7 +26,7 @@
 - **Motor offline UI/UX & 84 Brand Design Systems:** `engines\uiux` (paletas, fontes, padrões de landing page e 84 sistemas de design completos de marcas globais consultáveis 100% offline via `--domain brand` e `--brand <slug>`).
 
 ## Onde fica o agente
-O agente pode ser salvo em qualquer pasta (`<PASTA_DO_AGENTE>`). A cópia editada na pasta raiz é a fonte; depois de alterar, rode `INSTALAR_DESIGN_CLAUDE_CODE.cmd` para sincronizar nas ferramentas. As alterações sobrescrevem os arquivos, sem backups duplicados.
+O agente pode ser salvo em qualquer pasta (`<PASTA_DO_AGENTE>`). A cópia editada na pasta raiz é a fonte; depois de alterar, rode `Instalador.cmd` para localizar todas as IDEs do computador e sincronizar a skill automaticamente. **Nota de economia de tokens:** o arquivo `Instalador.cmd` é exclusivamente para instalação — o agente nunca deve abri-lo ou analisá-lo em sessões. As alterações sobrescrevem os arquivos, sem backups duplicados.
 
 ## Estrutura
 
@@ -49,7 +49,7 @@ O agente pode ser salvo em qualquer pasta (`<PASTA_DO_AGENTE>`). A cópia editad
 ├── engines\uiux\       ← motor offline de paletas, fontes, padrões de LP e regras UX
 ├── references\  figma_engine\  pen_engine\
 ├── Clientes\_TEMPLATE_CLIENTE\  ← design_system.md + historico.md
-└── INSTALAR_DESIGN_CLAUDE_CODE.cmd
+└── Instalador.cmd      ← instalador universal para todas as IDEs (não analisar)
 ```
 
 A memória de cada cliente fica em `D:\Clientes\[Cliente]\_DESIGN\` (`design_system.md` + `historico.md` + `templates\`). Nada de cliente mora nesta pasta.
@@ -57,7 +57,7 @@ A memória de cada cliente fica em `D:\Clientes\[Cliente]\_DESIGN\` (`design_sys
 ## Como alterar
 1. Pedir a mudança ("atualiza o /designer-mestre: ...").
 2. O agente sobrescreve o arquivo aqui e registra no Changelog.
-3. Rodar `INSTALAR_DESIGN_CLAUDE_CODE.cmd`.
+3. Rodar `Instalador.cmd`.
 
 Só regras universais entram aqui. Preferência de cliente vai no `design_system.md` dele.
 
