@@ -4,7 +4,7 @@
 
 ## Fluxo
 1. **Briefing:** o texto, e-mail ou PDF do cliente vira `briefing.md`.
-2. **Tipo de pedido:** mecânico (legenda, redimensionar, trocar texto ou cor) é executado direto; criativo novo passa por prévia, espera o "aprovado" e só então vai para o Figma.
+2. **Tipo de pedido:** mecânico (legenda, redimensionar, trocar texto ou cor) é executado direto; criativo novo passa por prévia e, após o "aprovado", pergunta se o usuário quer a entrega final no **Figma**, em **PNG** ou em **SVG** (só gerando o que for solicitado).
 3. **Gate de KV:** antes de gerar, lê o `design_system.md` do cliente (cores, fontes, logo, vetos). Cliente sem KV passa pelo Cold Start (`kv-logo.md`).
 4. **Módulo do pedido:** abre só o módulo do tipo de peça (`ads`, `html`, `video`, `kv-logo`, `imagem`, `deck`, `referencias`, `figma`, `qualidade`).
 5. **QA e entrega:** confere uma prancha (cortes, safe zone, copy, logo) e aplica a crítica anti-IA antes de entregar. Salva em pasta padronizada por ano, mês e data.
@@ -14,7 +14,7 @@
 - **Copy:** literal, sem inventar CTA, selo ou número, e sem promessas absolutas.
 - **Isolamento:** nada de um cliente vaza para outro.
 - **Peça estática:** SVG de coordenadas absolutas (1080×1350 ou 1080×1920).
-- **Figma:** só depois do "aprovado".
+- **Exportação final e Figma:** após aprovar a prévia, o agente pergunta se quer montar no **Figma** ou exportar em **PNG** / **SVG** — só executa o formato que o usuário pedir.
 - **Anti-IA:** reprova o índigo/violeta genérico de IA, o degradê roxo→azul e o emoji usado como ícone.
 - **Autonomia e evolução unificada:** não depende de sites ou apps de terceiros; ao absorver técnicas ou funções novas, o agente estuda o módulo existente e integra tudo na melhor versão única, sem criar módulos fragmentados/duplicados (salvo quando a separação economizar tokens) e sem perder nenhuma capacidade existente.
 
@@ -66,4 +66,4 @@ Só regras universais entram aqui. Preferência de cliente vai no `design_system
 - v16 (20/10/2026): **renomeado para Designer Mestre** (`/designer-mestre`); nome pessoal removido de todos os arquivos; caminhos fixos trocados por `<PASTA_DO_AGENTE>`.
 - v16.1 (20/10/2026): **otimização universal de LPs extraídas e descrição da skill** — regras universais para LPs de construtor (unificação de CTAs pelo maior peso tipográfico com seta lateral interna e hover consistente na cor de ação; escala fluida entre breakpoints com respiro lateral simétrico e sem cortes de texto; centralização e padding interno simétrico de 24 px nos 4 lados para formulários sobre caixa/card de fundo no mobile). `SKILL.md`: `description` atualizada com o resumo claro do agente/skill.
 - v17 (20/10/2026): **consolidação de módulos e padronização de `Referências\`** — módulos de mesmo domínio fundidos sem perda de conteúdo (`video.md`, `html.md`, `kv-logo.md`, `imagem.md`); removidos créditos/referências de terceiros e adicionada diretiva interna de soberania e evolução unificada; pasta `Referencias\` padronizada com acento (`Referências\`) em todos os arquivos e clientes.
-- v17.1 (20/10/2026): **autonomia total sem dependência de apps/sites de terceiros e arsenal completo de imagem com auto-aprendizado** — `imagem.md`, `SKILL.md` e `README.md` mantêm todas as opções ativas (Antigravity / Nano Banana Pro, subagente `image-generator` / nativo da IDE, motor local FLUX.2 klein 4B / SDXL / Flux e Rota Híbrida IA+SVG) com ciclo de aprendizado contínuo onde a máquina descobre e registra qual gerador é melhor para si em cada tarefa; `assets\img_qa.py` reescrito para rodar 100% autônomo via Chromium/Canvas (prancha, paridade RMSE, paleta, contraste, bbox e WebP sem exigir instalação do ImageMagick); instalador limpo de avisos de programas externos.
+- v17.1 (20/10/2026): **autonomia total sem dependência de apps/sites de terceiros, arsenal completo de imagem com auto-aprendizado e exportação final sob escolha** — `imagem.md`, `SKILL.md` e `README.md` mantêm todas as opções ativas (Antigravity / Nano Banana Pro, subagente `image-generator` / nativo da IDE, motor local FLUX.2 klein 4B / SDXL / Flux e Rota Híbrida IA+SVG) com ciclo de aprendizado contínuo onde a máquina descobre e registra qual gerador é melhor para si em cada tarefa; `assets\img_qa.py` reescrito para rodar 100% autônomo via Chromium/Canvas; exportação final após aprovação não força o Figma (pergunta sempre se quer Figma, PNG ou SVG e só gera o que for solicitado).

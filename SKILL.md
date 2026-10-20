@@ -16,7 +16,7 @@ Base `<PASTA_DO_AGENTE>\` = pasta onde o agente está instalado/baixado (qualque
 
 ## 1. Fluxo
 1. **Briefing** (texto longo, e-mail, PDF, áudio, vários pedidos) → `briefing.md` primeiro; nada bloqueia: seguir na mesma resposta.
-2. **Tipo:** *mecânico* (legenda, redimensionar, trocar texto/cor, exportar, ajuste) = executar direto, a v1 é a prévia. *Criativo novo* = prévia → "aprovado" → final. `/rapido` pula a prévia.
+2. **Tipo:** *mecânico* (legenda, redimensionar, trocar texto/cor, exportar, ajuste) = executar direto, a v1 é a prévia. *Criativo novo* = prévia → após "aprovado", perguntar onde/como deseja a exportação final (**Figma**, **PNG** ou **SVG** — só gerar/montar o formato que o usuário escolher). `/rapido` pula a prévia.
 3. **Cliente:** direto em `D:\Clientes\[Cliente]`; nome ambíguo: listar `D:\Clientes` 1×.
 4. **Gate de KV** (§3) → módulo → entrega (§5).
 
@@ -25,7 +25,7 @@ Topo da resposta: `Modo · Cliente · Rota · tipo`. Criativo novo: + `Leitura: 
 | Sinais | Módulo |
 |---|---|
 | briefing, traduz, e-mail/PDF/áudio do cliente | `briefing.md` |
-| criativo, ads, post, story, carrossel, banner | `ads.md` (`figma.md` após aprovação) |
+| criativo, ads, post, story, carrossel, banner | `ads.md` (`figma.md` só se pedido após aprovação) |
 | legenda, editar vídeo, corte, trilha, endcard, roteiro, UGC, vídeo por IA, motion, animação, Remotion | `video.md` |
 | LP, site, HTML, clonar, extrair, formulário, print, relatório | `html.md` |
 | deck, slides | `deck.md` |
@@ -58,7 +58,7 @@ Ler `_DESIGN\design_system.md` 1×.
 4. Sem promessa absoluta nem prazo/estoque/certificação não confirmados. Atendimento: cargo do KV ou "Fale com nossa equipe".
 5. Foto: `Originais\` (só leitura) → `Banco de Imagens\` → `IA\` → gerar (`imagem.md`). IA salva em `Imagens\IA\` com `.txt`; sem texto/logo/rótulo na imagem (vão no SVG); pessoa real só com autorização (`imagem.md` Parte C).
 6. Estático = SVG de coordenadas absolutas (1080×1350 / 1080×1920), nunca HTML com reflow. Texto ≥ 24 px; contraste ≥ 4.5:1 (≥ 3:1 acima de 24 px). Fonte do KV: `Identidade Visual\` ou Google Fonts; senão a substituta, declarada.
-7. Figma só após "aprovado", com o mesmo SVG; conferir com `img_qa.py paridade`. Ajuste mecânico em Figma existente: direto.
+7. Exportação final sob escolha: após o "aprovado" na prévia, sempre perguntar se quer montar no **Figma** ou exportar em **PNG** / **SVG** (não gerar/montar no Figma, nem exportar PNG/SVG finais sem o usuário solicitar). Se escolher Figma, usar o mesmo SVG e conferir com `img_qa.py paridade`. Ajuste mecânico em Figma existente: direto.
 8. Antes de entregar: 1 prancha (cortes, sobreposição, acentos, logo, safe zone, copy). Vídeo: 3 frames + duração + tamanho. Criativo novo, sem abrir `qualidade.md`:
    - **P0 (reprova, salvo se for do KV):** acento índigo/violeta de IA (`#6366F1 #4F46E5 #8B5CF6 #A855F7`), degradê roxo→azul, emoji como ícone, card com borda só à esquerda, métrica/copy inventada, sans genérica onde o KV pede display, placeholder de banco de imagem. Acento ≤ 2 usos visíveis; 80% padrão do KV + 1 gesto marcante.
    - **Crítica em 1 linha:** Conceito · Hierarquia · Detalhe · Função · Gesto (0–10, cada nota com 1 elemento); vale a pior nota; < 7 = corrigir 1× antes de mostrar. Ex.: `Crítica 8·7·8·9·7 → forte`.

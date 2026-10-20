@@ -1,6 +1,6 @@
 # Módulo Ads — Criativos estáticos e carrossel (SVG-First)
 
-Entrega: prévia PNG renderizada do SVG → após "aprovado", Feed + Story editáveis no Figma (`figma.md`), SVGs em `Trabalho\` e PNGs em `Exportados\` da solicitação `[CA]` ou `[PA]`.
+Entrega: prévia renderizada do SVG na conversa → após "aprovado", perguntar ao usuário qual formato final deseja (**montar no Figma**, **exportar PNG** ou **exportar SVG** — só executar o formato solicitado; nada é montado no Figma nem exportado em PNG/SVG final sem pedido). Quando solicitado, SVGs ficam em `Trabalho\` e PNGs em `Exportados\` da solicitação `[CA]` ou `[PA]`.
 
 ## 1. Base
 - Se existir arquétipo aprovado em `_DESIGN\templates\` (`E1.svg`, `E2.svg`...), clonar o SVG e só injetar copy e imagem.

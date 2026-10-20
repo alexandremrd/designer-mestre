@@ -1,6 +1,6 @@
 # Módulo Figma — Entrega editável (paridade 1:1 com o SVG)
 
-Só é lido depois do "aprovado" na prévia (salvo o usuário mandar ir direto ao Figma ou pedir edição de um arquivo existente). Objetivo: cada elemento como camada nativa editável, com a geometria exata do SVG aprovado.
+Só é lido e executado depois do "aprovado" na prévia **e** quando o usuário escolher montar no Figma (ou quando pedir edição direta de um arquivo Figma existente). Se o usuário aprovar a prévia mas pedir apenas PNG ou SVG (ou não pedir Figma), não abrir nem montar no Figma. Objetivo quando acionado: cada elemento como camada nativa editável, com a geometria exata do SVG aprovado.
 
 ## Rota A — Conector oficial (preferida)
 - Conector desligado: pedir para ativar. Carregar `figma-use` antes de `use_figma`.
