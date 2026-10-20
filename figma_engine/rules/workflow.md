@@ -1,13 +1,13 @@
 ---
 name: workflow
-description: Recommended agent workflow and operator rules for figma-pilot
+description: Recommended agent workflow and operator rules for figma-engine
 metadata:
   tags: workflow, best-practices, tips
 ---
 
 ## Agent Workflow (Recommended)
 
-figma-pilot uses **code execution mode**. Use `figma_status` to check connection, then `figma_execute` for all operations:
+figma-engine uses **code execution mode**. Use `figma_status` to check connection, then `figma_execute` for all operations:
 
 ```text
 1) figma_status                     # Check connection first

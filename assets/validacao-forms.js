@@ -1,5 +1,5 @@
 /* ============================================================
-   V4 Forms — validação de leads (email, telefone, CPF, CNPJ)
+   Validacao Forms — validacao de leads (email, telefone, CPF, CNPJ)
    ------------------------------------------------------------
    Uso:
      1. Marque cada input com data-validate:
@@ -246,7 +246,7 @@
   else init();
 
   // expõe pra uso programático / testes
-  window.V4Forms = {
+  window.ValidacaoForms = {
     validateEmail: validateEmail, validatePhone: validatePhone,
     validateCPF: validateCPF, validateCNPJ: validateCNPJ,
     maskPhone: maskPhone, maskCPF: maskCPF, maskCNPJ: maskCNPJ

@@ -1,13 +1,13 @@
 ---
 name: fonts
-description: Loading and using custom fonts in Figma with figma-pilot
+description: Loading and using custom fonts in Figma with figma-engine
 metadata:
   tags: font, fontFamily, typography, text
 ---
 
 ## Using Fonts
 
-figma-pilot supports custom fonts through the `fontFamily` and `fontWeight` parameters.
+figma-engine supports custom fonts through the `fontFamily` and `fontWeight` parameters.
 
 ### Parameters
 
@@ -84,7 +84,7 @@ await figma.create({
 
 ### Font Fallback
 
-If the specified font is not available, figma-pilot will fall back to Inter Regular. Common fonts that typically work:
+If the specified font is not available, figma-engine will fall back to Inter Regular. Common fonts that typically work:
 
 - **System fonts**: Arial, Helvetica, Times New Roman, Georgia
 - **Google fonts** (if installed in Figma): Roboto, Open Sans, Lato, Montserrat, Poppins
@@ -92,7 +92,7 @@ If the specified font is not available, figma-pilot will fall back to Inter Regu
 
 ### Tips
 
-- Use `fontWeight` to specify the exact weight - figma-pilot maps it to the appropriate font style
+- Use `fontWeight` to specify the exact weight - figma-engine maps it to the appropriate font style
 - The default font is "Inter" if no `fontFamily` is specified
 - The default weight is 400 (Regular) if no `fontWeight` is specified
 - For titles, use `fontWeight: 700` (Bold) or `fontWeight: 600` (Semi Bold)

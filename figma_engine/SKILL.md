@@ -1,5 +1,5 @@
 ---
-name: figma-pilot
+name: figma-engine
 description: REQUIRED reading before using figma_execute. Contains API syntax, parameter formats, and examples. READ rules/*.md files for correct usage.
 metadata:
   tags: figma, mcp, design, ai, components, accessibility, tokens
@@ -7,13 +7,13 @@ metadata:
 
 ## When to use
 
-**ALWAYS read this skill BEFORE calling figma_execute!** This skill contains the correct API syntax, parameter formats, and examples that you MUST follow. Failure to read this will result in syntax errors.
+**ALWAYS read this internal reference BEFORE calling figma_execute!** It contains the exact API syntax, parameter formats, and examples required for batch execution.
 
-Use this skill whenever you are working with figma-pilot MCP tools to create or modify Figma designs.
+Use this engine whenever you are working with Figma MCP tools to create or modify Figma designs.
 
 ## Code Execution Mode
 
-figma-pilot uses a **code execution mode** for maximum efficiency. Instead of 15+ individual tools, you use `figma_execute` to run JavaScript code with access to all Figma APIs.
+The Figma engine uses a **code execution mode** for maximum efficiency. Instead of 15+ individual tools, you use `figma_execute` to run JavaScript code with access to all Figma APIs.
 
 ### Available Tools
 

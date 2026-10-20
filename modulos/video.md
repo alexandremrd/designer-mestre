@@ -52,8 +52,15 @@ python "<PASTA_DO_AGENTE>\assets\reels_legenda.py" ^
 
 ## Parte B · Roteiro, Dramaturgia Cinematográfica, UGC e Direção para IA de Vídeo
 
-### 1. Estrutura de Roteiro Publicitário (30 s) & Regra dos 6 de Walter Murch
-- **Arco de 30 s:** Gancho 0–3 s (problema ou resultado concreto) · Problema 4–8 s · Solução/Mecanismo 9–18 s · Prova 19–24 s · CTA 25–30 s. A voz vem primeiro e define o tempo.
+### 1. Estrutura de Roteiro Publicitário (Sprint de 30 s / 15 s), Voz e Regra dos 6 de Murch
+- **Escolha de Formato pelo Objetivo Comercial:** Conversão direta/oferta → Apresentador/Avatar ou UGC de resposta direta · Produto visual/lifestyle → B-roll cinematográfico + locução · Prova social → UGC em 1ª pessoa · Teste misto → Gancho com pessoa (0–3 s) + B-roll de produto no corpo.
+- **Arco de 5 Bullets (30 s, máx. 80 palavras faladas; ou 3 Bullets para 15 s com Gancho 0–3 s + Solução/Prova 4–11 s + CTA 12–15 s, máx. 40 palavras):**
+  - `• GANCHO (0–3 s)`: para o scroll imediatamente — gerar sempre **3 opções de ângulo** (**Dor** / **Curiosidade** / **Oferta Direta**) e escolher a mais forte;
+  - `• PROBLEMA (4–8 s)`: dor ou situação que o público reconhece na hora;
+  - `• SOLUÇÃO (9–18 s)`: produto/serviço como resposta direta;
+  - `• PROVA (19–24 s)`: resultado concreto, número confirmado ou demonstração visual;
+  - `• CTA (25–30 s)`: ação única, clara e imperativa (máx. 2 frases faladas por bullet; variação A/B de teste troca **apenas** os primeiros 3 segundos do gancho).
+- **Voz Primeiro & Mixagem de Áudio Padrão:** gerar e aprovar a locução antes de cortar o visual (o áudio dita o tempo exato dos cortes e o respiro das legendas). Parâmetros vocais recomendados para PT-BR natural: estabilidade `0.45–0.55` (`0.40` em UGC para soar espontâneo), similaridade `0.75`, estilo/expressividade `0.20–0.35`, velocidade `1.05–1.10`. Mixagem final: **Voz em `-6 dB` (ou `-16 LUFS`) · Trilha em `-18 dB` a `-20 dB` · SFX em `-12 dB`**. Disparo de todos os renders de cena sempre em paralelo.
 - **Dramaturgia e Fórmula de Cena (obrigatória antes do prompt):**
   - **Fórmula da Cena (1 frase):** `Desejo + Obstáculo + Geometria Espacial (Foreground / Midground / Background) + Direção do Olhar + Ritmo`.
   - **Lei dos 3 Detalhes Físicos por Take:** todo plano deve declarar (1) pressão ambiental (vento, vapor, reflexo de chuva, luz rasante), (2) micro-ação física do corpo/produto, e (3) âncora sonora ou motivo visual.
@@ -65,12 +72,19 @@ python "<PASTA_DO_AGENTE>\assets\reels_legenda.py" ^
 - **Movimentos:** `Push-in` (tensão/detalhe) · `Pull-back / Dolly out` (revelação de contexto) · `Tracking shot` (acompanhamento lateral) · `Pan` (rotação no eixo horizontal) · `Tilt` (eixo vertical, imponência) · `Crane up/down` (abertura/revelação vertical) · `Orbit / Arc` (giro 360° heroico no produto) · `Dolly zoom` (vertigem dramática) · `Handheld / Steadicam` (realismo UGC/documental) · `Static / Locked-off` (packshot limpo) · `Slow-motion` (luxo/impacto físico) · `Timelapse` (transformação temporal).
 - **Ângulos:** `Eye-level` (neutro/humano) · `Low angle` (poder/aspiracional/luxo) · `High angle` (visão geral) · `Bird's eye / Top-down` (flat-lay geométrico) · `Dutch angle` (tensão) · `Over-the-shoulder / POV` (intimismo, unboxing).
 
-### 3. UGC Autêntico (Sem Cara de IA)
-- **Fórmulas UGC (Unboxing, Review, Rotina):** câmera de mão com leve oscilação natural (`slightly shaky handheld, front-facing phone camera quality, not studio-perfect`), luz natural de janela, ambiente vivido real, micro-pausas espontâneas, formato 9:16 vertical com cortes secos e produto em uso real.
-- Depoimento só real ou claramente encenado por ator; nunca apresentar como cliente verdadeiro.
+### 3. Os 7 Pilares do UGC Ultra-Realista (Sem Cara de IA)
+Para vídeos de criadores/usuários (Unboxing, Review/Depoimento com pequena hesitação natural *"tipo… como eu explico…"*, Rotina *"Day with"* ou Antes/Depois com mesma luz e ângulo), combater a perfeição sintética aplicando obrigatoriamente os **7 Pilares**:
+1. **Câmera Imperfeita:** `handheld smartphone footage, slight natural camera shake, selfie front-facing angle slightly below eye level, 1-3 degree tilt, casual reframing mid-shot`.
+2. **Iluminação Natural de Janela:** `natural side window lighting, slight overexposure on one side, no ring light reflections, visible soft shadows`.
+3. **Ambiente Vivido Real:** `lived-in room background, everyday objects visible on shelves/counter, no studio backdrop, faint natural ambient room noise`.
+4. **Performance Humana Autêntica:** `authentic human expressions, natural micro-pauses before speaking, genuine smile building slowly, unscripted hand gestures, occasional glance down at product`.
+5. **Linguagem Óptica de Smartphone:** `shot on smartphone portrait mode, f/1.8 shallow bokeh, slight digital compression grain, warm slightly saturated colors, 9:16 vertical format`.
+6. **Edição Orgânica:** cortes secos diretos, 1–2 jump cuts intencionais, durações variadas por plano (2 s, 4 s, 3 s) e ritmo calibrado por plataforma (TikTok 15–30 s rápido/saturado · Reels 30–60 s médio/lifestyle · Shorts 45–60 s informativo · Stories 15 s casual extremo).
+7. **Especificidade da Persona e Produto em Uso Real:** roupa cotidiana real, cabelo natural, textura de pele real (`natural skin texture, pores visible, no beauty filter`) e interação física tátil com o produto. Depoimento só real ou claramente encenado por ator; nunca apresentar ficção como cliente verdadeiro.
 
-### 4. Adaptadores de Física por Motor de Vídeo & Filtro Anti-Slop
-- **Ordem densa em inglês (SLCT Cinematográfico):** `[Plano, Ângulo e Movimento de Câmera] + [Sujeito e Micro-ação Física] + [Cenário em 3 Planos e Pressão Ambiental] + [Luz: fonte, direção, razão Key:Fill, Kelvin] + [Paleta, Óptica/Lente, Grão e Ritmo/Duração]`.
+### 4. Anatomia de 10 Elementos do Prompt Cinematográfico & Adaptadores de Física por Motor
+- **Prosa Cinematográfica Contínua em Inglês (80–150 palavras, verbos no presente, zero bullets dentro do prompt final, 1 ação principal por cena + Character Sheet fixo repetido entre cenas do mesmo projeto):**
+  1. `Shot type & camera` → 2. `Subject & physical action` → 3. `Setting & 3-plane environment` → 4. `Lighting (source, direction, Key:Fill ratio, Kelvin)` → 5. `Color palette & mood` → 6. `Lens & depth of field (24mm/40mm anamorphic/50mm/85mm)` → 7. `Camera movement` → 8. `Atmosphere & texture (rain, steam, dust, 16mm/35mm grain)` → 9. `Visual style reference` → 10. `Duration & pacing`.
 - **Adaptação por Motor:**
   - **Veo 3 / 3.1:** brilha em cenas cinematográficas longas, física coerente e áudio/SFX sincronizado (para UGC, exigir explicitamente `"phone camera quality, casual home lighting, not cinematic"`).
   - **Kling 2.6 / 3.0 Master:** brilha em *Image-to-Video* de produto e consistência de personagem (`[Character A: ...]` binding, `cfg_scale 0.3–0.5` para liberdade ou `0.7–0.9` para aderência estrita + campo de negative prompt).
@@ -81,9 +95,14 @@ python "<PASTA_DO_AGENTE>\assets\reels_legenda.py" ^
 
 ---
 
-## Parte C · Motion Design (animações programáticas)
+## Parte C · Motion Design Programático (Comps × Skin, Física de Mola e Ancoragem)
 
-- Separar **comps** neutros (abertura, headline, dado, citação, CTA) da **skin** do cliente (cores, fontes, logo e áudio do `design_system.md`).
-- Segmentar a copy: pergunta/frase curta = gancho; número/%/R$ = cena de dado; aspas = citação; imperativo = CTA.
-- Render programático em 1080×1350 ou 1080×1920. Safe zones do Story valem para o 9:16. Logo oficial nunca deformada.
-- Projeto em `Trabalho\` e render final em `Exportados\`, na pasta da solicitação `[MT]`. Checagem final: `qualidade.md` §C.
+- **Separação Estrutural `Comps × Skin`:** construir os momentos do vídeo (**Comps**: `Abertura`, `Ancoragem`, `Bloco de Benefício 1..N`, `Dado/Número`, `Citação`, `Encerramento/CTA`) como componentes modulares reutilizáveis e injetar a identidade do cliente (**Skin**: cores `#HEX`, família tipográfica oficial, logo e assinatura sonora do `design_system.md`) por variáveis/props.
+- **Segmentação Semântica da Copy e Tipografia Cinética (`KineticText`):**
+  - Pergunta ou afirmação curta de impacto → **Abertura / Gancho** (palavras ou frases curtas gigantes entradas em sequência rápida de `30–45 frames` a `30 fps`, `fontSize: 110–150px`, `lineHeight: 1.05–1.1`, sobre fundo em zoom suave `scale 1 → 1.2` com `opacity: 0.3`);
+  - Preço ou comparação de valor → **Cena de Ancoragem com Transição de Impacto** (ex.: exibir o valor/custo antigo nos primeiros `60 frames` e disparar micro-transição de impacto/deslocamento horizontal `interpolate([60, 65, 70], [-20, 20, 0])` revelando a condição principal em `160px` uppercase na cor de acento do KV);
+  - Número, `%` ou `R$` → **Cena de Dado**; Aspas → **Citação**; Verbo imperativo → **Encerramento / CTA** (fundo preenchido na cor de ação do KV com contraste máximo de texto).
+- **Física de Animação Baseada em Mola (`spring`):**
+  - Escala de entrada de títulos: `spring({ fps, frame: frame - delay, config: { damping: 12, stiffness: 150, mass: 0.5 } })`;
+  - Opacidade e movimentos de câmera suaves: `spring({ fps, frame: frame - delay, config: { damping: 200 } })`.
+- Render programático em `1080×1350` (Feed) ou `1080×1920` (Reels/Stories, respeitando as safe zones do Story). Logo oficial nunca deformada. Projeto em `Trabalho\` e render final em `Exportados\` da solicitação `[MT]`. Checagem final: `qualidade.md` §C.

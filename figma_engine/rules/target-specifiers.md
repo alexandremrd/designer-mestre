@@ -1,6 +1,6 @@
 ---
 name: target-specifiers
-description: How to target elements in figma-pilot - ID, selection, name
+description: How to target elements in figma-engine - ID, selection, name
 metadata:
   tags: target, selection, name, id
 ---

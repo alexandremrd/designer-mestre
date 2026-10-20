@@ -49,10 +49,19 @@ Cliente antigo com `KV.md`, `NAO_FAZER.md`, `aprovados.md`, `inteligencia.md` se
 
 ---
 
-## Parte B · Brand Book e Logo nova
+## Parte B · Brand Book (Manual de Identidade Visual 16:9) e Logo nova
 
-### 1. Brand Book
-Salvar em `Compartilhada\Identidade Visual\` e na página "Brand" no Figma (com estilos e variáveis), sem alterar arquivos oficiais existentes. Formato 16:9: capa, índice, logo (versões, área de proteção, tamanho mínimo, fundos, monocromia, usos indevidos), cores, tipografia, grafismos e aplicações.
+### 1. Brand Book (Diagramação HTML/CSS 16:9 e Exportação)
+Salvar em `Compartilhada\Identidade Visual\` e, se solicitado após aprovação, na página "Brand" no Figma (com estilos e variáveis), sem alterar arquivos oficiais existentes.
+- **Revisão Obrigatória de Ativos antes de gerar:** auditar o que existe (`✓`), o que está incompleto (`⚠`) e quais seções opcionais serão omitidas (`✗`, ex.: omitir `2.4 Construção/Grade` se não houver malha `construcao.svg`; nunca inventar código Pantone se não foi fornecido), apresentando a estimativa de páginas antes da composição final. Cliente multi-marca recebe 1 brandbook por marca + `index.html` de capa-índice unificada.
+- **Sumário-Mestre Hierárquico e Catálogo de 14 Tipos de Página (`aspect-ratio: 16/9`, `max-width: 1600px`, margens `96px × 80px`, grid 12 colunas com layouts `5/7`, `4/8` e `6/6`, tipografia escalável em `cqi`):**
+  - `00 Capa` + `00 Sumário` + **Divisores de Seção** de página cheia antes de cada macro-seção (`01` a `07`) com número gigante (`62cqi`) e paginação `001` no rodapé;
+  - `01 A Marca`: `1.1` Sobre · `1.2` Propósito/Missão/Visão · `1.3` Valores · `1.4` Personalidade e Tom de Voz · `1.5` Manifesto;
+  - `02 Logotipo`: `2.1` Conceito · `2.2` Versão Principal · `2.3` Variações (`2×2` ou `3×2`) · `2.4` Construção/Grade · `2.5` Área de Proteção (`X`) · `2.6` Redução Mínima (`mm` impresso e `px` digital) · `2.7` Monocromáticas (positivo/negativo/P&B) · `2.8` Usos sobre Fundos · `2.9` Co-branding · `2.10` **Usos Incorretos** (grid `3×2` ou `4×2` gerado automaticamente aplicando transformações CSS na logo oficial — `scaleX(1.4)`, `scaleY(0.6)`, `rotate(15deg)`, `hue-rotate(180deg)`, `-webkit-text-stroke`, `drop-shadow`, `opacity: 0.3`, fundo sem contraste — com faixa diagonal vermelha de proibição e legenda técnica);
+  - `03 Cores`: `3.1` Principal (modo Hero para 1 cor ou Grid proporcional) · `3.2` Secundária · `3.3` Neutras (escala `50–900` mantendo matiz constante e saturando o meio) · `3.4` Gradientes · `3.5` Proporções de Uso (90% neutro / 10% marca no template editorial, ou 60% cor da marca no template expressivo);
+  - `04 Tipografia`: `4.1` Principal (`Aa` gigante com contraste primária/acento + pesos) · `4.2` Secundária · `4.3` Hierarquia tabular (`Display 13cqi`, `H1 3cqi`, `H2 1.8cqi`, `H3 1.3cqi`, `Corpo 1cqi`, `Legenda 0.72cqi`) · `4.4` Boas Práticas;
+  - `05 Elementos Gráficos`: `5.1` Grafismos/Patterns · `5.2` Iconografia · `5.3` Direção de Fotografia · `5.4` Texturas;
+  - `06 Aplicações` (grid irregular com 1 mockup dominante por página) e `07 Encerramento`.
 
 ### 2. Logo nova (somente sob pedido explícito)
 - Se o cliente já tem logo, confirmar que é redesign ou marca nova. Logo de cliente nunca é criada sem pedido explícito (faltou logo num pedido comum = pedir).

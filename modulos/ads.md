@@ -28,11 +28,20 @@ Entrega: prévia renderizada do SVG na conversa → após "aprovado", perguntar 
   2. **Proibido slide puramente "mudo" ou desconectado:** mesmo quando um slide não leva foto (ex.: restrição de imagem médica), estruturar com **UI/HUD técnico, diagrama vetorial da marca, numeração editorial de etapas ou grid arquitetônico** para manter peso visual equivalente aos demais cards.
   3. **Proibido último slide (Endcard/CTA) vazio só com logo + botão em fundo liso:** o card final de carrossel DEVE ter **cena heroica de fechamento** (ex.: foto noturna/editorial iluminada com fusão em degradê, silhueta/blueprint de fundo ou painel glassmorphism), **barra/chips de credenciais reais do KV** (ex.: anos de operação, bases, abrangência) + Logo em destaque + Botão CTA com alto contraste.
 
-## 4. Camadas padrão (cliente sem arquétipo próprio)
+## 4. Camadas padrão, 7 Padrões de Layout e Dimensionamento da Logo
 1. `<g id="BG_Foto_Fundo">`: fundo + foto com `<clipPath>` e gradiente de fusão/scrim na zona de leitura.
 2. `<g id="Grafismos_Moldura">`: elementos de marca do KV.
 3. `<g id="Bloco_Tipografico">`: headline (entrelinha 1.05–1.15, quebra de linha semântica e nunca palavra órfã isolada); apoio em até 2–3 linhas a 40–50% do tamanho da headline.
 4. `<g id="CTA_e_Logo">`: botão (`<rect rx>` + `<text>`) isolado de ruído e `<g id="Logo_Oficial">` com os paths originais em escala uniforme.
+- **7 Padrões Canônicos de Layout e Engajamento de Canvas (70–90% de utilização espacial):**
+  1. **Left/Right Content:** textos alinhados a 20–30% (ou espelhados a 60–70%) da borda, deixando o lado oposto limpo para o herói fotográfico;
+  2. **Z-Pattern / F-Pattern:** headline no topo esquerdo → ponto visual no topo direito → subhead na diagonal inferior → CTA no canto inferior direito (Z) ou escaneamento vertical à esquerda (F);
+  3. **Centered / Pyramid:** eixo central simétrico (headline no terço superior, herói no centro, CTA na base);
+  4. **Golden-Ratio / Rule-of-Thirds:** ponto focal e texto ancorados nas interseções de 1,618:1 ou terços;
+  5. **Diagonal / Asymmetrical:** fluxo dinâmico em diagonal ou peso visual concentrado num lado equilibrado por espaço negativo generoso;
+  6. **Top-Down Hierárquico:** progressão vertical com redução controlada de escala;
+  7. **Grid Modular:** colunas e linhas explícitas com espaçamento proporcional (gaps de 8–10% em formatos pequenos, 10–15% em médios, 15–20% em grandes).
+- **Dimensionamento e Proteção da Logo:** largura de `15–20%` da peça para logos horizontais (ou altura de `10–15%` para verticais), **nunca excedendo 25%** da menor dimensão da peça, com margem de proteção mínima de `16px` (ampliada sobre fundos fotográficos) e contraste verificado contra a luminosidade do fundo (fundo escuro pede logo clara/negativa; fundo claro pede logo escura/positiva).
 
 ## 5. Render da prévia, Imagem e Nomenclatura
 - **Render:** via headless browser com wrapper mínimo (`<style>@import url('[Google Fonts]'); body{margin:0;width:1080px;height:1350px;overflow:hidden}</style>` + `<svg>` inline). Prancha local: `python assets\img_qa.py prancha Exportados\*.png -o Trabalho\_prancha.jpg` e olhar só ela. Aplicar P0 + crítica da lei 8 do núcleo.

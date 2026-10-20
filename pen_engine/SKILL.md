@@ -1,17 +1,17 @@
 ---
-name: pen-design
+name: pen-engine
 description: >
-  Create high-quality visual designs — websites, app screens, dashboards, slides, marketing materials, social media graphics — using the pen.dev CLI tool. Use this skill whenever the user wants to create, generate, or visualize any kind of UI design, mockup, wireframe, layout, webpage, app screen, presentation slide, poster, banner, or marketing asset. Also use it when the user says things like "design me a...", "make a visual for...", "create a mockup of...", "what would X look like?", or wants to turn an idea into a visual. Even if the user doesn't mention "pen.dev" or "design tool" explicitly — if they want something visual created, this is the skill to use.
+  Motor interno de canvas vetorial estruturado (.pen JSON) para prototipação rápida de layouts, telas, slides e peças gráficas via linha de comando.
 ---
 
-# pen.dev Design Engine
+# Motor Interno de Canvas Vetorial (`.pen`)
 
-Create professional visual designs from natural language descriptions using the pen.dev CLI. pen.dev is a headless design tool that generates `.pen` files (a structured JSON design format) and can export them as images.
+Gera e itera arquivos estruturados `.pen` (JSON vetorial de layout) com exportação direta para PNG/WebP/PDF em alta resolução.
 
 ## Setup & CLI
 
-The CLI is installed globally at `@pen.dev/cli` (`pen`).
-Run `pen --help` or `pen status` to check configuration.
+O binário `pen` opera via linha de comando local.
+Rode `pen --help` ou `pen status` para checar a configuração.
 
 ### Core Command:
 ```bash

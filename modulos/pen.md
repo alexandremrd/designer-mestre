@@ -1,10 +1,12 @@
-﻿# Módulo pen.dev (opcional)
+# Módulo Canvas Vetorial Headless (`.pen`) — Exploração Rápida de Telas, Mockups e Dashboards
 
-Para explorar ou gerar rápido, ou quando pedido com `/pen`. O resultado é rascunho; a peça final vai ao Figma (`modulos/figma.md`). Detalhes do CLI na skill `pen-design`, se instalada.
+Módulo opcional para exploração rápida de layouts de aplicativos, dashboards, wireframes e mockups estruturados em JSON vetorial (`.pen`) renderizados em PNG 2×/4×. O resultado funciona como prévia/rascunho; a entrega final segue a escolha do usuário após aprovação (Figma, PNG ou SVG).
 
-1. **Setup:** `which pen || npm install -g @pen.dev/cli`. Sem permissão, usar `npx pen`. Conferir a versão.
-2. **Autenticação:** `pen status`. Precisa de usuário pen.dev, com login feito pelo usuário, e de agente autenticado. Não criar conta nem digitar senha ou código; se faltar, explicar e parar.
-3. **Prompt:** o briefing literal. `design_system.md` do cliente entram como anexo `-f`, junto com fotos e referências. O `.lib.pen` do cliente entra com `-l`.
-4. **Comando:** `pen --out <nome>.pen --prompt "<briefing>" -f <design_system.md> --export <nome>.png --export-scale 2`, com timeout ≥ 600000 ms. Avisar que leva 1–5 min. Iterar com `--in`.
-5. **Logo:** nunca gerada pelo pen.dev. Usar placeholder e inserir o arquivo oficial depois. Abrir o PNG e conferir.
+1. **Setup:** verificar disponibilidade do binário local `pen` (`pen version`).
+2. **Autenticação:** `pen status`. Requer sessão autenticada pelo usuário; nunca criar conta nem digitar senhas/códigos automaticamente — se não estiver autenticado, usar a geração nativa em HTML/SVG do agente ou avisar em 1 linha.
+3. **Prompt:** passar o briefing literal e anexar o `design_system.md` do cliente com `-f` (junto com fotos/referências) e biblioteca `.lib.pen` com `-l` quando existir.
+4. **Execução e Iteração:**
+   - Criar: `pen --out <nome>.pen --prompt "<briefing>" -f <design_system.md> --export <nome>.png --export-scale 2` (timeout ≥ 600000 ms).
+   - Iterar preservando a árvore de nós: `pen --in <v1>.pen --out <v2>.pen --prompt "<ajuste pontual>" --export <v2>.png --export-scale 2`.
+5. **Logo:** nunca gerada por IA. Usar placeholder e aplicar o arquivo vetorial oficial depois.
 6. Salvar em `Trabalho\` da pasta da solicitação e registrar no `historico.md`.

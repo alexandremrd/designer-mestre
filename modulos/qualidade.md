@@ -37,17 +37,17 @@ Ler só a seção do tipo da entrega. O KV do cliente vence qualquer regra daqui
 5. **Performance:** imagens via `img_qa.py web` (WebP/AVIF sem metadados), `loading=lazy` abaixo da dobra.
 6. Revisão pelo **render** nas larguras-alvo, não pela leitura do código.
 
-## C. Motion (HTML, Remotion, vídeo)
+## C. Motion (HTML, animação programática, vídeo)
 - Animar só `transform` e `opacity`. Durações 0.08 / 0.18 / 0.35 / 0.6 / 1.0 s; escala 0.95–1.04; stagger 0.05–0.10 s.
 - Movimento só se chama atenção, mostra estado ou dá continuidade. `prefers-reduced-motion`: só fade ≤ 0.2 s.
 - Corte no beat: 60/BPM s por batida (30 fps: 1800/BPM frames). Um acento de cor por cena.
 
-## D. Deck
-- Cada slide cabe na tela (`100dvh`, `overflow:hidden`); conteúdo demais = dividir, nunca encolher a fonte.
-- Densidade: título + subtítulo; 4–6 bullets; grid ≤ 6 cards; 1 citação; 1 imagem principal.
-- Ritmo: nunca 3+ slides seguidos no mesmo fundo; deck de 8+ slides tem ≥ 1 abertura escura e ≥ 1 clara.
-- Navegação: setas/Espaço/PageDown, Home/End, swipe ≥ 50 px, `aria-current` no indicador.
-- Conferir em 1920×1080, 1280×720 e 375×667.
+## D. Deck (1600×900)
+- Cada slide cabe no canvas `1600×900` (`overflow:hidden`), centralizado com `translate(-50%, -50%) scale(var(--deck-scale, 1))` via `visualViewport`; conteúdo demais = dividir ou mudar arquétipo, nunca encolher a fonte abaixo do mínimo (`h2 >= 44px`, `h3 >= 20px`, corpo `>= 17px`).
+- Higiene de copy e lista: zero hífen solto em prosa (` - `), zero `–`, `—` ou `~`; zero metalinguagem (*"neste slide"*); zero palavras órfãs na última linha; todo `<li>` com ícone SVG outline (`24×24`); logos inlinadas em Base64.
+- Ritmo: nunca > 2 slides seguidos com o mesmo fundo e mesma composição.
+- Navegação: setas/Espaço/PageDown, Home/End, botões anterior/próximo e barra de progresso.
+- Conferir centralização (`±1px` de margem simétrica) em `1024×768`, `1366×768`, `1600×900` e `1920×1080`.
 
 ## E. Copy de anúncio e social
 - Uma afirmação concreta por peça; especificidade > adjetivo. Vídeo curto: problema ou resultado nos 3 primeiros segundos.
@@ -79,3 +79,12 @@ Faixas: 0–4 quebrado · 5–6 funcional · 7–8 forte · 9–10 excepcional. 
 - Polaridade de Tracking: CAIXA ALTA / `eyebrow` / badges `+0.04` a `+0.12 em` (`+0.4px` a `+1.4px`, obrigatório); títulos ≥ 32 px `-0.01` a `-0.02 em`; display ≥ 56 px `-0.03` a `-0.04 em` (`-1.8px` a `-3.5px`); corpo `0`.
 - Linha de leitura 45–75 caracteres (`max-width:65ch`).
 - Fundo: preto puro e branco puro só se o KV mandar; senão `#0F0F0F` / `#FAFAFA`.
+
+## J. Auditoria Cirúrgica de Código, Scripts e Componentes (`HTML/CSS/JS/Python`)
+Ao revisar, auditar ou refatorar código, LPs, embeds ou motores internos, inspecionar e corrigir na ordem exata de prioridade:
+1. **Bug:** entradas vazias/zero/nulas, limites de array/viewport, fuso horário, encoding UTF-8 e divergência entre seletores/chamadores.
+2. **Risk:** injeção em `innerHTML` sem sanitização, chaves/credenciais expostas, erros silenciados (`catch {}` vazio) e mutação de variáveis globais em embeds.
+3. **Scale:** condições de corrida em listeners/timers, listas/loops sem limite e buscas `O(n²)` no DOM dentro de eventos de `scroll`/`resize`.
+4. **Missing Check:** todo parser, formulário ou ramo não-trivial exige validação explícita de entrada e fallback seguro.
+5. **Speed:** eliminar leituras repetidas de layout (`getBoundingClientRect` em loop), reflows forçados e re-renderizações desnecessárias.
+6. **Lean:** deletar código morto, seletores órfãos e abstrações de uso único; fundir funções duplicadas; preferir APIs nativas da plataforma/stdlib em vez de dependências externas. Limites técnicos intencionais recebem comentário `shortcut: <limite>, <gatilho de upgrade>`.
