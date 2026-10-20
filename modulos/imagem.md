@@ -11,7 +11,7 @@ Prompts genéricos falham porque cada família de modelo processa linguagem e ó
 
 | Opção do Arsenal | Física e Gramática do Modelo | Como Operar |
 |---|---|---|
-| **1. Acervo Real do Cliente** | Verificado sempre primeiro (`Originais\` → `Banco de Imagens\` → `IA\`) | Uso direto sem custo de geração |
+| **1. Acervo Real do Cliente** | Verificado sempre primeiro (`Originais\` → `Banco de Imagens\` → `Tratadas\` → `IA\`, núcleo Lei 5) | Uso direto sem custo de geração |
 | **2. Antigravity · Gemini Nano Banana Pro (`NB2 / NBP`) / Subagente `image-generator`** | **Prosa natural descritiva (1–2 parágrafos coesos)** descrevendo relações espaciais, luz, materiais e atmosfera. **Regra física crítica:** NÃO usar números secos de câmera (`50mm, f/1.4, ISO 100` — o modelo ignora); traduzir em perspectiva visual (*"compressed telephoto perspective with shallow focus and creamy bokeh"*). Suporta grounding real, proporções extremas (`1:8` a `8:1`, `4:5`, `9:16`, `16:9`), até **14 referências indexadas** (`[Ref 1: mestra]`) e **Spatial JSON / Thinking Mode** quando a cena tiver 5+ elementos distintos. | Chamar o gerador nativo do Antigravity / IDE e registrar em `Compartilhada\Imagens\IA\` com `.txt` (`python assets\gerar_imagem.py registrar <img_gerada> -o "<IA>\<nome>.png" --prompt "..." --ferramenta "Antigravity (Nano Banana Pro)" --ref mestra.jpg`) |
 | **3. Motor Local (`assets\gerar_imagem.py` · FLUX.2 klein 4B / Flux Kontext / SDXL)** | **Estrutura densa 70/30 + SLCT (`Subject → Lighting → Camera → Technical`)** em inglês com parâmetros ópticos explícitos (`85mm lens, f/2.8, 5500K`), controle exato de `--seed`, `img2img` (`--init base.jpg --forca 0.25–0.55`) e multi-referência `--ref`. | `python assets\gerar_imagem.py gerar "<prompt EN>" [--ref mestra.jpg] -a 4:5 -o "<IA>\<nome>.png"` |
 | **4. Edição por instrução (qualquer gerador que aceite imagem + texto)** | **Template de 5 Slots** (`Scene / Subject / Important Details / Use Case / Constraints`), **World Knowledge Anchors** (1 único âncora de Era, Cultura ou Fotógrafo/Diretor como *"Roger Deakins natural chiaroscuro"* ou *"Peter Lindbergh raw monochrome"* — proibido empilhar 2 âncoras) e **Contrato de Edição Atômica em 2 Colunas** (`Change / Preserve / Constraints`). | Compilar nos 5 slots ou no contrato de edição atômica |
@@ -21,7 +21,7 @@ Prompts genéricos falham porque cada família de modelo processa linguagem e ó
 ### 2. Como a Máquina Aprende (Memória Evolutiva e Regra "Editar em vez de Re-rolar")
 1. **Leitura de performance passada:** antes de gerar, ler `## 2. O QUE FAZER` no `_DESIGN\design_system.md` (e `PRODUTO_*.md` / `PERSONAGEM_*.md`) para usar o motor e a estrutura de prompt já homologados no cliente.
 2. **Adaptação imediata e 1 Mutação por Iteração:** se um motor não estiver disponível ou se a 1ª geração falhar em um eixo, trocar automaticamente de opção no arsenal ou aplicar **1 única mutação atômica** na camada responsável (luz, escala, perspectiva ou referência, máx. 3 passes). Se a imagem estiver **80% correta**, **editar atomicamente** (`Change: <1 ajuste> | Preserve: <rosto, produto, pose, luz, fundo> | Constraints: <zero deriva>`) em vez de re-rolar do zero.
-3. **Registro de aprendizado:** toda saída em `Compartilhada\Imagens\IA\AAAA-MM-DD_[solicitação]_[tema]_v[n].png` gera `.txt` com `ferramenta`, `status`, `referencias`, `notas` e `PROMPT`. Na aprovação, gravar em 1 linha no `design_system.md` a receita vencedora.
+3. **Registro de aprendizado:** toda saída (inclusive descartada e cena de produto) em `Compartilhada\Imagens\IA\AAAA-MM-DD_[solicitação]_[tema]_v[n].png` — nunca em `Originais\`, `Banco de Imagens\` ou `Referências\` de produto/personagem (o `gerar_imagem.py` recusa esses destinos) — gera `.txt` com `ferramenta`, `status`, `referencias`, `notas` e `PROMPT`. Na aprovação, gravar em 1 linha no `design_system.md` a receita vencedora.
 
 ---
 
@@ -86,3 +86,15 @@ Quando o usuário anexar qualquer imagem pedindo para extrair o prompt, clonar a
 2. **Pass 2 — Detalhe (5 s):** mãos com 5 dedos naturais, poros reais na pele, bordas limpas sem halo e zero texto/logo embaralhado?
 3. **Pass 3 — Marca (3 s):** temperatura de luz, paleta `#HEX` e atmosfera pertencem ao KV do cliente?
 Falhou em qualquer Pass → mutar apenas a camada responsável e regenerar antes de mostrar.
+
+---
+
+## Parte C · Imagem Publicitária (Hero Shot)
+Imagem para anúncio não é "foto bonita": é a prova visual do argumento da peça. Antes de gerar, escrever a **Proposição Visual em 1 frase** (`ads.md` §1) e só então o prompt.
+1. **Ficha de direção (1 linha cada, no `.txt`):** papel na peça (capa, prova, endcard) · território (`ads.md` §1) · ângulo do herói · lente · esquema de luz · hora/clima · área de respiro para texto (terço e lado, oposta ao herói) · tratamento de cor (sombras e altas puxadas para a paleta do KV) · 1 gesto marcante.
+2. **Ângulo do herói por categoria** (adaptar ao KV): veículo/aeronave = ¾ frontal baixo (câmera na altura das rodas/trem), tele 85–135 mm para comprimir fundo, golden hour ou blue hour com rim light no contorno e piso molhado/polido refletindo; produto de mesa = 3/4 a 30–45°, f/8, key softbox + rim; arquitetura/imóvel = 24–35 mm com verticais corrigidas, crepúsculo com interiores acesos; pessoa = 85 mm, olhar com intenção, luz de janela; interior de veículo/aeronave/imóvel = 24–28 mm da posição do usuário (POV de quem senta), linhas convergindo para o ponto de interesse.
+3. **Herói dominante:** ocupa 35–60% da área útil, silhueta inteira e legível na miniatura 100 px; nada corta bico, roda, cauda ou cabeça; fundo atrás do texto liso e calmo (desfoque, céu, parede, degradê natural).
+4. **Física publicitária:** horizonte e altura de câmera coerentes; sombra de contato + sombra projetada; reflexo coerente no piso; luz de recorte separando herói escuro de fundo escuro; nada de HDR, halo ou saturação artificial.
+5. **3 variações estruturais** quando for conceito novo (ângulo, luz/hora, ambiente), nunca só cor; mostrar as 3 numa prancha (núcleo §2) e gerar a peça só com a escolhida.
+6. **Pass³ + teste publicitário:** além do Pass³ (Parte B §6), responder sim/não: o herói se entende em 1 s? há espaço limpo para headline e logo sem cobrir o herói? a cor já parece da marca antes do texto? Um "não" = 1 mutação na camada responsável.
+

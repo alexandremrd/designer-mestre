@@ -47,7 +47,7 @@ Ciclo de entrega: núcleo §2. Quando houver export: SVG em `Trabalho\`, PNG em 
 - **Dimensionamento e Proteção da Logo:** largura de `15–20%` da peça para logos horizontais (ou altura de `10–15%` para verticais), **nunca excedendo 25%** da menor dimensão da peça, com margem de proteção mínima de `16px` (ampliada sobre fundos fotográficos) e contraste verificado contra a luminosidade do fundo (fundo escuro pede logo clara/negativa; fundo claro pede logo escura/positiva).
 
 ## 5. Render da prévia, Imagem e Nomenclatura
-- **Render:** via headless browser com wrapper mínimo (`<style>@import url('[Google Fonts]'); body{margin:0;width:1080px;height:1350px;overflow:hidden}</style>` + `<svg>` inline). Prancha local: `python assets\img_qa.py prancha Exportados\*.png -o Trabalho\_prancha.jpg` e olhar só ela. Aplicar U6 + U7 + U8 do núcleo.
+- **Render:** via headless browser com wrapper mínimo (`<style>@import url('[Google Fonts]'); body{margin:0;width:1080px;height:1350px;overflow:hidden}</style>` + `<svg>` inline). Prancha local: `python assets\img_qa.py prancha Exportados\*.png -o Trabalho\_prancha.jpg` e olhar só ela. Aplicar U6 + U7 + U8 do núcleo e **mostrar a prancha ao usuário** (núcleo §2, Prévia visível).
 - **Imagem:** acervo do cliente primeiro; faltou → `imagem.md`. Texto, rótulo e logo nunca na imagem gerada (entram no SVG).
 - **Nomenclatura:** a do briefing; sem ela: `[CLIENTE]_[CAMPANHA]_[AAAAMM]_E[n]_[FEED|STORY].png`. Revisões `_V2`, `_V3`.
 - **Export:** PNG em 1× do `viewBox` para social; 2× (`deviceScaleFactor: 2`) só para impressão/ampliação; esperar fontes e imagens carregarem antes da captura.

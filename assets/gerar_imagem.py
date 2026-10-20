@@ -114,7 +114,19 @@ def cmd_modelos(_):
     print(json.dumps(j.get("models", j), ensure_ascii=False, indent=1)[:4000])
 
 
+def _destino_ok(out, pasta):
+    """Lei 5: gerado vai so para Imagens\\IA; tratado para Imagens\\Tratadas. Nunca Originais/Banco/Referencias."""
+    p = os.path.abspath(out).replace('/', '\\').lower()
+    for proibido in ('\\originais\\', '\\banco de imagens\\', '\\referências\\', '\\referencias\\'):
+        if proibido in p:
+            sys.exit(f"[erro] destino proibido ({proibido.strip(chr(92))}): {out}\n  Use ...\\Compartilhada\\Imagens\\{pasta}\\")
+    if f'\\{pasta.lower()}\\' not in p:
+        sys.exit(f"[erro] destino fora de Imagens\\{pasta}\\: {out}")
+
+
 def cmd_gerar(a):
+    if not a.dry_run:
+        _destino_ok(a.out, 'IA')
     w, h = SIZES[a.aspect]
     body = {
         "request_id": uuid.uuid4().hex, "session_id": SESSION,
@@ -152,6 +164,7 @@ def cmd_gerar(a):
 
 
 def cmd_upscale(a):
+    _destino_ok(a.out, 'IA' if '\\ia\\' in os.path.abspath(a.out).replace('/', '\\').lower() else 'Tratadas')
     filtros = ["realesrgan"] + (["codeformer"] if a.rosto else [])
     body = {"request_id": uuid.uuid4().hex, "session_id": SESSION, "image": data_url(a.imagem),
             "filter": filtros, "filter_params": {"scale": a.escala}, "output_format": "png",
@@ -168,6 +181,7 @@ def cmd_registrar(a):
     """Copia imagem gerada por qualquer motor da IDE para Imagens\\IA\\ e grava o .txt de aprendizado."""
     if not os.path.isfile(a.imagem):
         sys.exit(f"[erro] arquivo nao encontrado: {a.imagem}")
+    _destino_ok(a.out, 'IA')
     os.makedirs(os.path.dirname(os.path.abspath(a.out)) or ".", exist_ok=True)
     base, ext = os.path.splitext(a.out)
     src_ext = os.path.splitext(a.imagem)[1].lower() or ".png"
