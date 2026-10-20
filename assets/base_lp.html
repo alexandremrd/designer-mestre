@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>[CLIENTE] | [Promessa principal em ate 60 caracteres]</title>
+<meta name="description" content="[Descricao de 150 a 160 caracteres: o que e oferecido, para quem e qual o proximo passo. Usar a copy aprovada.]">
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="https://[dominio-final]/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="[CLIENTE] | [Promessa principal]">
+<meta property="og:description" content="[Mesma ideia da meta description]">
+<meta property="og:image" content="https://[url-hospedada]/og-1200x630.jpg">
+<meta name="theme-color" content="#0B3D5C">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230B3D5C'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+/* ===== BASE GREATPAGES - comentarios so em ASCII ===== */
+
+/* --- Tokens da marca (trocar pelo GUIA_DE_MARCA) --- */
+:root{
+  --cor-primaria:#0B3D5C;
+  --cor-destaque:#F2A900;
+  --cor-fundo:#FFFFFF;
+  --cor-fundo-alt:#F4F6F8;
+  --cor-texto:#1B1F24;
+  --cor-texto-suave:#5A6470;
+  --cor-erro:#C62828;
+  --cor-ok:#2E7D32;
+  --fonte-titulo:'Inter',system-ui,-apple-system,'Segoe UI',Arial,sans-serif;
+  --fonte-texto:'Inter',system-ui,-apple-system,'Segoe UI',Arial,sans-serif;
+  --raio:10px;
+  --largura:1180px;
+}
+
+/* --- Blindagem do construtor --- */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{margin:0;padding:0;background:var(--cor-fundo)}
+#site{width:100%!important;min-width:0!important}
+.centralizar:empty,[id^="b_"]:empty{display:none!important}
+[hidden]{display:none!important}
+.form-feedback:empty{display:none!important}
+
+/* --- Anti faixa branca --- */
+img,svg,video,iframe,picture{display:block;max-width:100%;height:auto;border:0}
+.lp{display:block;font-family:var(--fonte-texto);color:var(--cor-texto);font-size:clamp(1rem,0.95rem + 0.3vw,1.125rem);line-height:1.55;overflow-x:hidden;font-kerning:normal;-webkit-font-smoothing:antialiased}
+.lp-secao{margin:0;padding:72px 20px;background:var(--cor-fundo)}
+.lp-secao--alt{background:var(--cor-fundo-alt)}
+.lp-secao--escura{background:var(--cor-primaria);color:#fff}
+.lp-secao > :first-child,.lp-container > :first-child{margin-top:0}
+.lp-secao > :last-child,.lp-container > :last-child{margin-bottom:0}
+.lp-container{max-width:var(--largura);margin:0 auto}
+
+/* --- Anti borda azul na logo / links --- */
+.lp a{color:inherit;-webkit-tap-highlight-color:transparent}
+.lp a:focus{outline:none}
+.lp a:focus-visible,.lp button:focus-visible{outline:3px solid var(--cor-destaque);outline-offset:3px;border-radius:4px}
+.lp-logo{display:inline-block;line-height:0;text-decoration:none}
+.lp-logo svg,.lp-logo img{height:44px;width:auto}
+
+/* --- Tipografia --- */
+.lp h1,.lp h2,.lp h3{font-family:var(--fonte-titulo);line-height:1.15;margin:0 0 16px;text-wrap:balance}
+.lp h1{font-size:clamp(32px,5vw,56px);font-weight:700}
+.lp h2{font-size:clamp(26px,3.6vw,40px);font-weight:700}
+.lp p{margin:0 0 16px;max-width:65ch;text-wrap:pretty}
+.lp-skip{position:absolute;left:12px;top:-60px;z-index:999;padding:12px 16px;background:#fff;color:#111;border-radius:8px;font-weight:700;text-decoration:none}
+.lp-skip:focus{top:12px}
+.lp-sr{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.lp img{height:auto}
+
+/* --- Hero --- */
+.lp-hero{padding-top:32px}
+.lp-hero__topo{display:flex;align-items:center;justify-content:space-between;margin-bottom:48px}
+.lp-hero__grade{display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:start}
+.lp-hero__sub{font-size:20px;opacity:.9}
+
+/* --- Animacao segura: base sempre visivel --- */
+.js-anim .anima{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease}
+.js-anim .anima.visivel{opacity:1;transform:none}
+.js-anim h1.anima{opacity:1} /* H1 nunca some: anima so transform */
+@media (prefers-reduced-motion:reduce){.js-anim .anima{opacity:1!important;transform:none!important;transition:none!important}}
+
+/* --- Botao --- */
+.lp-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;width:100%;min-height:56px;padding:16px 32px;border:0;border-radius:var(--raio);background:var(--cor-destaque);color:#111;font:700 18px/1.2 var(--fonte-texto);cursor:pointer;text-decoration:none;transition:filter .2s}
+.lp-btn:hover{filter:brightness(1.06)}
+.lp-btn[disabled]{opacity:.65;cursor:wait}
+
+/* --- Formulario --- */
+.lp-form{background:#fff;color:var(--cor-texto);border-radius:calc(var(--raio) + 4px);padding:32px;box-shadow:0 12px 40px rgba(0,0,0,.12)}
+.lp-form__titulo{font-size:22px;font-weight:700;margin:0 0 20px}
+.lp-campo{margin:0 0 16px}
+.lp-campo label{display:block;font-size:15px;font-weight:600;margin:0 0 6px}
+.lp-campo input,.lp-campo select{display:block;width:100%;min-height:52px;padding:12px 14px;border:1.5px solid #CBD2D9;border-radius:8px;background:#fff;color:var(--cor-texto);font:400 17px/1.3 var(--fonte-texto);-webkit-appearance:none;appearance:none}
+.lp-campo input:focus,.lp-campo select:focus{outline:none;border-color:var(--cor-primaria);box-shadow:0 0 0 3px rgba(11,61,92,.18)}
+.lp-campo.erro input,.lp-campo.erro select{border-color:var(--cor-erro)}
+.lp-campo__erro{display:none;color:var(--cor-erro);font-size:14px;margin-top:6px}
+.lp-campo.erro .lp-campo__erro{display:block}
+.lp-hp{position:absolute!important;left:-9999px!important;width:1px;height:1px;overflow:hidden}
+.form-feedback{margin-top:14px;padding:12px 14px;border-radius:8px;font-size:15px}
+.form-feedback.ok{background:#E8F5E9;color:var(--cor-ok)}
+.form-feedback.falha{background:#FDECEA;color:var(--cor-erro)}
+.lp-form__aviso{font-size:13px;color:var(--cor-texto-suave);margin-top:12px}
+
+/* --- Responsivo --- */
+@media (max-width:900px){
+  .lp-hero__grade{grid-template-columns:1fr;gap:32px}
+  .lp-secao{padding:56px 16px}
+  .lp-form{padding:24px}
+}
+</style>
+</head>
+<body>
+<div class="lp" id="lp-root">
+  <a class="lp-skip" href="#form-lead">Ir para o formul&aacute;rio</a>
+
+  <!-- HERO -->
+  <section class="lp-secao lp-secao--escura lp-hero">
+    <div class="lp-container">
+      <div class="lp-hero__topo">
+        <!-- LOGO: colar o SVG oficial com os paths originais. Nunca recriar. -->
+        <a class="lp-logo" href="#form-lead" aria-label="[CLIENTE]">
+          <svg viewBox="0 0 200 44" preserveAspectRatio="xMidYMid meet" role="img" aria-label="LOGO [CLIENTE]"><rect x="1" y="1" width="198" height="42" fill="none" stroke="currentColor" stroke-dasharray="4 4"/><text x="100" y="27" text-anchor="middle" font-size="13" fill="currentColor" font-family="Arial">LOGO [CLIENTE]</text></svg>
+        </a>
+      </div>
+
+      <div class="lp-hero__grade">
+        <div>
+          <h1 class="anima">[Headline aprovada &ndash; copiar literal]</h1>
+          <p class="lp-hero__sub anima">[Subt&iacute;tulo aprovado]</p>
+        </div>
+
+        <!-- FORMULARIO -->
+        <form class="lp-form anima" id="form-lead" novalidate data-email="corporativo">
+          <p class="lp-form__titulo">[T&iacute;tulo do formul&aacute;rio]</p>
+
+          <div class="lp-campo">
+            <label for="f-nome">Nome</label>
+            <input id="f-nome" name="nome" type="text" autocomplete="name" required>
+            <span class="lp-campo__erro">Informe seu nome.</span>
+          </div>
+
+          <div class="lp-campo">
+            <label for="f-email">E-mail corporativo</label>
+            <input id="f-email" name="email" type="email" autocomplete="email" inputmode="email" required>
+            <span class="lp-campo__erro">Use seu e-mail corporativo.</span>
+          </div>
+
+          <div class="lp-campo">
+            <label for="f-tel">WhatsApp</label>
+            <input id="f-tel" name="telefone" type="tel" autocomplete="tel-national" inputmode="tel" placeholder="(00) 00000-0000" required>
+            <span class="lp-campo__erro">Informe um telefone com DDD.</span>
+          </div>
+
+          <div class="lp-campo">
+            <label for="f-empresa">Empresa</label>
+            <input id="f-empresa" name="empresa" type="text" autocomplete="organization" required>
+            <span class="lp-campo__erro">Informe a empresa.</span>
+          </div>
+
+          <!-- Honeypot anti-spam -->
+          <div class="lp-hp" aria-hidden="true"><label>Site<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
+
+          <!-- UTMs + rastreio (preenchidos por JS) -->
+          <input type="hidden" name="utm_source">
+          <input type="hidden" name="utm_medium">
+          <input type="hidden" name="utm_campaign">
+          <input type="hidden" name="utm_term">
+          <input type="hidden" name="utm_content">
+          <input type="hidden" name="page_url">
+          <input type="hidden" name="referrer">
+
+          <button class="lp-btn" type="submit">[Texto do bot&atilde;o]</button>
+          <div class="form-feedback" role="status" aria-live="polite"></div>
+          <p class="lp-form__aviso">Seus dados s&atilde;o usados apenas para retorno do contato.</p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECAO EXEMPLO -->
+  <section class="lp-secao">
+    <div class="lp-container">
+      <h2 class="anima">[T&iacute;tulo da se&ccedil;&atilde;o]</h2>
+      <p class="anima">[Texto aprovado.]</p>
+    </div>
+  </section>
+
+  <section class="lp-secao lp-secao--alt">
+    <div class="lp-container">
+      <h2 class="anima">[Outra se&ccedil;&atilde;o]</h2>
+      <p class="anima">[Texto aprovado.]</p>
+    </div>
+  </section>
+
+</div>
+
+<script>
+(function(){
+  'use strict';
+
+  /* ===== CONFIG (trocar pelo GUIA_DE_MARCA) ===== */
+  var WEBHOOK_URL = 'https://hook.us2.make.com/COLE_AQUI_O_ID_DO_WEBHOOK';
+  var URL_OBRIGADO = ''; /* ex.: 'https://site.com/obrigado' ou vazio */
+  var MSG_OK = 'Recebemos seus dados! Em breve nossa equipe entra em contato.';
+  var MSG_FALHA = 'N\u00e3o foi poss\u00edvel enviar agora. Tente novamente em instantes.';
+
+  var WEBMAIL = ['gmail.com','googlemail.com','hotmail.com','hotmail.com.br','outlook.com','outlook.com.br','live.com','msn.com','yahoo.com','yahoo.com.br','ymail.com','icloud.com','me.com','mac.com','bol.com.br','uol.com.br','terra.com.br','ig.com.br','globo.com','globomail.com','r7.com','aol.com','protonmail.com','proton.me','zoho.com','yandex.com','gmx.com','mail.com'];
+  var UTMS = ['utm_source','utm_medium','utm_campaign','utm_term','utm_content'];
+
+  var root = document.getElementById('lp-root');
+  var form = document.getElementById('form-lead');
+
+  /* ===== Animacao segura ===== */
+  var anims = root.querySelectorAll('.anima');
+  var reduz = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function revelarTudo(){ for (var i=0;i<anims.length;i++) anims[i].classList.add('visivel'); }
+  if (!reduz && 'IntersectionObserver' in window) {
+    document.documentElement.classList.add('js-anim');
+    var io = new IntersectionObserver(function(ents){
+      ents.forEach(function(e){ if (e.isIntersecting){ e.target.classList.add('visivel'); io.unobserve(e.target); } });
+    }, {threshold:0.12, rootMargin:'0px 0px -40px 0px'});
+    for (var i=0;i<anims.length;i++) io.observe(anims[i]);
+    setTimeout(revelarTudo, 2500); /* rede de seguranca */
+  }
+
+  if (!form) return;
+
+  /* ===== UTMs ===== */
+  function store(k,v){ try{ if (v===undefined) return sessionStorage.getItem(k); sessionStorage.setItem(k,v); }catch(e){ return null; } }
+  var qs = new URLSearchParams(location.search);
+  UTMS.forEach(function(k){
+    var v = qs.get(k);
+    if (v) store('lp_'+k, v); else v = store('lp_'+k) || '';
+    var f = form.elements[k]; if (f) f.value = v;
+  });
+  form.elements.page_url.value = location.href;
+  form.elements.referrer.value = document.referrer || '';
+
+  /* ===== Mascara de telefone (nao bloqueia digitacao) ===== */
+  var tel = form.elements.telefone;
+  function formataTel(d){
+    d = d.slice(0,11);
+    if (d.length === 0) return '';
+    if (d.length <= 2) return '(' + d;
+    if (d.length <= 6) return '(' + d.slice(0,2) + ') ' + d.slice(2);
+    if (d.length <= 10) return '(' + d.slice(0,2) + ') ' + d.slice(2,6) + '-' + d.slice(6);
+    return '(' + d.slice(0,2) + ') ' + d.slice(2,7) + '-' + d.slice(7);
+  }
+  tel.addEventListener('input', function(){
+    var pos = tel.selectionStart || 0;
+    var digitosAntes = tel.value.slice(0,pos).replace(/\D/g,'').length;
+    var novo = formataTel(tel.value.replace(/\D/g,''));
+    tel.value = novo;
+    var p = 0, n = 0;
+    while (p < novo.length && n < digitosAntes){ if (/\d/.test(novo[p])) n++; p++; }
+    try{ tel.setSelectionRange(p,p); }catch(e){}
+  });
+
+  /* ===== Validacao ===== */
+  function campo(el){ return el.closest('.lp-campo'); }
+  function marca(el, ok){ var c = campo(el); if (c) c.classList.toggle('erro', !ok); return ok; }
+  function validaEmail(v){
+    v = v.trim().toLowerCase();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)) return false;
+    if (form.getAttribute('data-email') === 'livre') return true;
+    return WEBMAIL.indexOf(v.split('@')[1]) === -1;
+  }
+  function validaTel(v){
+    var d = v.replace(/\D/g,'');
+    if (d.length !== 10 && d.length !== 11) return false;
+    if (/^(\d)\1+$/.test(d)) return false;
+    if (d.length === 11 && d[2] !== '9') return false;
+    return parseInt(d.slice(0,2),10) >= 11;
+  }
+  function valida(el){
+    var v = el.value || '';
+    if (el.name === 'email') return marca(el, validaEmail(v));
+    if (el.name === 'telefone') return marca(el, validaTel(v));
+    if (el.required) return marca(el, v.trim().length >= 2);
+    return true;
+  }
+  var visiveis = form.querySelectorAll('.lp-campo input, .lp-campo select');
+  for (var j=0;j<visiveis.length;j++){
+    visiveis[j].addEventListener('blur', function(){ if (this.value) valida(this); });
+    visiveis[j].addEventListener('input', function(){ if (campo(this).classList.contains('erro')) valida(this); });
+  }
+
+  /* ===== Envio para webhook Make/Celonis ===== */
+  var btn = form.querySelector('button[type="submit"]');
+  var fb = form.querySelector('.form-feedback');
+  var txtBtn = btn.innerHTML;
+
+  form.addEventListener('submit', function(ev){
+    ev.preventDefault();
+    fb.className = 'form-feedback'; fb.textContent = '';
+
+    var ok = true, primeiro = null;
+    for (var k=0;k<visiveis.length;k++){ if (!valida(visiveis[k])){ ok = false; primeiro = primeiro || visiveis[k]; } }
+    if (!ok){ primeiro.focus(); return; }
+    if (form.elements.website.value){ return; } /* bot */
+
+    var dados = new URLSearchParams(new FormData(form));
+    dados.delete('website');
+    dados.set('telefone_digitos', tel.value.replace(/\D/g,''));
+    dados.set('data_envio', new Date().toISOString());
+
+    btn.disabled = true; btn.textContent = 'Enviando...';
+
+    fetch(WEBHOOK_URL, { method:'POST', body:dados })
+      .then(function(r){ if (!r.ok) throw new Error('HTTP ' + r.status); })
+      .then(function(){
+        fb.className = 'form-feedback ok'; fb.textContent = MSG_OK;
+        form.reset();
+        UTMS.forEach(function(k){ form.elements[k].value = store('lp_'+k) || ''; });
+        form.elements.page_url.value = location.href;
+        form.elements.referrer.value = document.referrer || '';
+        if (URL_OBRIGADO) location.href = URL_OBRIGADO;
+      })
+      .catch(function(){ fb.className = 'form-feedback falha'; fb.textContent = MSG_FALHA; })
+      .then(function(){ btn.disabled = false; btn.innerHTML = txtBtn; });
+  });
+})();
+</script>
+</body>
+</html>

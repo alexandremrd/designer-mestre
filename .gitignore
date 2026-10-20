@@ -1,0 +1,6 @@
+﻿Clientes/
+__pycache__/
+*.pyc
+.env
+*.key
+node_modules/
