@@ -1,6 +1,6 @@
-# Módulo Vídeo, Edição (Legenda + KV) e Motion
+# Módulo Vídeo, Edição (Legenda + KV), Dramaturgia para IA de Vídeo e Motion
 
-Módulo autônomo e unificado para **edição mecânica** de vídeo do cliente (legenda queimada no KV + overlay + trilha + corte de pausas), **criação** de roteiro/UGC/IA de vídeo e **motion design** programático. Opera com ferramentas nativas e scripts internos (`assets\reels_legenda.py`), sem depender de sites ou aplicativos externos.
+Módulo autônomo e unificado para **edição mecânica** de vídeo do cliente (legenda queimada no KV + overlay + trilha + corte de pausas), **direção dramatúrgica** de roteiro/UGC/IA de vídeo e **motion design** programático. Opera com ferramentas nativas e scripts internos (`assets\reels_legenda.py`), sem depender de sites ou aplicativos externos.
 
 ---
 
@@ -50,30 +50,40 @@ python "<PASTA_DO_AGENTE>\assets\reels_legenda.py" ^
 
 ---
 
-## Parte B · Roteiro, UGC e direção de cena para IA de vídeo
+## Parte B · Roteiro, Dramaturgia Cinematográfica, UGC e Direção para IA de Vídeo
 
-### 1. Roteiro (30 s)
-Gancho 0–3 s · Problema 4–8 s · Solução 9–18 s · Prova 19–24 s · CTA 25–30 s. A voz vem primeiro e define o tempo; as cenas são feitas em paralelo.
+### 1. Estrutura de Roteiro Publicitário (30 s) & Regra dos 6 de Walter Murch
+- **Arco de 30 s:** Gancho 0–3 s (problema ou resultado concreto) · Problema 4–8 s · Solução/Mecanismo 9–18 s · Prova 19–24 s · CTA 25–30 s. A voz vem primeiro e define o tempo.
+- **Dramaturgia e Fórmula de Cena (obrigatória antes do prompt):**
+  - **Fórmula da Cena (1 frase):** `Desejo + Obstáculo + Geometria Espacial (Foreground / Midground / Background) + Direção do Olhar + Ritmo`.
+  - **Lei dos 3 Detalhes Físicos por Take:** todo plano deve declarar (1) pressão ambiental (vento, vapor, reflexo de chuva, luz rasante), (2) micro-ação física do corpo/produto, e (3) âncora sonora ou motivo visual.
+  - **Lei das 3 Funções:** um take deve mudar a emoção, avançar a ação ou aumentar a pressão; se não fizer nenhum dos três, cortar.
+  - **Regra dos 6 de Murch no corte:** Emoção (51%) > História (23%) > Ritmo (10%) > Eye-trace (7%) > Plano 2D (5%) > Espaço 3D (4%).
+  - **Escada de Montagem:** `longo → mais curto → mais curto → pausa respiratória → impacto`. A câmera só se move quando há mudança na cena.
 
-### 2. UGC sem cara de IA
-- Câmera de mão imperfeita e luz de janela; ambiente vivido; micro-pausas e gestos espontâneos; linguagem de smartphone em 9:16 com cortes secos; produto em uso real.
+### 2. Vocabulário Canônico de Câmera (12 Movimentos e 6 Ângulos)
+- **Movimentos:** `Push-in` (tensão/detalhe) · `Pull-back / Dolly out` (revelação de contexto) · `Tracking shot` (acompanhamento lateral) · `Pan` (rotação no eixo horizontal) · `Tilt` (eixo vertical, imponência) · `Crane up/down` (abertura/revelação vertical) · `Orbit / Arc` (giro 360° heroico no produto) · `Dolly zoom` (vertigem dramática) · `Handheld / Steadicam` (realismo UGC/documental) · `Static / Locked-off` (packshot limpo) · `Slow-motion` (luxo/impacto físico) · `Timelapse` (transformação temporal).
+- **Ângulos:** `Eye-level` (neutro/humano) · `Low angle` (poder/aspiracional/luxo) · `High angle` (visão geral) · `Bird's eye / Top-down` (flat-lay geométrico) · `Dutch angle` (tensão) · `Over-the-shoulder / POV` (intimismo, unboxing).
+
+### 3. UGC Autêntico (Sem Cara de IA)
+- **Fórmulas UGC (Unboxing, Review, Rotina):** câmera de mão com leve oscilação natural (`slightly shaky handheld, front-facing phone camera quality, not studio-perfect`), luz natural de janela, ambiente vivido real, micro-pausas espontâneas, formato 9:16 vertical com cortes secos e produto em uso real.
 - Depoimento só real ou claramente encenado por ator; nunca apresentar como cliente verdadeiro.
 
-### 3. Direção de cena para IA de vídeo
-Prosa densa em inglês, com tradução, nesta ordem: plano/câmera · sujeito e ação · cenário · luz (fonte, direção, Kelvin) · paleta e clima · lente e profundidade · movimento de câmera · atmosfera/textura · referência estética · duração e ritmo.
-Manter uma bíblia de consistência entre as cenas do mesmo projeto, salva em `Trabalho\` da pasta da solicitação `[EV]`.
+### 4. Adaptadores de Física por Motor de Vídeo & Filtro Anti-Slop
+- **Ordem densa em inglês (SLCT Cinematográfico):** `[Plano, Ângulo e Movimento de Câmera] + [Sujeito e Micro-ação Física] + [Cenário em 3 Planos e Pressão Ambiental] + [Luz: fonte, direção, razão Key:Fill, Kelvin] + [Paleta, Óptica/Lente, Grão e Ritmo/Duração]`.
+- **Adaptação por Motor:**
+  - **Veo 3 / 3.1:** brilha em cenas cinematográficas longas, física coerente e áudio/SFX sincronizado (para UGC, exigir explicitamente `"phone camera quality, casual home lighting, not cinematic"`).
+  - **Kling 2.6 / 3.0 Master:** brilha em *Image-to-Video* de produto e consistência de personagem (`[Character A: ...]` binding, `cfg_scale 0.3–0.5` para liberdade ou `0.7–0.9` para aderência estrita + campo de negative prompt).
+  - **Seedance 2.5 / v1 Pro:** brilha em movimento corporal humano natural, UGC e sequências multi-plano de até 30 s com diálogo `{ Personagem: "fala" }`.
+  - **Sora 2:** movimentos de câmera contínuos e transições espaciais suaves (4s / 8s / 12s).
+  - **MiniMax Hailuo:** física volumétrica densa e vetores explícitos de câmera (`[Pan left]`, `[Dolly in]`, `[Orbit]`, intensidade `1–10`).
+- **Filtro Anti-Slop de Vídeo:** proibido usar palavras vazias como `cinematic, epic, stunning, masterpiece, beautiful lighting, dynamic camera` — substituir sempre pela descrição física real da luz, lente e movimento. Manter bíblia de consistência em `Trabalho\` da pasta `[EV]`.
 
 ---
 
 ## Parte C · Motion Design (animações programáticas)
 
 - Separar **comps** neutros (abertura, headline, dado, citação, CTA) da **skin** do cliente (cores, fontes, logo e áudio do `design_system.md`).
-- Segmentar a copy:
-  - pergunta ou frase curta = gancho;
-  - número, % ou R$ = cena de dado;
-  - aspas = citação;
-  - imperativo = CTA.
-- Render programático em 1080×1350 ou 1080×1920.
-- Safe zones do Story valem para o 9:16. Logo oficial, nunca animada de forma que deforme.
-- Projeto em `Trabalho\` e render final em `Exportados\`, na pasta da solicitação `[MT]`.
-- Checagem final: `qualidade.md` §C (tokens de duração, reduced-motion, corte no beat).
+- Segmentar a copy: pergunta/frase curta = gancho; número/%/R$ = cena de dado; aspas = citação; imperativo = CTA.
+- Render programático em 1080×1350 ou 1080×1920. Safe zones do Story valem para o 9:16. Logo oficial nunca deformada.
+- Projeto em `Trabalho\` e render final em `Exportados\`, na pasta da solicitação `[MT]`. Checagem final: `qualidade.md` §C.

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-UI/UX Pro Max Core - BM25 search engine for UI/UX style guides
+Designer Mestre UI/UX & Brand Engine Core - BM25 search engine for UI/UX & Brand Design Systems
 """
 
 import csv
@@ -75,6 +75,11 @@ CSV_CONFIG = {
         "file": "google-fonts.csv",
         "search_cols": ["Family", "Category", "Stroke", "Classifications", "Keywords", "Subsets", "Designers"],
         "output_cols": ["Family", "Category", "Stroke", "Classifications", "Styles", "Variable Axes", "Subsets", "Designers", "Popularity Rank", "Google Fonts URL"]
+    },
+    "brand": {
+        "file": "brands.csv",
+        "search_cols": ["Brand ID", "Brand Name", "Category", "Preferred Mode", "Keywords", "Summary", "Typography", "Overview"],
+        "output_cols": ["Brand ID", "Brand Name", "Category", "Preferred Mode", "Summary", "Primary Accent", "Canvas", "Color Tokens", "Typography", "Overview", "Elevation & Depth", "Do and Dont", "Responsive Strategy", "Design MD File"]
     }
 }
 
@@ -83,7 +88,7 @@ CSV_CONFIG = {
 UNTRUNCATED_COLS = {
     "Code Example Good", "Code Example Bad", "Code Good", "Code Bad",
     "Implementation Checklist", "Design System Variables", "CSS Import",
-    "Tailwind Config", "GSAP Snippet",
+    "Tailwind Config", "GSAP Snippet", "Color Tokens", "Overview", "Do and Dont",
 }
 
 STACK_CONFIG = {

@@ -65,9 +65,8 @@ SEMANTIC_COLOR_ENTRIES = (
 )
 
 # ============ DESIGN DIALS (1-10) ============
-# Inspired by taste-skill's DESIGN_VARIANCE / MOTION_INTENSITY / VISUAL_DENSITY
-# knobs: three optional 1-10 sliders that bias the existing query-based search
-# instead of replacing it. Each dial buckets into a low/mid/high tier.
+# Three optional 1-10 sliders (DESIGN_VARIANCE / MOTION_INTENSITY / VISUAL_DENSITY)
+# that bias the query-based search. Each dial buckets into a low/mid/high tier.
 DIAL_TIERS = {
     "variance": [
         (1, 3, {"label": "Centered / Minimal", "style_keywords": ["Minimalism", "Exaggerated Minimalism", "centered", "symmetric", "grid-based"]}),

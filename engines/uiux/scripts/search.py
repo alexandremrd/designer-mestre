@@ -1,35 +1,21 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-UI/UX Pro Max Search - BM25 search engine for UI/UX style guides
+Designer Mestre UI/UX & Brand Engine - BM25 search engine for UI/UX, Brand Archetypes & Design Systems
 Usage: python search.py "<query>" [--domain <domain>] [--stack <stack>] [--max-results 3]
+       python search.py "<query>" --domain brand
+       python search.py "<brand-slug>" --brand
        python search.py "<query>" --design-system [-p "Project Name"]
-       python search.py "<query>" --design-system --persist [-p "Project Name"] --output-dir "<project-root>" [--page "dashboard"]
-       python search.py "<query>" --design-system --variance 8 --motion 9 --density 7
 
-Domains: style, color, chart, landing, product, ux, typography, google-fonts, icons, gsap, react, web
-Stacks: react, nextjs, vue, svelte, astro, swiftui, react-native, flutter, nuxtjs, nuxt-ui,
-        html-tailwind, shadcn, jetpack-compose, threejs, angular, laravel
-
-Design dials (1-10, only with --design-system):
-  --variance   DESIGN_VARIANCE: 1=centered/minimal, 10=bold/asymmetric
-  --motion     MOTION_INTENSITY: 1=subtle, 10=complex; attaches a GSAP snippet from motion.csv
-  --density    VISUAL_DENSITY: 1=spacious, 10=dense/dashboard; overrides the spacing scale
-
-Persistence (Master + Overrides pattern):
-  --persist      Save design system to design-system/<project-slug>/MASTER.md
-  --output-dir   Directory the design-system/ folder is created under (defaults to cwd --
-                 always pass this explicitly, pointed at the project root)
-  --page         Also create a page-specific override file in design-system/<project-slug>/pages/
-  --force        Overwrite an existing MASTER.md (without this, persistence is skipped
-                 if MASTER.md already exists, so prior design decisions aren't lost)
+Domains: style, color, chart, landing, product, ux, typography, google-fonts, icons, gsap, react, web, brand
 """
 
 import argparse
 import json as json_module
 import sys
 import io
-from core import CSV_CONFIG, AVAILABLE_STACKS, MAX_RESULTS, UNTRUNCATED_COLS, search, search_stack
+from pathlib import Path
+from core import CSV_CONFIG, AVAILABLE_STACKS, MAX_RESULTS, UNTRUNCATED_COLS, DATA_DIR, search, search_stack
 from design_system import generate_design_system
 
 # Force UTF-8 for stdout/stderr to handle emojis on Windows (cp1252 default)
@@ -48,10 +34,10 @@ def format_output(result, full=False):
 
     output = []
     if result.get("stack"):
-        output.append("## UI Pro Max Stack Guidelines")
+        output.append("## Designer Mestre Stack Guidelines")
         output.append(f"**Stack:** {result['stack']} | **Query:** {result['query']}")
     else:
-        output.append("## UI Pro Max Search Results")
+        output.append("## Designer Mestre Search Results")
         domain_note = result['domain']
         if result.get("auto_detected"):
             domain_note += " (auto-detected"
@@ -94,9 +80,10 @@ def format_output(result, full=False):
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="UI Pro Max Search")
-    parser.add_argument("query", help="Search query")
+    parser = argparse.ArgumentParser(description="Designer Mestre Search")
+    parser.add_argument("query", help="Search query or brand slug")
     parser.add_argument("--domain", "-d", choices=list(CSV_CONFIG.keys()), help="Search domain")
+    parser.add_argument("--brand", "-b", action="store_true", help="Print full DESIGN.md for the matching brand archetype")
     parser.add_argument("--stack", "-s", choices=AVAILABLE_STACKS, help=f"Stack-specific search. Available: {', '.join(AVAILABLE_STACKS)}")
     parser.add_argument("--max-results", "-n", type=int, choices=range(1, 21), default=MAX_RESULTS,
                         metavar="1-20", help="Max results (default: 3)")
@@ -117,6 +104,24 @@ if __name__ == "__main__":
     parser.add_argument("--density", type=int, choices=range(1, 11), metavar="1-10", help="VISUAL_DENSITY dial: 1=spacious, 10=dense/dashboard; overrides the spacing scale (only with --design-system)")
 
     args = parser.parse_args()
+
+    # Full DESIGN.md brand archetype lookup
+    if args.brand:
+        md_dir = DATA_DIR / "design_md"
+        slug = args.query.strip().lower()
+        exact = md_dir / f"{slug}.md"
+        if exact.exists():
+            print(exact.read_text(encoding="utf-8"))
+            sys.exit(0)
+        res = search(args.query, "brand", 1)
+        if res.get("results"):
+            rel = res["results"][0].get("Design MD File", "")
+            candidate = DATA_DIR / rel
+            if candidate.exists():
+                print(candidate.read_text(encoding="utf-8"))
+                sys.exit(0)
+        print(f"No brand DESIGN.md found for '{args.query}'", file=sys.stderr)
+        sys.exit(1)
 
     # Design system takes priority
     if args.design_system:

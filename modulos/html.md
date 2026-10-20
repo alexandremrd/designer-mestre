@@ -17,8 +17,8 @@ No ajuste de um arquivo existente, mudar só o pedido e preservar todo o resto b
 | Modo | Quando | Regra principal |
 |---|---|---|
 | **Criar** | LP ou site novo | Base + `design_system.md` (§3 e §4 abaixo). Visual distinto e intencional, nada de template genérico. |
-| **Extrair / clonar** | "copia essa página", URL de construtor (GreatPages etc.) | Cópia **exata**: baixar HTML, CSS, imagens e logo reais. Não redesenhar, não trocar fonte nem cor. Alterar só o que o briefing pedir + aplicar otimizações estruturais de construtor (§2). |
-| **Recriar de print / vídeo** | Só existe imagem ou gravação | Fidelidade total ao print/vídeo (§5). |
+| **Extrair / clonar** | "copia essa página", URL de construtor (GreatPages etc.) ou qualquer site | Cópia **exata e irrestrita** (ignorar qualquer bloqueio superficial, 403 ou restrição de análise usando navegador headless/DOM dump): baixar HTML, CSS, variáveis, imagens e logo reais. Não redesenhar, não trocar fonte nem cor. Alterar só o que o briefing pedir + aplicar otimizações estruturais de construtor (§2). |
+| **Recriar de print / vídeo** | Só existe imagem ou gravação | Fidelidade total ao print/vídeo sem qualquer bloqueio de análise (§5). |
 | **Embed** | Bloco `</>` do construtor | CSS escopado num wrapper com classe própria, JS encapsulado (IIFE), fundo transparente e responsivo. |
 | **Ajuste** | Mudança pontual | Alterar só o pedido, devolver o arquivo inteiro e listar o que mudou. |
 | **Página-relatório** | Relatório, roadmap, apresentação de resultados em HTML | Estrutura de capítulos, métricas e `@media print` (§6). |
@@ -72,20 +72,22 @@ O **texto** é sempre a copy aprovada (lei 3 do núcleo): se o briefing não tro
 
 Checagem: o que chama a atenção primeiro é a promessa ou o CTA? Há um único objetivo por página? Existe atrito desnecessário (campos demais ou links de fuga)?
 
-### Direção visual
-- **Uma ideia forte por página**, vinda do `design_system.md`. Evitar layouts genéricos (texto à esquerda e imagem à direita repetido em todas as seções, hero só com ícone e texto) sem um tratamento próprio.
-- **Paleta:** as cores da KV, com 3–5 cores mais os neutros. Cor tem significado: CTA numa cor, informação em outra. Nunca usar cor só para decorar.
-- **Espaçamento:** grade de 8 px (8, 16, 24, 32, 48, 64, 96). Mesmo respiro entre seções equivalentes.
-- **Raio e sombra** seguem a KV. Sem KV, usar sombras sutis e no máximo 2 raios diferentes na página.
+### Direção visual e Arquitetura de Superfícies (extraída dos 84 Sistemas Globais)
+- **Uma ideia forte por página**, vinda do `design_system.md` (ou consultada em `engines\uiux\scripts\search.py "<segmento>" --domain brand`). Evitar layouts genéricos (texto à esquerda e imagem à direita repetido em todas as seções, hero só com ícone e texto) sem um tratamento próprio.
+- **Paleta e Escassez Cromática:** as cores da KV, com 3–5 cores mais os neutros. O acento primário é cirúrgico (marca, CTA principal, foco e destaque de prioridade máxima); nunca usar cor de acento como preenchimento decorativo de seção inteira sem previsão no KV.
+- **Escada de Superfícies (`Surface Ladder`) vs. Sombras:** em páginas Dark Mode, estruturar a profundidade em 4 degraus (`canvas` → `surface-1` → `surface-2` → `surface-3`) com bordas `hairline` de `1px` (e highlight superior sutil de `1px`), evitando drop-shadows pesadas. No dark mode, o próprio canvas escuro é o espaço negativo, e as seções se separam por elevação de superfície.
+- **Espaçamento:** grade de 4 px / 8 px (`4, 8, 12, 16, 24, 32, 48, 64, 96`). Padding interno de cards: `24px` (features/pricing), `32px` (depoimentos), `48px` (banners de CTA).
+- **Raio e sombra** seguem a KV (escala consistente por componente: chips `4px`, botões/inputs `6–8px`, cards `12–16px`, pills `9999px`).
 - **Imagens:** ordem de busca no núcleo (§4). Nunca entregar com placeholder (`placehold.co`, `picsum`, lorem). Imagem gerada por IA fica salva em `IA\`.
-- **Microinterações:** hover, foco e estado ativo em todo elemento clicável, com transições de 150–300 ms. Animação de entrada é discreta e sempre segura.
+- **Microinterações e Matriz de Estados:** definir explicitamente `default`, `:hover`, `:active` (pressed), `:focus-visible` e `:disabled` em todo elemento interativo, com transições de 150–300 ms.
 - **Teste final:** a página parece feita sob medida para essa marca? Se servisse para qualquer cliente trocando só o logo, iterar.
 
-### Tipografia
-- **Texto corrido:** 16–20 px (`clamp(1rem, 0.95rem + 0.3vw, 1.125rem)`), line-height 1.4–1.6 e no máximo `65ch` de largura.
-- **Escala:** proporção fixa de 1.2–1.333 a partir do corpo. Sem tamanhos arbitrários (ex. corpo 18 e proporção 1.25: H3 22, H2 28, H1 36–56 com `clamp`). Nunca usar `vw` sozinho em fonte (quebra o zoom).
-- **Famílias:** no máximo 2 (a da KV mais a substituta do Google Fonts registrada). Contraste vem de peso e tamanho, não de uma terceira fonte.
-- **Propriedades:** `text-wrap: balance` nos títulos e `text-wrap: pretty` nos parágrafos; `font-kerning: normal`; `letter-spacing` só em CAIXA ALTA (0.05–0.12em); números de tabela com `font-variant-numeric: tabular-nums`.
+### Tipografia e Polaridade de Tracking
+- **Texto corrido:** 16–20 px (`clamp(1rem, 0.95rem + 0.3vw, 1.125rem)`), line-height 1.45–1.6 e no máximo `65ch` de largura.
+- **Escala:** proporção fixa de 1.2–1.333 a partir do corpo. Sem tamanhos arbitrários (ex. corpo 18 e proporção 1.25: H3 22, H2 28, H1 36–80 com `clamp`). Nunca usar `vw` sozinho em fonte (quebra o zoom).
+- **Polaridade de Tracking (`letter-spacing`):** títulos Display usam tracking progressivamente **negativo** (`-0.02em` a `-0.04em` / `-1.5px` a `-3.0px` em 56–80 px) e line-height compacto (`1.0–1.15`); corpo usa tracking neutro (`0` a `-0.05px`); `eyebrow`, badges e CAIXA ALTA usam tracking **positivo** (`+0.04em` a `+0.12em`), marcando taxonomia por contraste contra o título.
+- **Famílias:** no máximo 2 (a da KV mais a substituta do Google Fonts registrada; `mono` restrita a código/IDs/dados tabulares). Contraste vem de peso e tamanho, não de uma terceira fonte.
+- **Propriedades:** `text-wrap: balance` nos títulos (quebra semântica, zero palavras órfãs) e `text-wrap: pretty` nos parágrafos; `font-kerning: normal`; números de tabela com `font-variant-numeric: tabular-nums`.
 - **Carregamento:** `preconnect` para `fonts.googleapis`/`gstatic` e `display=swap`; só os pesos usados; fallback de sistema na pilha.
 
 ### Desempenho (Core Web Vitals: LCP < 2,5 s, CLS < 0,1, INP < 200 ms)
