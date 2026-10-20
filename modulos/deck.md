@@ -39,6 +39,7 @@ fitDeck();
   - `.lede` (abertura): `24px–27px`, `line-height: 1.42`; corpo de card ≥ `17px` (nunca diminuir fonte antes de ajustar largura, quebras de linha ou grid).
   - `.eyebrow` / badges / números de slide: `12px`, `font-weight: 700`, `letter-spacing: +0.09em a +0.14em`, `text-transform: uppercase`.
 - **Portabilidade 100% Offline (Inlining de Logos e Grafismos):** antes de entregar o `index.html`, converter todas as logos e imagens locais para Data URIs Base64 (`data:image/png;base64,...` ou SVG inline) para que o arquivo funcione isoladamente ao ser enviado ao cliente. Esconder a logo de rodapé na capa e no slide de encerramento quando a logo principal já estiver em destaque no centro/topo.
+- **Partir sempre de `<AG>\assets\base_deck.html`** (escala, navegação, teclado, swipe, progresso e reduced-motion prontos); trocar só tokens e slides.
 
 ---
 
@@ -65,6 +66,8 @@ Escolher o arquétipo de cada slide pela **estrutura semântica da copy aprovada
   - Alternar entre `.slide.hero` (cor/gradiente institucional de impacto na capa, statements e fechamento), `.slide` (base editorial de leitura), `.slide.depth` (fundo escuro de profundidade) e `.slide.spotlight` (contraste limpo de marca).
   - Se o KV do cliente for 100% Dark Mode (ex.: preto + ouro/neon), manter os mesmos 4 tratamentos variando a densidade e a iluminação de fundo (base dark editorial · hero com glow ascendente na cor de acento · depth com radial superior · spotlight em carvão `#101010` com halo superior).
   - **Regra de ritmo:** proibido mais de 2 slides consecutivos com o mesmo fundo **e** a mesma composição.
+- Quebrar fundo e composição em ~1/3 e ~2/3 do deck (picos de atenção). Gráficos: regras do `html-relatorio.md` (SVG inline).
+- Espaço morto: o conteúdo ocupa a altura útil; cards de métrica e tabelas crescem para não deixar faixa vazia.
 
 ---
 
@@ -87,3 +90,5 @@ Escolher o arquétipo de cada slide pela **estrutura semântica da copy aprovada
   1. Validar ausência de `–`, `—`, `~`, ` - `, placeholders, metalinguagem, `<li>` sem `<svg>` e logos externas não embutidas em base64.
   2. Testar centralização matemática (`left margin == right margin ±1px` e `top margin == bottom margin ±1px`, sem cortar bordas) nos 4 viewports canônicos: **`1024×768`**, **`1366×768`**, **`1600×900`** e **`1920×1080`**.
   3. Renderizar os slides em `1600×900`, montar prancha de contato (`python assets\img_qa.py prancha Trabalho\slides\*.png -o Trabalho\_prancha_deck.jpg`) e inspecionar individualmente slides densos (tabelas, processos, 5+ cards, hub) garantindo zero espaço morto acidental, zero colisão com o rodapé e console JS limpo.
+- **QA estático primeiro:** `python <AG>\assets\validate_deck.py deck.html` (travessões, metalinguagem, `<li>` sem SVG, asset externo, nav/escala ausentes, parágrafo > 230, 3 fundos iguais). Zerar ERRO, depois o QA visual.
+- Texto sobre vidro/gradiente: medir contraste na região mais clara. Ajuste pontual: alterar só os slides citados.

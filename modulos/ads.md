@@ -14,14 +14,17 @@ Ciclo de entrega: núcleo §2. Quando houver export: SVG em `Trabalho\`, PNG em 
 ## 2. Arquitetura de Ponto Focal, Base SVG e Preflight Perceptivo
 - **Arquétipo existente:** se houver arquétipo aprovado em `_DESIGN\templates\` (`E1.svg`, `E2.svg`...), clonar o SVG e injetar copy e imagem mantendo coordenadas fixas do `design_system.md`.
 - **Hierarquia de Ponto Focal Único:** exatamente **1 Ponto Focal Primário** (o herói que captura o olhar em < 1 s), 1 Âncora Secundária (contexto/apoio) e Elementos Terciários (headline, badge, logo). Proibido *"equal-emphasis"* (3+ elementos disputando o mesmo peso visual).
-- **3 Testes de Preflight Perceptivo (antes de renderizar a prévia):**
+- **4 Testes de Preflight Perceptivo (antes de renderizar a prévia):**
   1. **Teste da Miniatura (100×100 px):** reduzida a miniatura, a silhueta do herói e a hierarquia continuam imediatamente legíveis?
   2. **Teste em Escala de Cinza:** sem cor, o contraste de luminância/valor separa claramente primeiro plano, fundo e tipografia?
   3. **Zero Tangências Acidentais:** elementos próximos devem ter **sobreposição decidida (≥ 15%)** ou **separação limpa** — proibido bordas apenas "encostando" ou quase tangenciando.
+  4. **Bounds:** todo elemento com `x+largura ≤ viewBox` e `y+altura ≤ altura`; mover um elemento = reposicionar os ancorados nele e rechecar.
 
 ## 3. Formatos, Safe Zones e Leis Invioláveis de Composição
 - **Feed 4:5:** `viewBox="0 0 1080 1350"`.
 - **Story/Reels 9:16:** `viewBox="0 0 1080 1920"`; safe zone U2.
+- **Outros formatos (só se pedidos; cada um é um `viewBox` próprio):** FB/LinkedIn 1200×628 · X 1200×675 · capa X 1500×500 · capa LinkedIn 1584×396 · YouTube thumb 1280×720 · capa YouTube 2560×1440 (seguro 1546×423) · Pinterest 1000×1500 · hero web 1920×600–1080 · display 300×250, 336×280, 728×90, 160×600, 300×600, 320×50, 970×250 · e-mail 600×200. Conteúdo crítico nos 70–80% centrais, ≥ 50 px da borda, 1 CTA. Em formato < 1080 px de largura, o piso de 24 px do U1 escala proporcionalmente (mín. 16 px em display 320×50).
+- **Pisos em 1080 px:** headline ≥ 48 px · apoio ≥ 32 px · CTA ≥ 28 px. Zonas: marca/valor no topo, mensagem + herói no meio, ação na base.
 - **Carrossel:** mesmo `viewBox` em todos os cards, seguindo a progressão de arquétipos do cliente (capa E1 → internos E2 → endcard E3) e leitura contínua entre os títulos.
 - **Regras Anti-Corte e Endcard Forte (Invioláveis):**
   1. **Zero corte ou esmagamento de fotos:** nunca esticar, achatar ou recortar produtos/aeronaves/pessoas em tiras estreitas (`pill`, janelinha espremida ou círculo que decepa o objeto). Usar enquadramento editorial com respiro, fusão contínua em gradiente sobre o fundo do KV ou painel translúcido estruturado.
@@ -47,3 +50,5 @@ Ciclo de entrega: núcleo §2. Quando houver export: SVG em `Trabalho\`, PNG em 
 - **Render:** via headless browser com wrapper mínimo (`<style>@import url('[Google Fonts]'); body{margin:0;width:1080px;height:1350px;overflow:hidden}</style>` + `<svg>` inline). Prancha local: `python assets\img_qa.py prancha Exportados\*.png -o Trabalho\_prancha.jpg` e olhar só ela. Aplicar U6 + U7 + U8 do núcleo.
 - **Imagem:** acervo do cliente primeiro; faltou → `imagem.md`. Texto, rótulo e logo nunca na imagem gerada (entram no SVG).
 - **Nomenclatura:** a do briefing; sem ela: `[CLIENTE]_[CAMPANHA]_[AAAAMM]_E[n]_[FEED|STORY].png`. Revisões `_V2`, `_V3`.
+- **Export:** PNG em 1× do `viewBox` para social; 2× (`deviceScaleFactor: 2`) só para impressão/ampliação; esperar fontes e imagens carregarem antes da captura.
+- **Impresso:** 300 DPI (150 em grande formato), CMYK com perfil do cliente, sangria 3–5 mm, logo em PDF vetorial; nunca inventar Pantone.

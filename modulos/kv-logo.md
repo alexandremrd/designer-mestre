@@ -46,6 +46,7 @@ Cliente antigo com `KV.md`, `NAO_FAZER.md`, `aprovados.md`, `inteligencia.md` se
    - grafismos, arquétipos SVG, composição/respiro/posição da logo/rodapé, fotografia (tema · pessoas · luz · contraste), safe zones, tom de voz e pilares, O Que Fazer (Aprovados) e O Que Não Fazer (Vetos).
 7. Contradições ou itens ausentes essenciais (logo, paleta ou fonte) vão para `## 5. Decisões Pendentes` mantendo `PARCIAL`; quando completo, marcar `STATUS_KV: VALIDADO`.
 8. Cliente já `VALIDADO` num template antigo: campos novos vazios **não** rebaixam o status nem disparam nova análise.
+- E-mails do cliente como fonte: registrar por bloco (cabeçalho, corpo, rodapé) fundo, lista/ícone e botão; vira KV só com confirmação.
 
 ---
 
@@ -62,6 +63,8 @@ Salvar em `Compartilhada\Identidade Visual\` e, se solicitado após aprovação,
   - `04 Tipografia`: `4.1` Principal (`Aa` gigante com contraste primária/acento + pesos) · `4.2` Secundária · `4.3` Hierarquia tabular (`Display 13cqi`, `H1 3cqi`, `H2 1.8cqi`, `H3 1.3cqi`, `Corpo 1cqi`, `Legenda 0.72cqi`) · `4.4` Boas Práticas;
   - `05 Elementos Gráficos`: `5.1` Grafismos/Patterns · `5.2` Iconografia · `5.3` Direção de Fotografia · `5.4` Texturas;
   - `06 Aplicações` (grid irregular com 1 mockup dominante por página) e `07 Encerramento`.
+- **Chrome:** header 12 px caixa-alta +0.12em (marca à esq.; `NN SEÇÃO / N.N` à dir.); rodapé 11 px `Brandbook [Marca] · v1.0` + página em 3 dígitos; capas e divisores sem header. Flat (sem gradiente/sombra) salvo se a marca usar.
+- **Paginação:** 2.3 com 8+ variações, 3.1 com 5+ cores ou 06 com 9+ aplicações = dividir em páginas, 1 mockup dominante por página. Aplicações só as pedidas/existentes (cartão 85×55 mm, A4, envelope DL/C5, assinatura de e-mail ≤ 600 px).
 
 ### 2. Logo nova (somente sob pedido explícito)
 - Se o cliente já tem logo, confirmar que é redesign ou marca nova. Logo de cliente nunca é criada sem pedido explícito (faltou logo num pedido comum = pedir).
@@ -70,6 +73,8 @@ Salvar em `Compartilhada\Identidade Visual\` e, se solicitado após aprovação,
   2. Pesquisa de concorrência para diferenciar (avaliando Distintividade 30%, Relevância 25%, Versatilidade 20%, Atemporalidade 15%, Executabilidade 10%). Nunca imitar marca existente.
   3. Três rotas (símbolo, lettering, combinação) em vetor, com versões horizontal e vertical, cor/positivo/negativo, área de proteção e tamanho mínimo.
   4. Após aprovação, exportar no formato escolhido e salvar SVG/PNG em `Compartilhada\Identidade Visual\`, registrando na tabela de logos do `_DESIGN\design_system.md`. A partir daí vale a lei da logo existente.
+- **Testes antes de apresentar:** legível em 16×16, funciona em 1 cor e P&B, nada some em 32 px. Tipo pela função: wordmark (nome curto) · lettermark (nome longo) · símbolo (só com recall) · emblema (evitar).
+- **Entrega:** SVG (preferido) + PNG transparente 2× + PDF vetorial; versões positiva, negativa e monocromática.
 
 ---
 
@@ -91,6 +96,8 @@ Referência + logo + tipografia → análise → tokens → prévia para aprova�
    - **A1 · obrigatórios da marca:** `--bg` `--fg` `--accent` `--font-display`.
    - **A2 · obrigatórios com padrão:** `--fg-2` `--surface` `--surface-2` `--border` `--success` `--error` `--font-body` `--radius` `--space-4` (16 px) `--motion-fast` (0.18 s).
    - Nome sempre por **função**, nunca por cor (`--accent`, não `--laranja`).
+- **3 camadas de token:** primitivos (rampas, escala 4 px, tipo 1.2–1.25) → semânticos por função (`--accent`, `--surface-1`, `--fg-2`, `--success/--warning/--error/--info` + par `*-foreground` ≥ 4.5:1) → componente (`--btn-bg: var(--accent)`). Peças usam só semânticos; tema troca só a camada semântica. Export DTCG (`$value/$type`) opcional para variáveis do Figma.
+- Componente: tamanhos sm/md/lg · estilos default/outline/ghost/destructive · estados default/hover/focus/disabled/loading.
 
 ### 2. Exportações (sob pedido: "exporta o design system", LP, ou extração de site)
 Salvar em `_DESIGN\export\` (não lidos pelo Gate de KV):

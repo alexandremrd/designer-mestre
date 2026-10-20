@@ -21,6 +21,8 @@ Quando o usuário pedir para separar uma LP em embeds para colar em blocos `</>`
    - **JS em IIFE** (`(function(){ 'use strict'; ... })();`), IDs prefixados (`embed-...`), funções com prefixo curto e `IntersectionObserver` restrito ao próprio wrapper.
    - **Regra fixa de Modal:** no init, mover o modal para `document.body.appendChild(modal)` para escapar de containers pais do construtor que aplicam `transform`/`filter` e quebram `position: fixed`.
    - **Regra fixa de Marquee Full-Bleed (borda a borda):** blocos `</>` ficam presos na largura da coluna e `100vw + calc(50% - 50vw)` gera overflow assimétrico no mobile. Quando houver marquee full-bleed, gerar também `_LP-LEVEL-CODE-marquees.html` para o painel de código da página: ocultar o bloco original mantendo sua caixa no DOM (`.e_XXXXX_BLOCO { visibility: hidden !important; }`), reservar altura na seção-pai (`#b_XXXXX_SECAO { min-height: 90px; }`) e injetar a faixa `.marquee-fb` direto no `document.body` com `position: absolute; left: 0; width: 100vw`, sincronizando `top` e `height` via `getBoundingClientRect() + window.pageYOffset` em `ResizeObserver`, `scroll`, `resize` e timeouts (`200, 600, 1500, 3000, 6000 ms`). Lembrar sempre: `#b_xxx` = ID da seção (pai/âncora); `.e_xxx` = classe do bloco HTML (filho a ocultar).
+3. **Detecção de marquee full-bleed:** `100vw`, 100% da largura no topo/base da seção, `@keyframes translateX` ou pedido "borda a borda" → gerar `_LP-LEVEL-CODE-marquees.html`. Ocultar o bloco âncora só com `visibility:hidden` (o toggle desktop/mobile do construtor remove do DOM e quebra o JS).
+4. **Construtor que remove `<script>` inline** (testar no preview publicado): hospedar o componente como página standalone e embedar por `<iframe>`.
 
 ## 3. Recriar de print ou vídeo
 
@@ -30,3 +32,5 @@ Quando o usuário pedir para separar uma LP em embeds para colar em blocos `</>`
 - **Print de celular:** sem moldura do aparelho nem barra do navegador.
 - **Vídeo:** recriar o comportamento para que as mesmas interações produzam o mesmo resultado; prestar atenção a cor, fonte, padding, margin e borda; mockar dados quando houver backend; deixar funcional com JS.
 - **Verificação:** renderizar em desktop e mobile e comparar lado a lado com o print. Corrigir até ficar igual.
+- Nunca usar o print inteiro como imagem ou fundo; só ativos recortáveis. Ativo pixelado → upscale (`imagem.md` A.1.6), nunca esticar por CSS.
+- Elemento apontado no construtor: o DOM vivo pode ter classes injetadas; localizar por tag + id + classe + texto e alterar só ele.

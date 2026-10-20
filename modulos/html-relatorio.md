@@ -11,3 +11,7 @@ Carregado só junto com `html.md`. Para slides navegáveis use `deck.md`.
   5. **Preenchimento de Conteúdo:** compacto, escaneável e 100% auto-contido (offline).
 - **Componentes e Responsividade:** Hero enxuto (eyebrow, título, subtítulo ≤ 2 frases e 4–6 métricas numéricas de status); Navegação horizontal `sticky` (obrigatória a partir de 4 seções); espaçamento vertical uniforme entre seções (`20–24px`); abaixo de `980px`, grids de 4 colunas viram 2 colunas; abaixo de `640px`, 1 coluna; `@media print` oculta navegação, remove sombras e aplica `break-inside: avoid`.
 - **Verificação final:** abre offline, imprime em PDF sem cortes e os links da navegação levam às seções certas.
+- **Conteúdo:** abrir pelo resultado, estado atual ou decisão pedida; rótulo com nome de negócio (ID técnico só como texto secundário); cada item aparece em 1 lugar só.
+- **Status:** distinguir implantado · em andamento · planejado; nunca "em produção" sem fonte. Cor = categoria, nunca prioridade.
+- **Cards:** ≤ 3 linhas; > 6 do mesmo tipo = agrupar ou tabela; planos, pílula só funcional. Diagrama em 3 colunas: larguras iguais, mesma altura por linha, h3 em 1 linha.
+- **Gráficos (SVG inline, nunca lib por CDN):** tendência = linha; comparação = barra (3–12 categorias); proporção = rosca só até 5; rótulo direto com unidade; nunca só cor; dado ≥ 3:1 contra o fundo.

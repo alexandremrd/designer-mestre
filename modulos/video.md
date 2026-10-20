@@ -18,6 +18,7 @@ Legenda queimada no KV + overlay da marca + exportação 1080×1920. Todo o rest
 | Hook/headline no início | Usar o PNG de intro se existir no Figma/pasta; senão sem |
 | Endcard/CTA | Só se o arquivo existir; não inventar copy |
 | Divergência de headline no briefing | Afeta só a capa/intro; não bloqueia o vídeo |
+- Reframe do master 9:16 para 1:1 ou 16:9 só se pedido, conferindo o enquadramento do rosto/produto em cada um.
 
 ### 2. Overlay
 1. Frame 9:16 no Figma do cliente (link do pedido ou `_DESIGN\templates\overlay_9x16.png`): exportar PNG 1080×1920 **com transparência** (`get_screenshot` não preserva alpha; preferir export do Figma ou montar via SVG).
@@ -33,6 +34,7 @@ Nunca legendar a partir do roteiro sem conferir com a fala real.
 
 ### 4. Comando
 ```
+- `--y 1380`: define a **base** da legenda (em px a partir do topo; no ASS `Alignment=2`, `MarginV = 1920 - y`). Seguro para Reels (`base ≤ 1470`; padrão do script: 1400).
 python "<AG>\assets\reels_legenda.py" ^
   --video "Original\x.mp4" --overlay "Trabalho\overlay.png" [--intro "Trabalho\intro.png" --intro-s 2] ^
   --fonte "<família exata do KV>" --fontsdir "<pasta com .ttf/.otf>" --tamanho 60 ^
@@ -40,7 +42,6 @@ python "<AG>\assets\reels_legenda.py" ^
   --cortar-pausas 0.6 [--musica "Música\m.mp3" --musica-db -20] [--idioma pt] ^
   --out "Exportados\<nome do briefing>.mp4"
 ```
-- `--y 1380`: define a **base** da legenda (em px a partir do topo; no ASS `Alignment=2`, `MarginV = 1920 - y`). Seguro para Reels (`base ≤ 1470`; padrão do script: 1400).
 - 1ª rodada gera `<out>.srt`. Se o usuário corrigir uma palavra, rodar de novo com `--srt <out>.srt` (sem transcrever de novo).
 - `--palavras 3–4` e `--max-car 22–26` para Reels; `--caixa-alta` só se o KV pedir.
 - Saída: H.264 16 Mbps, AAC 192 k, voz normalizada a -16 LUFS.
@@ -82,6 +83,7 @@ Para vídeos de criadores/usuários (Unboxing, Review/Depoimento com pequena hes
 5. **Linguagem Óptica de Smartphone:** `shot on smartphone portrait mode, f/1.8 shallow bokeh, slight digital compression grain, warm slightly saturated colors, 9:16 vertical format`.
 6. **Edição Orgânica:** cortes secos diretos, 1–2 jump cuts intencionais, durações variadas por plano (2 s, 4 s, 3 s) e ritmo calibrado por plataforma (TikTok 15–30 s rápido/saturado · Reels 30–60 s médio/lifestyle · Shorts 45–60 s informativo · Stories 15 s casual extremo).
 7. **Especificidade da Persona e Produto em Uso Real:** roupa cotidiana real, cabelo natural, textura de pele real (`natural skin texture, pores visible, no beauty filter`) e interação física tátil com o produto. Depoimento só real ou claramente encenado por ator; nunca apresentar ficção como cliente verdadeiro.
+- **Sequência por formato:** unboxing = reação ao pacote → abertura com esforço → 1º contato → reação sensorial → mostra à câmera; review = olhar à câmera → contexto → uso → ressalva curta → CTA da copy; antes/depois = mesma luz, ângulo e roupa. Pós: 1–2 jump cuts, legenda via `reels_legenda.py`, áudio ambiente baixo.
 
 ### 4. Anatomia de 10 Elementos do Prompt Cinematográfico & Adaptadores de Física por Motor
 - **Prosa Cinematográfica Contínua em Inglês (80–150 palavras, verbos no presente, zero bullets dentro do prompt final, 1 ação principal por cena + Character Sheet fixo repetido entre cenas do mesmo projeto):**
@@ -93,6 +95,8 @@ Para vídeos de criadores/usuários (Unboxing, Review/Depoimento com pequena hes
   - **Sora 2:** movimentos de câmera contínuos e transições espaciais suaves (4s / 8s / 12s).
   - **MiniMax Hailuo:** física volumétrica densa e vetores explícitos de câmera (`[Pan left]`, `[Dolly in]`, `[Orbit]`, intensidade `1–10`).
 - **Filtro Anti-Slop de Vídeo:** proibido usar palavras vazias como `cinematic, epic, stunning, masterpiece, beautiful lighting, dynamic camera` — substituir sempre pela descrição física real da luz, lente e movimento. Manter bíblia de consistência em `Trabalho\` da pasta `[EV]`.
+- Sem negações no prompt (descrever o que está em cena); negação só no campo negative do motor. Runway (câmera controlada/edição) · Luma (câmera criativa) · Pika (iteração rápida, prompt curto).
+- **Claims:** nenhuma cena mostra garantia, resultado financeiro, comparação ou número sem fonte confirmada (lei 4); risco = 1 linha. Teste de ad: clareza e ritmo antes de grade de cor ou transição elaborada.
 
 ---
 
@@ -107,3 +111,4 @@ Para vídeos de criadores/usuários (Unboxing, Review/Depoimento com pequena hes
   - Escala de entrada de títulos: `spring({ fps, frame: frame - delay, config: { damping: 12, stiffness: 150, mass: 0.5 } })`;
   - Opacidade e movimentos de câmera suaves: `spring({ fps, frame: frame - delay, config: { damping: 200 } })`.
 - Render programático em `1080×1350` (Feed) ou `1080×1920` (Reels/Stories, respeitando as safe zones do Story). Logo oficial nunca deformada. Projeto em `Trabalho\` e render final em `Exportados\` da solicitação `[MT]`. Checagem final: `qualidade.md` §C.
+- **Licença Remotion:** grátis para pessoa física e empresa com até 3 funcionários; acima disso exige Company License — confirmar antes de usar em produção.

@@ -77,6 +77,7 @@ Checagem: o que chama a atenção primeiro é a promessa ou o CTA? Há um único
 - **Teste final:** a página parece feita sob medida para essa marca? Se servisse para qualquer cliente trocando só o logo, iterar.
 
 ### Tipografia
+- **Hero:** H1 com `clamp` de ≥ 40 px (375) a ≥ 64 px (1440); CTA principal visível sem rolar nos dois.
 - **Texto corrido:** 16–20 px (`clamp(1rem, 0.95rem + 0.3vw, 1.125rem)`), line-height 1.45–1.6 e no máximo `65ch` de largura.
 - **Escala, entrelinha e tracking:** U3 do núcleo; tamanhos com `clamp`, nunca `vw` sozinho (quebra o zoom).
 - **Famílias:** U3; `mono` só para código, IDs e dados tabulares.
@@ -117,6 +118,8 @@ Checagem: o que chama a atenção primeiro é a promessa ou o CTA? Há um único
 - **Comportamento:** botão travado no envio, mensagem de sucesso ou erro, honeypot, `autocomplete` correto e erro por campo.
 - **Enquadramento em caixa/card (especialmente no mobile):** quando o formulário estiver sobre um card ou moldura (div própria ou elemento de fundo absoluto em construtores), nunca deixar os inputs/botão colados na borda ou da mesma largura da caixa. Garantir caixa centralizada e respiro interno igual nos 4 lados (`24px` no mobile, `32–40px` no desktop), alinhando cabeçalho do card, campos e botão na mesma largura útil interna e ajustando a altura do card para abraçar até o fim do botão com o mesmo padding inferior. Unificar peso da fonte, seta lateral e hover do botão de submit com os demais CTAs da LP.
 - **Campos:** só os necessários. Cada campo a mais reduz a conversão.
+- **Biblioteca já pronta (`validacao-forms.js`):** CPF/CNPJ, cascata UF → cidade (IBGE; API fora = texto livre), MX e e-mail descartável (DNS falhou = não trava o lead). Usar, não reimplementar.
+- **Erros:** validar no `blur`; 2+ erros no envio = focar resumo no topo com links aos campos; 1 erro = focar o campo; `scroll-margin-top` para header fixo não cobrir. Sem Inteligência no KV: B2B se a copy fala em revenda/CNPJ/empresa; na dúvida B2C, confirmando com o usuário.
 
 ---
 

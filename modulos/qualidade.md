@@ -32,6 +32,7 @@ Ler só a seção do tipo da entrega. Criativo estático novo não abre este mó
 - Animar só `transform` e `opacity`. Durações 0.08 / 0.18 / 0.35 / 0.6 / 1.0 s; escala 0.95–1.04; stagger 0.05–0.10 s.
 - Movimento só se chama atenção, mostra estado ou dá continuidade. `prefers-reduced-motion`: só fade ≤ 0.2 s.
 - Corte no beat: 60/BPM s por batida (30 fps: 1800/BPM frames). Um acento de cor por cena.
+- Saída ≈ 60–70% da duração da entrada; máx. 1–2 elementos animados por tela; LP = 1 entrada orquestrada no carregamento (stagger acima), CSS antes de JS; animação nunca é a única via de estado.
 
 ## D. Deck (1600×900)
 - Cada slide cabe no canvas `1600×900` (`overflow:hidden`), centralizado com `translate(-50%, -50%) scale(var(--deck-scale, 1))` via `visualViewport`; conteúdo demais = dividir ou mudar arquétipo, nunca encolher a fonte abaixo do mínimo (`h2 >= 44px`, `h3 >= 20px`, corpo `>= 17px`).
@@ -75,3 +76,4 @@ Ao revisar, auditar ou refatorar código, LPs, embeds ou motores internos, inspe
 4. **Missing Check:** todo parser, formulário ou ramo não-trivial exige validação explícita de entrada e fallback seguro.
 5. **Speed:** eliminar leituras repetidas de layout (`getBoundingClientRect` em loop), reflows forçados e re-renderizações desnecessárias.
 6. **Lean:** deletar código morto, seletores órfãos e abstrações de uso único; fundir funções duplicadas; preferir APIs nativas da plataforma/stdlib em vez de dependências externas. Limites técnicos intencionais recebem comentário `shortcut: <limite>, <gatilho de upgrade>`.
+7. **Prova:** bug = buscar todos os chamadores antes de editar e corrigir a causa no ponto compartilhado; lógica nova não trivial (ramo, parser, dinheiro, segurança) deixa 1 assert/teste. Achado de revisão só com caso concreto (`entrada X → resultado Y`), agrupado em Deve · Deveria · Opcional. Antes de escrever: já existe? → nativo/stdlib → dependência instalada → mínimo; enxugar nunca corta validação, segurança ou acessibilidade.
