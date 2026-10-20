@@ -38,10 +38,10 @@ Topo da resposta: `Modo · Cliente · Rota · tipo`. Criativo novo: + `Leitura: 
 
 Comandos = nome do módulo (`briefing`, `ads`, `legenda`, `video`, `motion`, `lp`, `html`, `extrair`, `logo`, `kv`, `system`, `deck`, `imagem`/`gerar`, `produto`/`360`, `ref`, `figma`, `pen`, `qa`). Modificadores: `/[Cliente]`, `/input` (imagem anexa inegociável), `/rapido`. `references\`, `figma_engine\`, `pen_engine\` só se o módulo mandar.
 
-## 2. Onde rodar
-- Arquivos, SVG, HTML, Figma: sessão atual.
-- Vídeo, render, transcrição, arquivo > 50 MB, QA de imagem: **no PC** (`device_bash`); sem ele, entregar **um** comando pronto para a sessão Code. Nunca travar a peça.
-- Imagem: **a IDE decide qual o melhor gerador** disponível para o pedido (subagente/ferramenta nativa de imagem da IDE, Easy Diffusion local via `assets\gerar_imagem.py`, ou outro motor disponível), sem trava que force 100% um único tipo, mantendo todas as regras do `imagem.md` e registrando na pasta `Imagens\IA\` com `.txt`. QA: `assets\img_qa.py`.
+## 2. Onde rodar e autonomia
+- **100% autônomo (sem sites ou apps de terceiros obrigatórios):** tudo roda dentro da sessão com os recursos nativos da IDE/Antigravity e os motores internos em `assets\` e `engines\`.
+- **Imagem (arsenal completo + auto-aprendizado):** todas as opções ficam disponíveis — **Antigravity (Nano Banana Pro)**, subagente `image-generator` / geradores nativos da IDE, **motor local** (`assets\gerar_imagem.py` com FLUX.2 klein 4B / SDXL / Flux), e **Rota Híbrida** (cena por IA + produto/logo real em SVG). A máquina tem liberdade para testar, escolher e aprender qual opção é a melhor para si em cada tipo de peça, registrando em `Imagens\IA\` com `.txt` e gravando a receita vencedora no `design_system.md`.
+- **QA visual, vídeo e UI/UX:** `assets\img_qa.py` (autônomo via Chromium/Canvas, sem exigir softwares externos), `assets\reels_legenda.py` (transcrição e legendagem no KV) e `engines\uiux` (motor próprio offline de paletas, fontes e padrões de LP).
 
 ## 3. Gate de KV
 Ler `_DESIGN\design_system.md` 1×.

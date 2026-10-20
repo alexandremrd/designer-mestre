@@ -1,39 +1,19 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-img_qa.py - ferramentas locais de imagem do /designer-mestre (ImageMagick 7 `magick`).
-Instalar uma vez: winget install ImageMagick.ImageMagick
+img_qa.py - Motor autonomo de QA visual do /designer-mestre.
+Nao exige instalacao de programas externos: funciona com Playwright/Chromium da IDE,
+Pillow ou Python puro (stdlib), usando binarios do sistema apenas se ja existirem.
 
-  prancha   PNGs -> uma folha de conferencia (o agente olha 1 imagem, nao N)
+Comandos:
+  prancha   PNGs -> uma folha de conferencia (lado <= 540 px)
   paridade  previa aprovada x screenshot do Figma -> RMSE + mapa de diferencas
   paleta    N cores dominantes (HEX + %) de foto/logo/referencia
   contraste razao WCAG entre dois HEX (passa 4.5 / 3.0?)
   bbox      recorta logo/PNG pelo conteudo (trim) sem redimensionar
   web       exporta WebP/AVIF leve para LP (sem metadados)
-
-Exemplos:
-  python img_qa.py prancha Exportados\\*.png -o Trabalho\\_prancha.jpg
-  python img_qa.py paridade previa_feed.png figma_feed.png
-  python img_qa.py paleta foto.jpg -n 6
-  python img_qa.py contraste "#FFFFFF" "#F26B1D"
-  python img_qa.py bbox logo.png -o logo_trim.png
-  python img_qa.py web hero.png --largura 1600
 """
-import argparse, glob, os, re, shutil, subprocess, sys
-
-
-def magick():
-    m = shutil.which("magick")
-    if not m:
-        sys.exit("[erro] ImageMagick ausente: winget install ImageMagick.ImageMagick")
-    return m
-
-
-def run(args, capture=False):
-    r = subprocess.run([magick()] + args, capture_output=True, text=True)
-    if r.returncode not in (0, 1):  # compare devolve 1 quando ha diferenca
-        sys.exit("[erro] magick: " + (r.stderr or r.stdout)[:500])
-    return (r.stdout + r.stderr) if capture else None
+import argparse, base64, glob, math, os, re, shutil, subprocess, sys
 
 
 def expand(pats):
@@ -41,44 +21,6 @@ def expand(pats):
     for p in pats:
         out += sorted(glob.glob(p)) or [p]
     return [p for p in out if os.path.isfile(p)]
-
-
-def cmd_prancha(a):
-    files = expand(a.arquivos)
-    if not files:
-        sys.exit("[erro] nenhum arquivo")
-    cols = a.colunas or min(4, len(files))
-    run(["montage", *files, "-label", "%t", "-font", "Arial", "-pointsize", "18",
-         "-thumbnail", f"{a.lado}x{a.lado}>", "-geometry", "+12+12", "-tile", f"{cols}x",
-         "-background", "#E9E9E9", a.out])
-    print(f"[ok] {a.out}  ({len(files)} pecas)")
-
-
-def cmd_paridade(a):
-    w, h = run(["identify", "-format", "%w %h", a.previa], True).split()[:2]
-    tmp = os.path.splitext(a.figma)[0] + "_norm.png"
-    run([a.figma, "-resize", f"{w}x{h}!", tmp])
-    diff = a.diff or os.path.splitext(a.previa)[0] + "_diff.png"
-    txt = run(["compare", "-metric", "RMSE", a.previa, tmp, diff], True)
-    m = re.search(r"\(([\d.e-]+)\)", txt)
-    val = float(m.group(1)) if m else float("nan")
-    os.remove(tmp)
-    ok = val <= a.limite
-    print(f"[{'ok' if ok else 'DIFERENTE'}] RMSE normalizado {val:.4f} (limite {a.limite}) · mapa: {diff}")
-    sys.exit(0 if ok else 2)
-
-
-def cmd_paleta(a):
-    out = run([a.imagem, "-alpha", "off", "-resize", "200x200>", "+dither", "-colors", str(a.n), "-depth", "8",
-               "-format", "%c", "histogram:info:-"], True)
-    rows = []
-    for line in out.splitlines():
-        m = re.match(r"\s*(\d+):.*?(#[0-9A-Fa-f]{6})", line)
-        if m:
-            rows.append((int(m.group(1)), m.group(2).upper()))
-    tot = sum(c for c, _ in rows) or 1
-    for c, hx in sorted(rows, reverse=True):
-        print(f"{hx}  {100 * c / tot:5.1f}%")
 
 
 def lum(hx):
@@ -95,22 +37,153 @@ def cmd_contraste(a):
           f"texto >= 24 px {'OK' if r >= 3 else 'FALHA'} (3.0)")
 
 
+def _pw_eval(js_body, args_dict):
+    from playwright.sync_api import sync_playwright
+    with sync_playwright() as p:
+        b = p.chromium.launch()
+        pg = b.new_page()
+        res = pg.evaluate(f"async (a) => {{ {js_body} }}", args_dict)
+        b.close()
+        return res
+
+
+def _data_uri(path):
+    ext = os.path.splitext(path)[1].lower()
+    mime = {".png": "image/png", ".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".webp": "image/webp", ".svg": "image/svg+xml"}.get(ext, "image/png")
+    return f"data:{mime};base64," + base64.b64encode(open(path, "rb").read()).decode()
+
+
+def _save_data_uri(uri, out):
+    os.makedirs(os.path.dirname(os.path.abspath(out)) or ".", exist_ok=True)
+    raw = uri.split(",", 1)[1] if "," in uri else uri
+    with open(out, "wb") as f:
+        f.write(base64.b64decode(raw))
+
+
+def cmd_prancha(a):
+    files = expand(a.arquivos)
+    if not files:
+        sys.exit("[erro] nenhum arquivo encontrado")
+    cols = a.colunas or min(4, len(files))
+    items = [{"name": os.path.basename(f), "src": _data_uri(f)} for f in files]
+    js = """
+    const imgs = await Promise.all(a.items.map(it => new Promise((res) => {
+        const im = new Image(); im.onload = () => res({im, name: it.name}); im.src = it.src;
+    })));
+    const s = a.lado, pad = 16, labelH = 26, cols = a.cols, rows = Math.ceil(imgs.length / cols);
+    const c = document.createElement('canvas');
+    c.width = cols * (s + pad) + pad;
+    c.height = rows * (s + labelH + pad) + pad;
+    const ctx = c.getContext('2d');
+    ctx.fillStyle = '#E9E9E9'; ctx.fillRect(0, 0, c.width, c.height);
+    ctx.font = '14px sans-serif'; ctx.textAlign = 'center';
+    imgs.forEach((it, idx) => {
+        const col = idx % cols, row = Math.floor(idx / cols);
+        const x = pad + col * (s + pad), y = pad + row * (s + labelH + pad);
+        const sc = Math.min(1, s / Math.max(it.im.width, it.im.height));
+        const w = Math.round(it.im.width * sc), h = Math.round(it.im.height * sc);
+        ctx.fillStyle = '#FFFFFF'; ctx.fillRect(x, y, s, s);
+        ctx.drawImage(it.im, x + Math.round((s - w)/2), y + Math.round((s - h)/2), w, h);
+        ctx.fillStyle = '#191919'; ctx.fillText(it.name.slice(0, 28), x + s/2, y + s + 18);
+    });
+    return c.toDataURL('image/jpeg', 0.88);
+    """
+    uri = _pw_eval(js, {"items": items, "lado": a.lado, "cols": cols})
+    _save_data_uri(uri, a.out)
+    print(f"[ok] {a.out}  ({len(files)} pecas)")
+
+
+def cmd_paridade(a):
+    diff = a.diff or os.path.splitext(a.previa)[0] + "_diff.png"
+    js = """
+    const load = src => new Promise(r => { const i = new Image(); i.onload = () => r(i); i.src = src; });
+    const [i1, i2] = await Promise.all([load(a.u1), load(a.u2)]);
+    const w = i1.width, h = i1.height;
+    const c1 = document.createElement('canvas'), c2 = document.createElement('canvas'), cd = document.createElement('canvas');
+    c1.width = c2.width = cd.width = w; c1.height = c2.height = cd.height = h;
+    const x1 = c1.getContext('2d'), x2 = c2.getContext('2d'), xd = cd.getContext('2d');
+    x1.drawImage(i1, 0, 0, w, h); x2.drawImage(i2, 0, 0, w, h);
+    const d1 = x1.getImageData(0, 0, w, h).data, d2 = x2.getImageData(0, 0, w, h).data;
+    const out = xd.createImageData(w, h);
+    let sumSq = 0, n = w * h * 3;
+    for (let i = 0; i < d1.length; i += 4) {
+        const dr = (d1[i] - d2[i]) / 255, dg = (d1[i+1] - d2[i+1]) / 255, db = (d1[i+2] - d2[i+2]) / 255;
+        sumSq += dr*dr + dg*dg + db*db;
+        const err = Math.max(Math.abs(d1[i]-d2[i]), Math.abs(d1[i+1]-d2[i+1]), Math.abs(d1[i+2]-d2[i+2]));
+        if (err > 12) { out.data[i] = 229; out.data[i+1] = 9; out.data[i+2] = 20; out.data[i+3] = 255; }
+        else { out.data[i] = d1[i]; out.data[i+1] = d1[i+1]; out.data[i+2] = d1[i+2]; out.data[i+3] = 65; }
+    }
+    xd.putImageData(out, 0, 0);
+    return {rmse: Math.sqrt(sumSq / n), diffUri: cd.toDataURL('image/png')};
+    """
+    res = _pw_eval(js, {"u1": _data_uri(a.previa), "u2": _data_uri(a.figma)})
+    _save_data_uri(res["diffUri"], diff)
+    val = float(res["rmse"])
+    ok = val <= a.limite
+    print(f"[{'ok' if ok else 'DIFERENTE'}] RMSE normalizado {val:.4f} (limite {a.limite}) · mapa: {diff}")
+    sys.exit(0 if ok else 2)
+
+
+def cmd_paleta(a):
+    js = """
+    const im = await new Promise(r => { const i = new Image(); i.onload = () => r(i); i.src = a.u; });
+    const c = document.createElement('canvas'); c.width = 160; c.height = 160;
+    const ctx = c.getContext('2d'); ctx.drawImage(im, 0, 0, 160, 160);
+    const d = ctx.getImageData(0, 0, 160, 160).data;
+    const counts = {}; let tot = 0;
+    for (let i = 0; i < d.length; i += 4) {
+        if (d[i+3] < 128) continue;
+        const r = Math.min(255, Math.round(d[i]/16)*16), g = Math.min(255, Math.round(d[i+1]/16)*16), b = Math.min(255, Math.round(d[i+2]/16)*16);
+        const hx = '#' + [r,g,b].map(x => x.toString(16).padStart(2,'0')).join('').toUpperCase();
+        counts[hx] = (counts[hx] || 0) + 1; tot++;
+    }
+    return Object.entries(counts).sort((x,y) => y[1]-x[1]).slice(0, a.n).map(([hx, c]) => [hx, 100*c/(tot||1)]);
+    """
+    rows = _pw_eval(js, {"u": _data_uri(a.imagem), "n": a.n})
+    for hx, pct in rows:
+        print(f"{hx}  {pct:5.1f}%")
+
+
 def cmd_bbox(a):
     out = a.out or os.path.splitext(a.imagem)[0] + "_trim.png"
-    run([a.imagem, "-fuzz", f"{a.fuzz}%", "-trim", "+repage", out])
-    print(f"[ok] {out}  bbox {run(['identify', '-format', '%wx%h', out], True).strip()}")
+    js = """
+    const im = await new Promise(r => { const i = new Image(); i.onload = () => r(i); i.src = a.u; });
+    const w = im.width, h = im.height, c = document.createElement('canvas'); c.width = w; c.height = h;
+    const ctx = c.getContext('2d'); ctx.drawImage(im, 0, 0);
+    const d = ctx.getImageData(0, 0, w, h).data;
+    const br = d[0], bg = d[1], bb = d[2], ba = d[3], tol = a.fuzz * 2.55;
+    const isBg = (i) => ba < 10 ? d[i+3] < 10 : (Math.abs(d[i]-br)<=tol && Math.abs(d[i+1]-bg)<=tol && Math.abs(d[i+2]-bb)<=tol && Math.abs(d[i+3]-ba)<=tol);
+    let x0 = w, y0 = h, x1 = 0, y1 = 0;
+    for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+        if (!isBg((y*w + x)*4)) { if (x < x0) x0 = x; if (y < y0) y0 = y; if (x > x1) x1 = x; if (y > y1) y1 = y; }
+    }
+    if (x1 < x0) { x0 = 0; y0 = 0; x1 = w - 1; y1 = h - 1; }
+    const tw = x1 - x0 + 1, th = y1 - y0 + 1, co = document.createElement('canvas'); co.width = tw; co.height = th;
+    co.getContext('2d').drawImage(c, x0, y0, tw, th, 0, 0, tw, th);
+    return {w: tw, h: th, uri: co.toDataURL('image/png')};
+    """
+    res = _pw_eval(js, {"u": _data_uri(a.imagem), "fuzz": a.fuzz})
+    _save_data_uri(res["uri"], out)
+    print(f"[ok] {out}  bbox {res['w']}x{res['h']}")
 
 
 def cmd_web(a):
     base = os.path.splitext(a.imagem)[0]
-    for ext, q in (("webp", 80), ("avif", 55)):
-        out = f"{base}.{ext}"
-        run([a.imagem, "-strip", "-resize", f"{a.largura}x>", "-quality", str(q), out])
-        print(f"[ok] {out}  {os.path.getsize(out) // 1024} KB")
+    js = """
+    const im = await new Promise(r => { const i = new Image(); i.onload = () => r(i); i.src = a.u; });
+    const sc = Math.min(1, a.w / im.width), w = Math.round(im.width * sc), h = Math.round(im.height * sc);
+    const c = document.createElement('canvas'); c.width = w; c.height = h;
+    c.getContext('2d').drawImage(im, 0, 0, w, h);
+    return c.toDataURL('image/webp', 0.82);
+    """
+    uri = _pw_eval(js, {"u": _data_uri(a.imagem), "w": a.largura})
+    out = f"{base}.webp"
+    _save_data_uri(uri, out)
+    print(f"[ok] {out}  {os.path.getsize(out) // 1024} KB")
 
 
 def main():
-    ap = argparse.ArgumentParser(description="QA de imagem local /designer-mestre")
+    ap = argparse.ArgumentParser(description="Motor autonomo de QA visual /designer-mestre")
     s = ap.add_subparsers(dest="cmd", required=True)
     p = s.add_parser("prancha"); p.add_argument("arquivos", nargs="+"); p.add_argument("-o", "--out", required=True)
     p.add_argument("--colunas", type=int); p.add_argument("--lado", type=int, default=540); p.set_defaults(f=cmd_prancha)

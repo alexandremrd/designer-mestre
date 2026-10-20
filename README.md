@@ -1,6 +1,6 @@
 # Agente /designer-mestre — pasta raiz
 
-**Designer Mestre** é um agente unificado de design e criação visual. Cobre todo pedido de design ou de cliente (briefing, ads, posts, LP/HTML, deck, vídeo, motion, imagem/3D por IA, Figma) e mantém a memória isolada de cada cliente. Chamada: `/designer-mestre`.
+**Designer Mestre** é um agente unificado e autônomo de design e criação visual. Cobre todo pedido de design ou de cliente (briefing, ads, posts, LP/HTML, deck, vídeo, motion, imagem/3D por IA, Figma), mantém a memória isolada de cada cliente e aprende continuamente qual ferramenta entrega o melhor resultado. Chamada: `/designer-mestre`.
 
 ## Fluxo
 1. **Briefing:** o texto, e-mail ou PDF do cliente vira `briefing.md`.
@@ -16,14 +16,14 @@
 - **Peça estática:** SVG de coordenadas absolutas (1080×1350 ou 1080×1920).
 - **Figma:** só depois do "aprovado".
 - **Anti-IA:** reprova o índigo/violeta genérico de IA, o degradê roxo→azul e o emoji usado como ícone.
-- **Evolução unificada:** ao absorver técnicas ou funções novas, o agente estuda o módulo existente e integra tudo na melhor versão única, sem criar módulos fragmentados/duplicados (salvo quando a separação economizar tokens) e sem perder nenhuma capacidade existente.
+- **Autonomia e evolução unificada:** não depende de sites ou apps de terceiros; ao absorver técnicas ou funções novas, o agente estuda o módulo existente e integra tudo na melhor versão única, sem criar módulos fragmentados/duplicados (salvo quando a separação economizar tokens) e sem perder nenhuma capacidade existente.
 
-## Memória e ferramentas
-- **Memória por cliente:** `D:\Clientes\[Cliente]\_DESIGN\` (`design_system.md` e `historico.md`). Cada erro ou aprovação é gravado uma vez, no fim do trabalho.
-- **Geração de imagem:** a IDE escolhe livremente o melhor gerador disponível para o caso (ferramenta/subagente nativo da IDE ou motor local via `assets\gerar_imagem.py`), mantendo todas as regras de fidelidade e registro em `Imagens\IA\`.
-- **QA de imagem:** `assets\img_qa.py` (ImageMagick).
-- **Vídeo e legenda:** `assets\reels_legenda.py` (Whisper + ffmpeg).
-- **Motor UI/UX:** `engines\uiux` (paletas, fontes e padrões de landing page).
+## Memória, motores autônomos e auto-aprendizado
+- **Memória por cliente:** `D:\Clientes\[Cliente]\_DESIGN\` (`design_system.md` e `historico.md`). Cada erro, aprovação e receita vencedora é gravado uma vez, no fim do trabalho.
+- **Geração de imagem (arsenal completo + aprendizado da máquina):** inclui **Antigravity (Nano Banana Pro)**, subagente `image-generator` / geradores nativos da IDE, **motor local** (`assets\gerar_imagem.py` com FLUX.2 klein 4B / SDXL / Flux) e **Rota Híbrida** (cena gerada + produto/logo real em SVG). A máquina tem liberdade para testar, escolher e aprender qual opção é a melhor para si em cada tarefa, registrando tudo em `Imagens\IA\`.
+- **QA de imagem autônomo:** `assets\img_qa.py` (prancha, paridade RMSE, paleta, contraste WCAG, trim de bbox e conversão WebP rodando direto no motor interno Chromium/Canvas, sem depender de softwares externos).
+- **Vídeo e legenda autônomo:** `assets\reels_legenda.py` (sincronização palavra a palavra, legenda queimada no KV, corte de pausas, overlay e áudio normalizado).
+- **Motor offline UI/UX:** `engines\uiux` (paletas, fontes e padrões de landing page 100% locais).
 
 ## Onde fica o agente
 O agente pode ser salvo em qualquer pasta (`<PASTA_DO_AGENTE>`). A cópia editada na pasta raiz é a fonte; depois de alterar, rode `INSTALAR_DESIGN_CLAUDE_CODE.cmd` para sincronizar nas ferramentas. As alterações sobrescrevem os arquivos, sem backups duplicados.
@@ -32,18 +32,18 @@ O agente pode ser salvo em qualquer pasta (`<PASTA_DO_AGENTE>`). A cópia editad
 
 ```text
 <PASTA_DO_AGENTE>\
-├── SKILL.md            ← núcleo (v17): velocidade, roteamento, onde rodar, Gate de KV, leis, memória
+├── SKILL.md            ← núcleo (v17.1): velocidade, roteamento, autonomia, Gate de KV, leis, memória
 ├── modulos\            ← lidos só quando o pedido é daquele tipo (consolidados por domínio)
 │   ├── briefing.md     ← tradutor de briefing (só o que é do designer)
 │   ├── ads.md          ← criativos estáticos Feed/Story e carrossel (SVG-First)
-│   ├── video.md        ← edição de vídeo do cliente (legenda + KV) + roteiro/UGC/IA + motion (Remotion)
+│   ├── video.md        ← edição de vídeo do cliente (legenda + KV) + roteiro/UGC/IA + motion
 │   ├── html.md         ← LPs, sites, extração/otimização de construtor, formulário, print e relatório
 │   ├── kv-logo.md      ← Cold Start, MIV Scanner, Brand Book, Logo nova e Design System (tokens/DESIGN.md)
-│   ├── imagem.md       ← geração (IDE ou local), produto fiel 360, personagem/rosto, packshot e upscale
+│   ├── imagem.md       ← arsenal completo (Antigravity/Nano Banana Pro + IDE + local FLUX.2 + Híbrido), auto-aprendizado, produto 360, personagem, packshot e upscale
 │   ├── deck.md         ← apresentações 1600×900
 │   ├── referencias.md  ← decodificador de referências em fichas e receitas no KV
 │   ├── figma.md        ← montagem 1:1 no Figma após aprovação
-│   ├── pen.md          ← prototipação rápida via pen.dev
+│   ├── pen.md          ← prototipação rápida
 │   └── qualidade.md    ← checagem final por tipo (anti-IA, a11y, motion, deck, copy, QA)
 ├── assets\             ← gerar_imagem.py · img_qa.py · reels_legenda.py · base_lp.html · qa_html.py · validacao-forms.js/.css
 ├── engines\uiux\       ← motor offline de paletas, fontes, padrões de LP e regras UX
@@ -53,10 +53,6 @@ O agente pode ser salvo em qualquer pasta (`<PASTA_DO_AGENTE>`). A cópia editad
 ```
 
 A memória de cada cliente fica em `D:\Clientes\[Cliente]\_DESIGN\` (`design_system.md` + `historico.md` + `templates\`). Nada de cliente mora nesta pasta.
-
-## Requisitos opcionais no PC
-- **Imagem e QA local:** ImageMagick 7 (`winget install ImageMagick.ImageMagick`) e, para geração offline, Easy Diffusion com motor v4.
-- **Vídeo e legenda:** `ffmpeg` (`winget install Gyan.FFmpeg`), Python 3.10+ e `faster-whisper`.
 
 ## Como alterar
 1. Pedir a mudança ("atualiza o /designer-mestre: ...").
@@ -69,4 +65,5 @@ Só regras universais entram aqui. Preferência de cliente vai no `design_system
 - v9–v15: prévia aprovada antes do Figma; versão única sem backups; Fast-Track de KV + `design_system.md` único + SVG-First; núcleo enxuto; pedido mecânico vs criativo novo; legenda por palavra no KV (`reels_legenda.py`); dossiê de produto 360 e fichas de referências; scripts `gerar_imagem.py` e `img_qa.py`; tradutor de briefing (`briefing.md`).
 - v16 (20/10/2026): **renomeado para Designer Mestre** (`/designer-mestre`); nome pessoal removido de todos os arquivos; caminhos fixos trocados por `<PASTA_DO_AGENTE>`.
 - v16.1 (20/10/2026): **otimização universal de LPs extraídas e descrição da skill** — regras universais para LPs de construtor (unificação de CTAs pelo maior peso tipográfico com seta lateral interna e hover consistente na cor de ação; escala fluida entre breakpoints com respiro lateral simétrico e sem cortes de texto; centralização e padding interno simétrico de 24 px nos 4 lados para formulários sobre caixa/card de fundo no mobile). `SKILL.md`: `description` atualizada com o resumo claro do agente/skill.
-- v17 (20/10/2026): **consolidação de módulos, escolha livre de gerador de imagem pela IDE e padronização de `Referências\`** — módulos de mesmo domínio fundidos sem perda de conteúdo (`video-edicao` + `video` + `motion` → `video.md`; `html` + `html-lp` + `html-form` + `html-print` + `html-relatorio` → `html.md`; `cold-start` + `kv-logo` + `design-system` → `kv-logo.md`; `imagem` + `produto` + `personagem` → `imagem.md`); removidos créditos/referências de terceiros e adicionada diretiva interna de soberania e evolução unificada; removidas travas de gerador único em `imagem.md` (a IDE escolhe o melhor gerador mantendo todas as regras); pasta `Referencias\` padronizada com acento (`Referências\`) em todos os arquivos e clientes.
+- v17 (20/10/2026): **consolidação de módulos e padronização de `Referências\`** — módulos de mesmo domínio fundidos sem perda de conteúdo (`video.md`, `html.md`, `kv-logo.md`, `imagem.md`); removidos créditos/referências de terceiros e adicionada diretiva interna de soberania e evolução unificada; pasta `Referencias\` padronizada com acento (`Referências\`) em todos os arquivos e clientes.
+- v17.1 (20/10/2026): **autonomia total sem dependência de apps/sites de terceiros e arsenal completo de imagem com auto-aprendizado** — `imagem.md`, `SKILL.md` e `README.md` mantêm todas as opções ativas (Antigravity / Nano Banana Pro, subagente `image-generator` / nativo da IDE, motor local FLUX.2 klein 4B / SDXL / Flux e Rota Híbrida IA+SVG) com ciclo de aprendizado contínuo onde a máquina descobre e registra qual gerador é melhor para si em cada tarefa; `assets\img_qa.py` reescrito para rodar 100% autônomo via Chromium/Canvas (prancha, paridade RMSE, paleta, contraste, bbox e WebP sem exigir instalação do ImageMagick); instalador limpo de avisos de programas externos.
