@@ -35,6 +35,7 @@ Página que não abre (login, bloqueio): pedir o HTML salvo (Ctrl+S, "página co
   - grandes (fotos): URL absoluta já hospedada no construtor;
   - pequenas (ícones, logo): SVG inline ou base64 (base64 acima de ~800 KB no total deixa a página pesada).
 - Salvar o HTML final em `Exportados\` da pasta da solicitação `[LP]`. Versões de trabalho ficam em `Trabalho\`.
+- **Teto de caracteres do construtor:** cada plataforma/versão tem seu próprio limite de importação e ele pode mudar entre versões (uma versão nova pode aceitar menos que a anterior do mesmo construtor) — nunca supor que o teto já registrado no `design_system.md` do cliente continua valendo. Em qualquer `Ajuste` sobre um HTML perto do limite: todo JS/CSS novo entra minificado (zero comentário, zero quebra de linha supérflua, nomes curtos de variável); conferir o tamanho final do arquivo (bytes/caracteres) antes de reentregar; se o construtor recusar mesmo abaixo do teto conhecido, registrar o novo teto real no `design_system.md` do cliente.
 
 **Anti-mojibake:**
 - conteúdo visível com entidades HTML (`&aacute; &atilde; &ccedil; &eacute; &ecirc; &otilde; &ndash; &nbsp;`…);
@@ -48,6 +49,7 @@ Página que não abre (login, bloqueio): pedir o HTML salvo (Ctrl+S, "página co
 - **Contorno azul em logo e links:** `img{border:0}`, `-webkit-tap-highlight-color:transparent`, sem outline no clique e `:focus-visible` visível na cor da marca.
 - **Blindagem do construtor:** `*{box-sizing:border-box;margin:0;padding:0}`, `.centralizar:empty,[id^="b_"]:empty{display:none!important}`, `#site{width:100%!important;min-width:0!important}`, `[hidden]{display:none!important}`, `.form-feedback:empty{display:none!important}`.
 - **Rolagem horizontal:** nenhum elemento com largura fixa maior que a tela. Grids com `minmax(0,1fr)`. Testar em 375, 768 e 1440 px.
+- **CTA interno não rola até o alvo (builders tipo GreatPages):** sincronizar sempre `href="#id"` com `data-bloco`/`data-bloco-mobile` apontando para o MESMO id — nunca confiar só no `href`; um script externo (GTM, tracking da agência) pode interceptar o clique lendo `data-bloco` e ignorar o `href`. Reforçar com JS próprio no arquivo: listener em capture (`addEventListener(...,true)`) com `preventDefault()` + `scrollIntoView({behavior:"smooth",block:"start"})` direto nos botões, garantindo o destino mesmo que outro script tente agir primeiro. Testar o clique real (hit-test, não `element.click()` via JS) nos três breakpoints antes de entregar.
 
 ---
 

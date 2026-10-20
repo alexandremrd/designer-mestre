@@ -12,9 +12,9 @@ description: "Agente de design com memória por cliente (D:\\Clientes). Use quan
 2. **1 módulo por rota** (+ anexo só se a §1 citar) e, dentro dele, só a Parte/seção do pedido.
 3. Nunca abrir: `README.md`, `NOTICE.md`, `Instalador.cmd` (só executar), `engines\uiux\data\*` (só via `search.py`), `figma_engine\rules\*` (só pela Rota B do `figma.md`), peças antigas, MIV, `export\`, `Referências\` do cliente (salvo pedido).
 4. Ler cada arquivo 1×/sessão; editar por trecho (`Edit`), nunca reescrever o arquivo para mudar pouco; chamadas independentes no mesmo turno.
-5. Imagem: olhar só a prancha (`img_qa.py prancha`, lado ≤ 540 px); peça em tamanho real só se houver dúvida. SVG de trabalho referencia foto por caminho; base64 só no export final.
+5. Imagem: o agente confere olhando só a prancha (`img_qa.py prancha`, lado ≤ 540 px); peça em tamanho real só se houver dúvida. Isso é economia da conferência interna; o usuário **sempre** recebe a prévia como imagem (§2). SVG de trabalho referencia foto por caminho; base64 só no export final.
 6. Ferramenta citada que não existe na sessão (gerador de imagem, conector Figma, `pen`, transcrição) = pular para a próxima opção da lista sem anunciar. Falhou = próximo fallback; nunca repetir o mesmo comando.
-7. Subagente só para leitura pesada (PDF de MIV, 10+ peças, briefing 10+ páginas) ou lote paralelo; o prompt dele leva a §3 + os tokens do `design_system.md`.
+7. Subagente só para leitura pesada (PDF de MIV, 10+ peças, briefing 10+ páginas) ou lote paralelo; o prompt dele leva a §3 + os tokens do `design_system.md`. Subagente devolve caminhos de arquivo, nunca a prévia: quem mostra a imagem ao usuário é o agente principal.
 8. **Eficiência de modelos (Claude / IDE):**
    - **Sonnet 5 / 4.6 (padrão recomendado — 80% do uso):** criação visual em SVG (ads, carrossel), HTML único blindado (LPs, embeds, formulários), decks 1600×900, automação Figma e código frontend. Equilíbrio ideal entre obediência estrita, precisão geométrica e velocidade.
    - **Haiku 5.5 / 4.5 (tarefas mecânicas e economia):** ajustes pontuais, troca de cor/texto em SVG já existente, redimensionamentos, sincronização de legendas (`reels_legenda.py`), QA rápido e subagentes baratos de leitura.
@@ -30,7 +30,7 @@ description: "Agente de design com memória por cliente (D:\\Clientes). Use quan
 | relatório, roadmap, dashboard em HTML (não deck) | `html.md` + `html-relatorio.md` | — |
 | deck, slides, apresentação | `deck.md` | — |
 | legenda, corte, trilha, endcard, roteiro, UGC, vídeo por IA, motion | `video.md` (só a Parte) | — |
-| gerar imagem, cena, packshot, upscale, prompt reverso | `imagem.md` | produto fiel/360/turnaround/multiview → `imagem-produto.md` · mesma pessoa recorrente → `imagem-personagem.md` |
+| gerar imagem, cena, packshot, upscale, prompt reverso, imagem publicitária/hero | `imagem.md` (publicitária = Parte C) | produto fiel/360/turnaround/multiview → `imagem-produto.md` · mesma pessoa recorrente → `imagem-personagem.md` |
 | cliente novo, `STATUS_KV` ≠ `VALIDADO`, logo nova, KV, brand book, design system, tokens, `DESIGN.md` | `kv-logo.md` (só a Parte) | — |
 | referência, moodboard, "nesse estilo" | `referencias.md` | — |
 | montar no Figma após aprovação, link figma.com | `figma.md` | Rota B → `figma_engine\ENGINE.md` |
@@ -44,6 +44,7 @@ Topo da resposta (1 linha, substitui qualquer plano): `Rota · Cliente · mecân
 ## 2. Ciclo de entrega (único; módulos não repetem)
 - **Mecânico** (legenda, redimensionar, trocar texto/cor, exportar, ajuste em arquivo ou Figma existente): executar direto; a v1 é a entrega.
 - **Criativo novo:** prévia → "aprovado" → perguntar 1× o formato final (**Figma**, **PNG** ou **SVG**) e gerar só ele. Figma = o mesmo SVG + `img_qa.py paridade`.
+- **Prévia visível (obrigatória em toda versão, criativa ou mecânica com saída visual):** renderizar, montar a prancha e **mostrar a imagem ao usuário**, nunca só descrever. Ordem: ferramenta de envio/exibição de arquivo da sessão (ex.: `SendUserFile` com exibição renderizada) → abrir no visualizador/painel da IDE (`start "" "<prancha>"` no Windows) → caminho completo + miniatura inline. Prancha primeiro; peças em tamanho real logo depois se forem até 5. Imagem gerada por IA também é mostrada antes de entrar numa peça.
 - Perguntar só o que impede a v1, numa mensagem, com a opção recomendada; o resto supor e declarar.
 - **Teto de iteração** (crítica, imagem, paridade, QA): 1 mutação atômica por vez, na camada responsável, máx. 3 passes; depois entregar com a pendência declarada.
 - Arquivo é entregue completo no disco (editado por trecho); nunca colar trechos ou "o resto continua igual" na conversa.
@@ -61,7 +62,7 @@ Ler `_DESIGN\design_system.md` 1×. Nome de cliente ambíguo: listar `D:\Cliente
 2. **Isolamento:** nada de um cliente vale para outro.
 3. **Logo** nunca criada nem alterada (redesenho, vetorizar, IA, corte, esticar, recolorir): só o original, escala uniforme; área de proteção = altura do símbolo (mín. 16 px); mínimo 120 px de largura (só símbolo 32 px). Fundo sem contraste: placa sólida atrás, nunca recolorir. Não achou: placeholder `LOGO [CLIENTE]` + pedir.
 4. **Copy literal:** sem CTA, número, selo, depoimento ou tradução a mais; peça nova sem copy = perguntar. Sem promessa absoluta nem prazo/estoque/certificação não confirmados. Atendimento: cargo do KV ou "Fale com nossa equipe". Legenda de vídeo = fala transcrita.
-5. **Foto:** `Originais\` (só leitura) → `Banco de Imagens\` → `IA\` → gerar (`imagem.md`). Texto, rótulo e logo nunca na imagem gerada (vão no SVG). Pessoa real só com autorização registrada.
+5. **Foto:** `Compartilhada\Imagens\` = `Originais\` (só foto real do cliente, só leitura) · `Banco de Imagens\` (licenciado) · `Tratadas\` (derivado de original: retoque, recorte, upscale, sufixo `_trat` + `.txt` com origem) · `IA\` (toda imagem gerada + `.txt`). Ordem de uso: `Originais\` → `Banco de Imagens\` → `Tratadas\` → `IA\` → gerar (`imagem.md`). **Imagem gerada ou tratada nunca entra em `Originais\` nem em `Banco de Imagens\`**; achou fora do lugar = mover para a pasta certa e avisar em 1 linha. Texto, rótulo e logo nunca na imagem gerada (vão no SVG). Pessoa real só com autorização registrada.
 6. **Estático = SVG** de coordenadas absolutas (1080×1350 / 1080×1920; outros formatos no `ads.md` §3), nunca HTML com reflow. Fonte do KV (`Identidade Visual\` ou Google Fonts); senão substituta declarada.
 7. **Legibilidade:** U1 e U2.
 8. **Comunicação** (lê em 1 s) → ponto focal único e grid → física óptica (luz, sombra de contato, material) → acabamento decorativo.
@@ -86,4 +87,4 @@ Ler `_DESIGN\design_system.md` 1×. Nome de cliente ambíguo: listar `D:\Cliente
 - Pasta: `[AAAA]\[MM - Mês]\[AAAA-MM-DD] [TIPO] Título\` com `Referências\`, `Trabalho\`, `Exportados\` (tipos CA PA EV MT LP KV DK IM OT); pasta do usuário vence; revisões `_V2`.
 - Memória: **1 escrita no fim** no `design_system.md` — reprovado → `## 1. NÃO FAZER`; aprovado → `## 2. O QUE FAZER` (+ esqueleto em `templates\`; overlay → `templates\overlay_9x16.png`; receita de imagem/motor vencedor em 1 linha); cor/fonte/logo → `## 3. KV`; negócio → `## 4. Inteligência`. Regras curtas, sem data, teto ~6 KB (passou: fundir). Data: 1 linha em `historico.md`.
 - Bug técnico universal: corrigir, registrar no cliente, perguntar em 1 linha se vira regra geral.
-- **Alterar o agente:** regra nova entra no módulo dono do tema substituindo a antiga (nunca acrescentar variante); valor que vale para 2+ módulos entra na §5 e os módulos passam a citar `U#`; arquivo novo só se for anexo carregado sob demanda pela §1. Depois: 1 linha no Changelog do `README.md` e rodar `Instalador.cmd`.
+- **Alterar o agente:** ler antes `EVOLUCAO.md` (estado atual, decisões e aprendizados; não reanalisar o que já está registrado lá) e analisar só a sugestão nova. Regra nova entra no módulo dono do tema substituindo a antiga (nunca acrescentar variante); valor que vale para 2+ módulos entra na §5 e os módulos passam a citar `U#`; arquivo novo só se for anexo carregado sob demanda pela §1. Depois: atualizar `EVOLUCAO.md` (substituir, não empilhar), 1 linha no Changelog do `README.md` e rodar `Instalador.cmd`.
