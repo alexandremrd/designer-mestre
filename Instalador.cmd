@@ -54,6 +54,9 @@ if exist "%USERPROFILE%\.windsurf" (
 if exist "%USERPROFILE%\.codex" (
     call :INSTALL_SKILL "OpenAI Codex CLI" "%USERPROFILE%\.codex\skills\designer-mestre"
 )
+if exist "%USERPROFILE%\.agents\skills" (
+    call :INSTALL_SKILL "Agents Skills" "%USERPROFILE%\.agents\skills\designer-mestre"
+)
 
 :: 6. OpenCode (.opencode)
 if exist "%USERPROFILE%\.opencode" (
@@ -103,6 +106,7 @@ set "IDE_NAME=%~1"
 set "DST=%~2"
 echo [+] Sincronizando em %IDE_NAME%: "%DST%"
 if not exist "%DST%" mkdir "%DST%" 2>nul
-robocopy "%SRC%" "%DST%" /MIR /XD ".git" "__pycache__" /XF "INSTALAR_DESIGN_CLAUDE_CODE.cmd" /R:1 /W:1 /NFL /NDL /NJH /NJS >nul
+robocopy "%SRC%" "%DST%" /MIR /XD ".git" "__pycache__" "node_modules" "_backup_*" /XF "INSTALAR_DESIGN_CLAUDE_CODE.cmd" /R:1 /W:1 /NFL /NDL /NJH /NJS >nul
+where npm >nul 2>&1 && if not exist "%DST%\assets\node_modules\sharp" (pushd "%DST%\assets" & call npm i sharp --no-save --silent >nul 2>&1 & popd)
 set /a COUNT+=1
 exit /b 0
