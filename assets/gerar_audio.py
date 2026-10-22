@@ -3,8 +3,9 @@
 """
 gerar_audio.py - Locucao (TTS) e efeitos sonoros via API da ElevenLabs para o /designer-mestre.
 
-Sem dependencias: usa so a biblioteca padrao. A chave vem de ELEVENLABS_API_KEY no ambiente ou de um
-arquivo .env (--env-file; padrao: .env.local ou .env na pasta atual). A chave nunca e impressa nem gravada.
+Sem dependencias: usa so a biblioteca padrao. A chave e da conta de cada usuario e vem de ELEVENLABS_API_KEY
+no ambiente ou de um arquivo .env (--env-file; padrao: .env.local/.env da pasta atual e depois
+%USERPROFILE%\\.designer-mestre\\, fora da skill, preservado nas atualizacoes). Nunca e impressa nem gravada.
 Cada audio gerado ganha um .txt ao lado com voz, modelo, ajustes e texto, para aprendizado do cliente.
 
 Comandos:
@@ -27,7 +28,9 @@ def carregar_chave(env_file):
     chave = os.environ.get("ELEVENLABS_API_KEY", "").strip()
     if chave:
         return chave
-    candidatos = [env_file] if env_file else [".env.local", ".env"]
+    pasta_usuario = os.path.join(os.path.expanduser("~"), ".designer-mestre")
+    candidatos = [env_file] if env_file else [
+        ".env.local", ".env", os.path.join(pasta_usuario, ".env.local"), os.path.join(pasta_usuario, ".env")]
     for caminho in candidatos:
         if not caminho or not os.path.isfile(caminho):
             continue
@@ -36,8 +39,9 @@ def carregar_chave(env_file):
                 nome, sep, valor = linha.strip().partition("=")
                 if sep and nome.strip().removeprefix("export ").strip() == "ELEVENLABS_API_KEY":
                     return valor.strip().strip('"').strip("'")
-    sys.exit("[sem chave] ELEVENLABS_API_KEY ausente. Rode `npx -y @elevenlabs/cli@latest onboard init` "
-             "na pasta do projeto (grava .env.local) ou passe --env-file. Nunca cole a chave no chat.")
+    sys.exit("[sem chave] ELEVENLABS_API_KEY ausente. Crie a pasta %USERPROFILE%\\.designer-mestre, rode ali "
+             "`npx -y @elevenlabs/cli@latest onboard init` e faca login com a sua conta (grava .env.local, "
+             "preservado nas atualizacoes). Nunca cole a chave no chat.")
 
 
 def req(chave, method, path, body=None, query=None, timeout=120):

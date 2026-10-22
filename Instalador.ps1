@@ -79,7 +79,8 @@ function Get-SkillSourceFiles {
                 continue
             }
 
-            if ($item.Name -ne 'INSTALAR_DESIGN_CLAUDE_CODE.cmd') {
+            # Credenciais nunca entram no pacote instalado.
+            if ($item.Name -ne 'INSTALAR_DESIGN_CLAUDE_CODE.cmd' -and $item.Name -notmatch '^\.env' -and $item.Extension -ne '.key') {
                 $files.Add($item)
             }
         }

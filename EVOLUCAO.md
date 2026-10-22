@@ -1,7 +1,8 @@
 # EVOLUCAO · memória do agente /designer-mestre
 > Ler ao alterar a skill. Manter conciso (~5 KB); preferências específicas ficam no `design_system.md` do cliente.
 
-## Estado atual (v19.33 instalada e publicada · 2026-10-22)
+## Estado atual (v19.34 instalada e publicada · 2026-10-22)
+- v19.34: privacidade e credenciais (núcleo §6). Pacote sem dados pessoais do mantenedor/usuário/clientes; instalador não copia `.env*`/`*.key`. API externa = conta de cada usuário, login oficial guiado pela IA, chave nunca no chat. Credenciais em `%USERPROFILE%\.designer-mestre\` e memória em `D:\Clientes\`, fora da pasta da skill, para que atualizações não exijam refazer login nem perder memória. Regressão: nenhuma busca por nome/e-mail/caminho de usuário/chave deve achar resultado no pacote antes de publicar.
 - v19.33: lacuna comprovada de geração de áudio. `video.md` já tinha os parâmetros de voz (§1 Voz Primeiro) mas nenhum motor; a capacidade parcial foi estendida no próprio módulo (§1.1) + `assets\gerar_audio.py` (stdlib, comandos `checar`/`vozes`/`falar`/`efeito`, `.txt` de origem, sem sobrescrever). Aprendido no onboarding real: `npx -y @elevenlabs/cli@latest onboard init` → autorizar no navegador → chave em `.env.local` já no gitignore; nunca pedir chave no chat nem imprimir o `.env`; teste de TTS gasta créditos e só roda com ok; George + `eleven_multilingual_v2` soou bem em PT-BR. `runway-api:rw-generate-audio` continua alternativa quando for a ferramenta pedida.
 - Conteúdo sob demanda: uma rota principal e anexos pertinentes. Skills especialistas conduzem crítica de interface e design-to-code.
 - Cold Start usa fontes acessíveis; separa evidência, inferência e lacuna, com origem e data. Sem coleta paga, contorno de bloqueios ou fatos inventados.
