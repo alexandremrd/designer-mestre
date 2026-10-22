@@ -46,6 +46,7 @@ Ler só a seção do tipo da entrega. Criativo estático novo não abre este mó
 - Carrossel: as legendas dos cards leem como uma frase contínua.
 - Proibido (salvo na copy do cliente): "game-changer", "revolucionário", "de ponta", "no cenário atual", "não é X, é Y", falsa curiosidade, pergunta-isca.
 - Copy do cliente é literal: estas regras **apontam** risco em 1 linha, não reescrevem.
+- Conferir U9 na prancha final: a cena sustenta a afirmação da copy, e a copy dá contexto à cena? Foto genérica de produto ao lado de promessa específica reprova; proporção entre ambos depende da leitura, não de percentual fixo.
 
 ## F. Imagem por IA
 - Rodar o **Teste Pass³** (`imagem.md` Parte B §6: Física 2s · Detalhe 5s · Marca 3s) e conferir contra a mestra: silhueta, cores, proporção, sombras de contato AO + Cast Shadow e itens proibidos (`PRODUTO_*.md` / `PERSONAGEM_*.md`). Falhou: 1 mutação atômica na camada responsável (máx. 3 tentativas).
@@ -61,12 +62,12 @@ Ler só a seção do tipo da entrega. Criativo estático novo não abre este mó
 | Logo PNG com sobra | `bbox logo.png` (recorta, não redimensiona) |
 
 ## H. Crítica antes de entregar (criativo novo)
-Nota 0–10 em 5 eixos, cada nota citando um elemento da peça: **Conceito** (proposição visual + KV/briefing) · **Hierarquia** (ponto focal único + miniatura 100×100 + grayscale) · **Detalhe** (alinhamento, acentos, kerning, zero tangências acidentais, safe zone) · **Função** (lê em 1 s no feed / CTA claro) · **Gesto** (o 20%).
+Comparar peça, briefing e referências lado a lado; divergência de copy literal, função da identidade ou relação cena↔argumento reprova antes da nota. Nos 5 eixos, citar evidência visível: **Conceito** (proposição visual + papéis dos ativos no KV) · **Hierarquia** (ponto focal único + miniatura 100×100 + grayscale) · **Detalhe** (alinhamento, acentos, kerning, tangências, safe zone) · **Função** (copy exata, cena que sustenta a afirmação, leitura em 1 s / CTA) · **Gesto** (o 20%).
 Faixas: 0–4 quebrado · 5–6 funcional · 7–8 forte · 9–10 excepcional. A nota final é a **pior faixa sustentada**, não a média; média > 8 é suspeita. Qualquer eixo < 7: corrigir uma vez na camada responsável antes de mostrar. Mostrar ao usuário só 1 linha: `Crítica: 8·7·8·9·7 → forte (ajustei hierarquia)`.
 
 ## I. Tipografia e hierarquia (estático, LP, deck)
 - 1 ponto de entrada dominante; no máximo 3 níveis visíveis por tela. Peso **salta** (400→700), não escorrega (400/500/600/700 juntos).
-- 6–8 tamanhos por peça. Famílias, escala, entrelinha, tracking, medida e fundos: U3/U4.
+- Em estático, começar com 3–5 tamanhos por peça; web/deck usam a escala necessária à função. Famílias, entrelinha, tracking, medida e fundos: U3/U4.
 
 ## J. Auditoria Cirúrgica de Código, Scripts e Componentes (`HTML/CSS/JS/Python`)
 Ao revisar, auditar ou refatorar código, LPs, embeds ou motores internos, inspecionar e corrigir na ordem exata de prioridade:

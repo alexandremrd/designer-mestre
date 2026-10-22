@@ -6,10 +6,10 @@ Módulo unificado para extração/validação de Identidade Visual (Cold Start),
 
 ## Parte A · Cold Start — Cliente novo ou KV incompleto
 
-Usado quando o cliente não tem `_DESIGN\design_system.md`, quando `STATUS_KV` é `PARCIAL`/`VAZIO` ou quando o usuário pede revisão do KV. Roda uma vez; depois o cliente entra no Fast-Track.
+Estudo completo quando não há `_DESIGN\design_system.md` ou quando `CLIENTE_NOVO: SIM`. Depois de consolidar as fontes e pendências, marcar `CLIENTE_NOVO: NÃO`, mesmo que `STATUS_KV` permaneça `PARCIAL`. Cliente existente com KV parcial recebe só a análise das pendências relevantes ao pedido; revisão completa apenas quando solicitada.
 
 ### 1. Estrutura de pastas
-Cliente existente: não mover nem apagar nada; criar só o que o pedido precisa. Cliente novo: criar a árvore e copiar `<AG>\Clientes\_TEMPLATE_CLIENTE\design_system.md` para `_DESIGN\`.
+Cliente existente: não mover nem apagar nada sem necessidade; criar só o que o pedido precisa. Cliente novo: criar a árvore **inclusive as quatro pastas de imagem vazias** e copiar `<AG>\Clientes\_TEMPLATE_CLIENTE\design_system.md` para `_DESIGN\`. Ativos recebidos fora da árvore são classificados em suas categorias; preservar caminhos já fornecidos pelo usuário quando mover afetaria usos existentes.
 
 ```text
 D:\Clientes\[Cliente]\
@@ -22,7 +22,7 @@ D:\Clientes\[Cliente]\
   Compartilhada\
     Identidade Visual\   ← logos, MIV, fontes, brand book (nunca sobrescrever)
     Referências\         ← referências enviadas (só salvar)
-    Imagens\  Originais\ (só leitura) · Banco de Imagens\ · IA\
+    Imagens\  Originais\ (só leitura) · Banco de Imagens\ · Tratadas\ · IA\
     Vídeos\   Originais\ · Banco\
   [AAAA]\[MM - Mês]\[AAAA-MM-DD] [TIPO] Título\
     briefing.md · Referências\ · Trabalho\ · Exportados\
@@ -33,7 +33,7 @@ Cliente antigo com `KV.md`, `NAO_FAZER.md`, `aprovados.md`, `inteligencia.md` se
 ### 2. Análise profunda (MIV Scanner & Extração Web — uma vez)
 1. `Compartilhada\Identidade Visual\`: MIV, guia de marca e logos. Renderizar cada logo uma única vez e anotar arquivo, layout, cor e proporção do bbox.
 2. Links de Figma do briefing (`get_design_context` / `get_screenshot`).
-3. Peças anteriores do cliente, se houver: só as 2 ou 3 mais recentes.
+3. Peças anteriores: inventariar as séries relevantes e estudar **todas as referências que o usuário indicar**. Para cliente novo ou sem `design_system.md`, a leitura inicial deve revelar padrões e exceções, não se limitar a 2–3 peças. Usar prancha de todos os criativos pertinentes; nos SVGs, inspecionar `viewBox`, cores, fontes, hierarquia, máscaras, fotos embutidas e elementos recorrentes sem despejar base64 no contexto. Registrar o **papel** de cada elemento recorrente (logo, motivo de marca, máscara, imagem ou ornamento), não só sua forma e cor; ver `ads.md` §2. Abrir peças individuais só para detalhes que a prancha não mostra. Depois de consolidar no KV, sessões futuras usam o Fast-Track.
 4. Site ou Instagram informados no briefing (extrair variáveis CSS `--*`, paleta computada, escada de superfícies, famílias de fonte, raios de borda e estilos de botão diretamente via DOM/headless browser; bloqueado = núcleo §6).
 5. Se o cliente não tiver KV ou pedir inspiração em grandes marcas globais, consultar o motor interno de **84 Design Systems reais**:
    - Busca por segmento/estética: `python "<AG>\engines\uiux\scripts\search.py" "<segmento ou estética>" --domain brand -n 3`
@@ -43,7 +43,8 @@ Cliente antigo com `KV.md`, `NAO_FAZER.md`, `aprovados.md`, `inteligencia.md` se
    - versões da logo (nome · layout · cor · bbox);
    - paleta por papel (HEX, RGB, CMYK, **Escada de Superfícies de 4 níveis** `canvas` → `surface-1`..`surface-4` + `hairline`, cores semânticas, contraste WCAG, regra de escassez do acento e cores proibidas);
    - tipografia por nível (oficial com peso, caixa, **polaridade de tracking** — negativo em display, neutro em body, positivo em eyebrow/label — + substituta Google Fonts para Figma/SVG);
-   - grafismos, arquétipos SVG, composição/respiro/posição da logo/rodapé, fotografia (tema · pessoas · luz · contraste), safe zones, tom de voz e pilares, O Que Fazer (Aprovados) e O Que Não Fazer (Vetos).
+   - grafismos, arquétipos SVG, composição/respiro/posição da logo/rodapé, fotografia (tema · pessoas · enquadramento · luz · tratamento · relação com a copy), safe zones, tom de voz e pilares, O Que Fazer (Aprovados) e O Que Não Fazer (Vetos);
+   - ofertas/produtos mencionados nas fontes, em 1–3 linhas por item com a origem e o grau de confirmação; separar descrição comercial observada de atributo técnico confirmado. Isso orienta a próxima cena sem inventar benefícios.
 7. Contradições ou itens ausentes essenciais (logo, paleta ou fonte) vão para `## 5. Decisões Pendentes` mantendo `PARCIAL`; quando completo, marcar `STATUS_KV: VALIDADO`.
 8. Cliente já `VALIDADO` num template antigo: campos novos vazios **não** rebaixam o status nem disparam nova análise.
 - E-mails do cliente como fonte: registrar por bloco (cabeçalho, corpo, rodapé) fundo, lista/ícone e botão; vira KV só com confirmação.

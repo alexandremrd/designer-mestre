@@ -10,6 +10,7 @@ contendo ferramenta, modelo, seed, referencias e prompt para aprendizado continu
 
 Comandos:
   python gerar_imagem.py registrar <imagem_gerada> -o "...\\IA\\2026-10-20_tema_v1.png" --prompt "..." --ferramenta "<motor>" [--ref mestra.jpg] [--status aprovado|descartado] [--notas "..."]
+  python gerar_imagem.py gemini "PROMPT" [--ref mestra.jpg] [--pro] -a 4:5 -o "...\\IA\\nome.png"   (exige GEMINI_API_KEY)
   python gerar_imagem.py ping
   python gerar_imagem.py modelos
   python gerar_imagem.py gerar "PROMPT EN" [--ref mestra.jpg] [--init base.jpg --forca 0.45] -a 4:5 -o "...\\IA\\nome.png"
@@ -163,6 +164,49 @@ def cmd_gerar(a):
         print(f"[ok] {p}  seed {seed}")
 
 
+GEMINI = {"flash": "gemini-2.5-flash-image", "pro": "gemini-3-pro-image-preview"}
+
+
+def cmd_gemini(a):
+    """Gera pela Gemini API com a chave do proprio usuario (aistudio.google.com/apikey). Cobranca separada da assinatura."""
+    key = os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_API_KEY")
+    if not key:
+        sys.exit("[sem-chave] GEMINI_API_KEY nao definida. Crie em https://aistudio.google.com/apikey e rode: "
+                 'setx GEMINI_API_KEY "SUA_CHAVE" (reabra o terminal). Regra da Falha: parar e perguntar ao usuario.')
+    _destino_ok(a.out, 'IA')
+    modelo = os.environ.get("GEMINI_IMAGE_MODEL") or GEMINI["pro" if a.pro else "flash"]
+    parts = [{"text": a.prompt}]
+    for p in a.ref[:14]:
+        mime, b64 = data_url(p)[5:].split(";base64,")
+        parts.append({"inline_data": {"mime_type": mime, "data": b64}})
+    body = {"contents": [{"parts": parts}],
+            "generationConfig": {"responseModalities": ["IMAGE"], "imageConfig": {"aspectRatio": a.aspect}}}
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/{modelo}:generateContent"
+    r = urllib.request.Request(url, data=json.dumps(body).encode(), method="POST",
+                               headers={"Content-Type": "application/json", "x-goog-api-key": key})
+    try:
+        with urllib.request.urlopen(r, timeout=300) as resp:
+            j = json.loads(resp.read())
+    except urllib.error.HTTPError as e:
+        sys.exit(f"[erro] Gemini HTTP {e.code}: {e.read()[:500]!r}")
+    except urllib.error.URLError as e:
+        sys.exit(f"[indisponivel] Gemini API inacessivel ({e.reason}).")
+    imgs = [pt["inlineData"]["data"] for c in j.get("candidates", [])
+            for pt in c.get("content", {}).get("parts", []) if "inlineData" in pt]
+    if not imgs:
+        sys.exit("[erro] Gemini nao devolveu imagem: " + json.dumps(j, ensure_ascii=False)[:500])
+    os.makedirs(os.path.dirname(os.path.abspath(a.out)) or ".", exist_ok=True)
+    base, ext = os.path.splitext(a.out)
+    for n, raw in enumerate(imgs):
+        p = a.out if n == 0 else f"{base}_{n + 1}{ext}"
+        with open(p, "wb") as f:
+            f.write(base64.b64decode(raw))
+        with open(os.path.splitext(p)[0] + ".txt", "w", encoding="utf-8") as f:
+            f.write(f"ferramenta: Gemini API ({modelo})\nstatus: gerado\nreferencias: {'; '.join(a.ref) or '-'}\n"
+                    f"proporcao: {a.aspect}\ndata: {time.strftime('%Y-%m-%d %H:%M')}\n\nPROMPT:\n{a.prompt}\n")
+        print(f"[ok] {p}")
+
+
 def cmd_upscale(a):
     _destino_ok(a.out, 'IA' if '\\ia\\' in os.path.abspath(a.out).replace('/', '\\').lower() else 'Tratadas')
     filtros = ["realesrgan"] + (["codeformer"] if a.rosto else [])
@@ -215,6 +259,13 @@ def main():
     g.add_argument("--vram", default="balanced", choices=["low", "balanced", "high"])
     g.add_argument("--dry-run", action="store_true")
     g.set_defaults(f=cmd_gerar)
+    gm = sub.add_parser("gemini", help="gera pela Gemini API (chave propria em GEMINI_API_KEY)")
+    gm.add_argument("prompt", help="prosa natural descritiva (imagem.md, opcao 2)")
+    gm.add_argument("-o", "--out", required=True, help=".png em Compartilhada\\Imagens\\IA\\")
+    gm.add_argument("-a", "--aspect", default="4:5", choices=list(SIZES))
+    gm.add_argument("--ref", action="append", default=[], help="referencia (ate 14; mestra primeiro)")
+    gm.add_argument("--pro", action="store_true", help="Nano Banana Pro (mais caro, melhor em texto/detalhe)")
+    gm.set_defaults(f=cmd_gemini)
     u = sub.add_parser("upscale")
     u.add_argument("imagem")
     u.add_argument("-o", "--out", required=True)
