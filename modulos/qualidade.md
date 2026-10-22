@@ -1,5 +1,5 @@
 # Módulo Qualidade — Checagem Final por Tipo e Taxonomia Anti-Slop
-Ler só a seção do tipo da entrega. Criativo estático novo não abre este módulo (U6–U8 do núcleo bastam). O KV vence qualquer regra daqui. Consulta offline: `python engines\uiux\scripts\search.py "<tema>" --domain ux|typography|color|landing|chart|brand -n 3`. Ferramentas locais: `assets\img_qa.py` (§G).
+Ler só a seção do tipo da entrega. Criativo estático novo abre §§A e H depois do render; U6–U8 continuam sendo os padrões base, e esta revisão é o gate independente de conceito e craft. O KV vence qualquer regra daqui. Consulta offline: `python engines\uiux\scripts\search.py "<tema>" --domain ux|typography|color|landing|chart|brand -n 3`. Ferramentas locais: `assets\img_qa.py` (§G).
 
 ## A. Anti-"cara de IA" e Taxonomia das 10 Famílias de AI Slop (toda peça)
 **P0:** U6 do núcleo.
@@ -61,9 +61,9 @@ Ler só a seção do tipo da entrega. Criativo estático novo não abre este mó
 | Par texto/fundo | `contraste "#FFF" "#F26B1D"` |
 | Logo PNG com sobra | `bbox logo.png` (recorta, não redimensiona) |
 
-## H. Crítica antes de entregar (criativo novo)
-Comparar peça, briefing e referências lado a lado; divergência de copy literal, função da identidade ou relação cena↔argumento reprova antes da nota. Nos 5 eixos, citar evidência visível: **Conceito** (proposição visual + papéis dos ativos no KV) · **Hierarquia** (ponto focal único + miniatura 100×100 + grayscale) · **Detalhe** (alinhamento, acentos, kerning, tangências, safe zone) · **Função** (copy exata, cena que sustenta a afirmação, leitura em 1 s / CTA) · **Gesto** (o 20%).
-Faixas: 0–4 quebrado · 5–6 funcional · 7–8 forte · 9–10 excepcional. A nota final é a **pior faixa sustentada**, não a média; média > 8 é suspeita. Qualquer eixo < 7: corrigir uma vez na camada responsável antes de mostrar. Mostrar ao usuário só 1 linha: `Crítica: 8·7·8·9·7 → forte (ajustei hierarquia)`.
+## H. Gate visual antes de entregar (criativo novo)
+Compare briefing, KV, referências aprovadas e render final lado a lado; não atribua notas. Copy literal, identidade, direitos ou relação cena↔argumento violados = rejeição imediata. Examine cinco perguntas com evidência visível: **Conceito** — há um mecanismo específico que torna a tese visível, além de adjetivos e tema? **Hierarquia** — em miniatura, o olhar entra na ideia certa e a percorre sem disputa acidental? **Craft** — crop, escala tipográfica, alinhamentos, ritmo, contraste e acabamento parecem decisões deliberadas, não defaults do gerador? **KV** — cada camada importante (fundo, foto/luz, tipo, textura/efeito, forma/assinatura) tem origem autorizada e foi adaptada sem copiar a composição? **Distinção** — a peça difere estruturalmente de layouts anteriores e das referências sem perder a família visual do cliente?
+**Não aprovar** quando a direção só combina elementos corretos (cor, logo, foto, headline e grafismo) sem explicar por que essas relações são específicas à mensagem; quando um motivo de campanha vira máscara decorativa sem função; ou quando a peça continua reconhecível como um template genérico ao ocultar logo e nome da marca. Reprovação deve apontar a camada e a mudança concreta; corrigir essa causa e conferir o novo render. Só relatar uma pontuação se o usuário pedir.
 
 ## I. Tipografia e hierarquia (estático, LP, deck)
 - 1 ponto de entrada dominante; no máximo 3 níveis visíveis por tela. Peso **salta** (400→700), não escorrega (400/500/600/700 juntos).
