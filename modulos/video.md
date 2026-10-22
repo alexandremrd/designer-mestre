@@ -1,6 +1,6 @@
 # Módulo Vídeo, Edição (Legenda + KV), Dramaturgia para IA de Vídeo e Motion
 
-Módulo autônomo e unificado para **edição mecânica** de vídeo do cliente (legenda queimada no KV + overlay + trilha + corte de pausas), **direção dramatúrgica** de roteiro/UGC/IA de vídeo e **motion design** programático. Opera com ferramentas nativas e scripts internos (`assets\reels_legenda.py`), sem depender de sites ou aplicativos externos.
+Módulo autônomo e unificado para **edição mecânica** de vídeo do cliente (legenda queimada no KV + overlay + trilha + corte de pausas), **direção dramatúrgica** de roteiro/UGC/IA de vídeo e **motion design** programático. Opera com ferramentas nativas e scripts internos (`assets\reels_legenda.py`; locução e efeitos sonoros pela API ElevenLabs em `assets\gerar_audio.py`, Parte B §1.1).
 
 ---
 
@@ -69,6 +69,16 @@ python "<AG>\assets\reels_legenda.py" ^
   - **Lei das 3 Funções:** um take deve mudar a emoção, avançar a ação ou aumentar a pressão; se não fizer nenhum dos três, cortar.
   - **Regra dos 6 de Murch no corte:** Emoção (51%) > História (23%) > Ritmo (10%) > Eye-trace (7%) > Plano 2D (5%) > Espaço 3D (4%).
   - **Escada de Montagem:** `longo → mais curto → mais curto → pausa respiratória → impacto`. A câmera só se move quando há mudança na cena.
+
+### 1.1 Locução e efeitos sonoros (ElevenLabs · `assets\gerar_audio.py`)
+- **Quando:** locução/voz off, narração de vídeo/motion/deck, TTS, efeito sonoro, assinatura sonora. Gera o áudio que o §1 (Voz Primeiro) aprova antes do corte.
+- **Chave:** `ELEVENLABS_API_KEY` no ambiente ou `.env.local` (`--env-file`). Sem chave: o usuário roda `npx -y @elevenlabs/cli@latest onboard init` na pasta do projeto e autoriza no navegador. Nunca pedir/aceitar chave no chat, nunca abrir/imprimir o `.env`, nunca pôr a chave em código. `checar` valida a chave e mostra o saldo sem gastar.
+- **Texto falado = copy literal** (lei 4): roteiro aprovado, sem CTA, número ou tradução a mais; pronúncia de marca/sigla se ajusta na grafia do texto falado, não na copy da peça.
+- **Voz:** a aprovada no `design_system.md` do cliente vence. Sem registro: `vozes [--busca]` e propor 2–3 opções coerentes com o tom de voz do KV; padrão George (`JBFqnCBsd6RMkjVDRZzb`) + `eleven_multilingual_v2` para PT-BR. Clonar voz de pessoa real só com autorização registrada (mesma regra de pessoa real da lei 5).
+- **Comandos:** `python "<AG>\assets\gerar_audio.py" falar "<texto>" -o "Trabalho\locucao_v1.mp3" [--voz ID --estabilidade --similaridade --estilo --velocidade]` (ajustes = parâmetros do §1) · `falar --arquivo roteiro.txt` · `efeito "<descrição física do som>" --duracao 3 -o "Trabalho\sfx.mp3"`. Cada saída ganha `.txt` com voz, modelo, ajustes e texto; nunca sobrescreve (`_v2`).
+- **Créditos:** toda geração gasta créditos da conta. Gerar só o que o pedido exige; teste avulso, variações A/B e regravação sem mudança de texto/ajuste só com ok do usuário.
+- **Fluxo:** rascunho em `Trabalho\` → usuário ouve e aprova → versão final em `Exportados\`; mixagem nos níveis do §1. Sem chave/rede: avisar em 1 linha e entregar roteiro + voz + ajustes prontos (Modo Manual).
+- **Memória:** voz aprovada (voice_id, modelo, ajustes) vira 1 linha em `## 2. O QUE FAZER` / assinatura sonora do KV; voz reprovada vai para `## 1. NÃO FAZER`.
 
 ### 2. Vocabulário Canônico de Câmera (12 Movimentos e 6 Ângulos)
 - **Movimentos:** `Push-in` (tensão/detalhe) · `Pull-back / Dolly out` (revelação de contexto) · `Tracking shot` (acompanhamento lateral) · `Pan` (rotação no eixo horizontal) · `Tilt` (eixo vertical, imponência) · `Crane up/down` (abertura/revelação vertical) · `Orbit / Arc` (giro 360° heroico no produto) · `Dolly zoom` (vertigem dramática) · `Handheld / Steadicam` (realismo UGC/documental) · `Static / Locked-off` (packshot limpo) · `Slow-motion` (luxo/impacto físico) · `Timelapse` (transformação temporal).
