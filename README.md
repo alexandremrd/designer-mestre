@@ -1,14 +1,14 @@
 # Designer Mestre (`/designer-mestre`)
 
-O **Designer Mestre** é uma skill para produção de entregáveis visuais ligados a uma marca. Quando o pedido exige, pode analisar materiais fornecidos e fontes públicas acessíveis para extrair posicionamento, identidade e referências; cria anúncios, páginas, apresentações, vídeos ou imagens conforme o pedido e as ferramentas disponíveis na sessão. Em criação visual nova, a bancada é iterada com o usuário e a direção é aprovada antes de escolher/exportar o arquivo final, exceto quando o usuário pede entrega direta. A memória é específica do cliente e depende dos arquivos e do feedback disponíveis: não há aprendizado autônomo entre sessões.
+O **Designer Mestre** é uma skill para produção e leitura de materiais visuais ligados a uma marca. Pode descrever e interpretar imagens, responder perguntas visuais, extrair texto legível e comparar referências pela capacidade multimodal nativa; análise de anúncios e decodificação de KV preservam seus módulos especialistas. Quando o pedido exige, também analisa materiais fornecidos e fontes públicas acessíveis para extrair posicionamento, identidade e referências; cria anúncios, páginas, apresentações, vídeos ou imagens conforme o pedido e as ferramentas disponíveis na sessão. Em criação visual nova, a bancada é iterada com o usuário e a direção é aprovada antes de escolher/exportar o arquivo final, exceto quando o usuário pede entrega direta. A memória é específica do cliente e depende dos arquivos e do feedback disponíveis: não há aprendizado autônomo entre sessões.
 
 ## Como instalar sem complicação
 
-Na v19.31, o fluxo de mudança aprovada é: atualizar a fonte, escolher a combinação de engine e bancada com maior potência adequada ao conceito, executar `Instalador.cmd`, conferir os destinos por SHA-256 e publicar os arquivos e informações relevantes no repositório GitHub (remoto `origin`). O instalador preserva arquivos extras. Recarregue a IDE para descobrir a skill; destinos opcionais dependem do ambiente. A página do GitHub mantém apenas as quatro atualizações mais recentes.
+Na v19.32, leitura de imagem usa primeiro a capacidade multimodal nativa da sessão, sem instalar skills, SDKs ou configurar API externa. O fluxo de mudança aprovada é: atualizar a fonte, escolher a combinação de engine e bancada com maior potência adequada ao conceito, executar `Instalador.cmd`, conferir os destinos por SHA-256 e publicar os arquivos e informações relevantes no repositório GitHub (remoto `origin`). O instalador preserva arquivos extras. Recarregue a IDE para descobrir a skill; destinos opcionais dependem do ambiente. A página do GitHub mantém apenas as quatro atualizações mais recentes.
 
 ## Visão geral técnica
 
-**Designer Mestre** é uma skill de criação visual. No Cold Start ou quando solicitado, analisa fontes acessíveis de site, Instagram, briefing e criativos, separando evidência de inferência; compara concorrentes quando isso for pertinente e mantém a memória isolada por cliente. Cobre ads, posts, LP/HTML, deck, vídeo, motion, imagem/3D e Figma, conforme ferramentas efetivamente disponíveis. Chamada: `/designer-mestre`.
+**Designer Mestre** é uma skill de criação e leitura visual. No Cold Start ou quando solicitado, analisa imagens e fontes acessíveis de site, Instagram, briefing e criativos, separando evidência de inferência; compara referências/concorrentes quando pertinente e mantém a memória isolada por cliente. Cobre ads, posts, LP/HTML, deck, vídeo, motion, imagem/3D e Figma, conforme ferramentas efetivamente disponíveis. Chamada: `/designer-mestre`.
 
 ## Fluxo
 1. **Briefing:** texto, e-mail ou PDF longo pode ser organizado em `briefing.md` quando a tarefa exigir.
@@ -52,7 +52,7 @@ O agente pode ser salvo em qualquer pasta (`<PASTA_DO_AGENTE>`). A cópia editad
 │   ├── html-extrair.md ← anexo: clonar/otimizar construtor, embed `</>`, recriar de print
 │   ├── html-relatorio.md ← anexo: página-relatório
 │   ├── kv-logo.md      ← Cold Start, MIV Scanner, Brand Book, Logo nova e Design System (tokens/DESIGN.md)
-│   ├── imagem.md       ← arsenal, prompt por motor, fotografia, compositing, Vision Decomposer, Pass³
+│   ├── imagem.md       ← arsenal, leitura/análise multimodal, OCR visual, prompt, fotografia, Vision Decomposer, Pass³
 │   ├── imagem-produto.md ← anexo: produto fiel / 360 / turnaround
 │   ├── imagem-personagem.md ← anexo: rosto recorrente
 │   ├── deck.md         ← apresentações e preview iterável; engine/formato por necessidade
@@ -78,10 +78,10 @@ A memória de cada cliente fica em `D:\Clientes\[Cliente]\_DESIGN\` (`design_sys
 Só regras universais entram aqui. Preferência de cliente vai no `design_system.md` dele.
 
 ## Changelog
+- v19.32 (22/10/2026, instalada em 7 destinos): integra leitura de imagens, OCR, comparação e análise semântica pela capacidade multimodal nativa, sem exigir skill/API/SDK externo. Consolida as capacidades comuns Azure Vision Python/Java numa rota de computer vision estruturada opcional, só para integração solicitada e autorizada. Mantém `ads.md` e `referencias.md` como donos das análises especializadas; cópias conferidas por SHA-256.
 - v19.31 (22/10/2026, instalada em 7 destinos): preserva a pesquisa criativa v19.30 — proposição/prova publicitária, direção fotográfica e cinematográfica, pôster, oferta/funil opcionais e beats de vídeo — retirando SVG/PNG e HTML de deck como formatos obrigatórios. Nova peça escolhe a engine/bancada mais potente adequada ao conceito e itera em preview; após aprovação, o usuário escolhe formato final e padrão de saída. HTML/CSS/JS, SVG, PPTX/Python, raster, Figma e composições híbridas são opções conforme ferramenta e uso; sites HTML continuam pixel-perfect. A cópia instalada foi conferida por SHA-256.
 - v19.30 (22/10/2026, somente na fonte): pesquisa de GitHub sobre direção de arte, fotografia publicitária, criação de anúncio, cinema e pôster; síntese preservada na v19.31.
 - v19.29 (22/10/2026): formaliza o ciclo aprovado: atualizar a fonte, reinstalar e verificar por SHA-256, publicar no GitHub e manter somente quatro notas públicas.
-- v19.28 (22/10/2026): fortalece a criação de ads com handoffs entre composição, referências, direção fotográfica e gate visual pós-render; instalado e verificado em 7 destinos.
 ## Eficiência de Modelos na IDE
 Escolha pelo trabalho, não por uma marca fixa. Nomes, disponibilidade e limites mudam; use o seletor da IDE para confirmar o modelo atual. Prefira tarefas mecânicas determinísticas a um modelo generativo quando o script/ferramenta já resolve o trabalho. Modelos de visão analisam referências, mas isso não significa que também gerem ou editem imagens.
 
