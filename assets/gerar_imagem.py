@@ -24,8 +24,7 @@ SESSION = "designer-mestre"
 SIZES = {"1:1": (1024, 1024), "4:5": (896, 1088), "3:4": (832, 1088),
          "9:16": (768, 1344), "16:9": (1344, 768), "4:3": (1088, 832)}
 MIME = {".png": "image/png", ".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".webp": "image/webp"}
-NEG = ("text, letters, watermark, logo, signature, ui, app interface, phone mockup, status bar, "
-       "buttons, plastic skin, airbrushed face, oversaturated, artificial hdr, deformed, extra fingers, blurry, apple logo")
+NEG = "unintended text, watermark, signature, fabricated brand logo"
 
 
 def req(method, path, body=None, timeout=30):
@@ -244,7 +243,7 @@ def main():
     sub.add_parser("ping").set_defaults(f=cmd_ping)
     sub.add_parser("modelos").set_defaults(f=cmd_modelos)
     g = sub.add_parser("gerar")
-    g.add_argument("prompt", help="prompt em ingles (formula do imagem.md)")
+    g.add_argument("prompt", help="prompt de acordo com a cena e a capacidade do modelo")
     g.add_argument("-o", "--out", required=True, help=".png em Compartilhada\\Imagens\\IA\\")
     g.add_argument("-a", "--aspect", default="4:5", choices=list(SIZES))
     g.add_argument("--ref", action="append", default=[], help="referencia (ate 4; mestra primeiro)")
