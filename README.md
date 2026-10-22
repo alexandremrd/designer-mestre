@@ -1,10 +1,10 @@
 # Designer Mestre (`/designer-mestre`)
 
-O **Designer Mestre** é uma skill para produção de entregáveis visuais ligados a uma marca. Quando o pedido exige, pode analisar materiais fornecidos e fontes públicas acessíveis para extrair posicionamento, identidade e referências; cria anúncios, páginas, apresentações, vídeos ou imagens conforme o pedido e as ferramentas disponíveis na sessão. A prévia visual é entregue para peças com saída visual; aprovação prévia só é aguardada quando o usuário pede seleção ou quando uma decisão altera materialmente identidade, copy ou custo externo. A memória é específica do cliente e depende dos arquivos e do feedback disponíveis: não há aprendizado autônomo entre sessões.
+O **Designer Mestre** é uma skill para produção de entregáveis visuais ligados a uma marca. Quando o pedido exige, pode analisar materiais fornecidos e fontes públicas acessíveis para extrair posicionamento, identidade e referências; cria anúncios, páginas, apresentações, vídeos ou imagens conforme o pedido e as ferramentas disponíveis na sessão. Em criação visual nova, a bancada é iterada com o usuário e a direção é aprovada antes de escolher/exportar o arquivo final, exceto quando o usuário pede entrega direta. A memória é específica do cliente e depende dos arquivos e do feedback disponíveis: não há aprendizado autônomo entre sessões.
 
 ## Como instalar sem complicação
 
-Na v19.29, o fluxo de mudança aprovada é: atualizar a fonte, executar `Instalador.cmd`, conferir os destinos por SHA-256 e publicar os arquivos e informações relevantes no repositório GitHub (remoto `origin`). O instalador preserva arquivos extras. Recarregue a IDE para descobrir a skill; destinos opcionais dependem do ambiente. A página do GitHub mantém apenas as quatro atualizações mais recentes.
+Na v19.31, o fluxo de mudança aprovada é: atualizar a fonte, escolher a combinação de engine e bancada com maior potência adequada ao conceito, executar `Instalador.cmd`, conferir os destinos por SHA-256 e publicar os arquivos e informações relevantes no repositório GitHub (remoto `origin`). O instalador preserva arquivos extras. Recarregue a IDE para descobrir a skill; destinos opcionais dependem do ambiente. A página do GitHub mantém apenas as quatro atualizações mais recentes.
 
 ## Visão geral técnica
 
@@ -12,10 +12,10 @@ Na v19.29, o fluxo de mudança aprovada é: atualizar a fonte, executar `Instala
 
 ## Fluxo
 1. **Briefing:** texto, e-mail ou PDF longo pode ser organizado em `briefing.md` quando a tarefa exigir.
-2. **Tipo de pedido:** ajustes mecânicos são executados diretamente; peça estática diagramada nova sai em SVG e PNG com prévia. Figma entra quando estiver disponível e for solicitado.
+2. **Bancada de criação:** nova peça abre uma visualização iterável no meio mais adequado à ideia e às ferramentas disponíveis; preview e formato final são decisões diferentes.
 3. **Gate de KV:** antes de gerar, lê o `design_system.md` do cliente (cores, fontes, logo, vetos). Cliente sem KV passa pelo Cold Start (`kv-logo.md`).
 4. **Módulo do pedido:** abre só o módulo da rota (e o anexo, quando a rota pede); dentro dele, só a Parte do pedido.
-5. **QA e entrega:** confere a prancha e aspectos pertinentes (cortes, safe zone, copy, logo, coerência com a ideia e o KV), corrigindo problemas concretos sem blacklist estética universal. Salva em pasta padronizada por ano, mês e data quando o fluxo de arquivos estiver disponível.
+5. **Aprovação e exportação:** depois da aprovação, confirme os formatos finais e o padrão de exportação, salvo se o usuário já os definiu ou houver preferência de cliente registrada. Faça QA pertinente ao destino e salve os arquivos escolhidos no caminho acordado.
 
 No Cold Start, distingue observação de inferência, registra fontes e datas, mapeia códigos visuais e verbais e transforma achados em posicionamento, provas, lacunas e oportunidades criativas. Scraping/serviços externos são opcionais; não instala dependências nem inicia coleta paga automaticamente.
 
@@ -23,11 +23,11 @@ No Cold Start, distingue observação de inferência, registra fontes e datas, m
 - **Logo:** nunca é criada nem alterada. Usa só o arquivo original, ou o placeholder `LOGO [CLIENTE]`.
 - **Copy:** literal, sem inventar CTA, selo ou número, e sem promessas absolutas.
 - **Isolamento:** nada de um cliente vaza para outro.
-- **Peça estática:** SVG de coordenadas absolutas (1080×1350 ou 1080×1920).
-- **Exportação final e Figma:** peça estática diagramada é entregue em SVG e PNG sem nova escolha de formato enquanto o Figma estiver indisponível; Figma é opcional quando voltar.
+- **Bancada e arquivo final:** escolha engine e meio de autoria/preview pelo potencial de criação, render e edição para a peça. SVG, PNG, HTML, PPTX, PDF, Figma nativo e composições híbridas atendem necessidades distintas; nenhum é o formato final padrão.
+- **Site em HTML:** preserva o requisito pixel-perfect da rota HTML. A liberdade entre engines aplica-se à bancada de outras peças visuais e não relaxa esse requisito.
 - **Direção visual:** escolhas são julgadas pelo papel na ideia, no KV e na legibilidade; cor intensa, gradientes, texturas e recursos expressivos não são vetados por si.
 - **Fontes e direitos:** extrai só o que é acessível (DOM renderizado, CSS computado, arquivos enviados); bloqueio = pede HTML salvo ou print. Referência de terceiros transfere técnica, nunca identidade. Código absorvido mantém a licença original.
-- **Evolução unificada:** regra nova substitui a antiga no módulo dono do tema; valor usado por 2+ módulos mora nos Padrões `U1–U10` do núcleo.
+- **Evolução unificada:** regra nova substitui a antiga no módulo dono do tema; valor usado por 2+ módulos mora nos Padrões `U1–U11` do núcleo.
 
 ## Memória e ferramentas disponíveis
 - **Memória por cliente:** `D:\Clientes\[Cliente]\_DESIGN\` (`design_system.md` e `historico.md`). Registre apenas conhecimento durável e feedback efetivamente recebido; não presuma aprovação, reprovação ou aprendizado automático.
@@ -43,10 +43,10 @@ O agente pode ser salvo em qualquer pasta (`<PASTA_DO_AGENTE>`). A cópia editad
 
 ```text
 <PASTA_DO_AGENTE>\
-├── SKILL.md            ← núcleo (v19): carga mínima, rotas, ciclo de entrega, Gate de KV, leis hierárquicas, padrões U1–U10, memória
+├── SKILL.md            ← núcleo (v19): carga mínima, rotas, ciclo de entrega, Gate de KV, leis hierárquicas, padrões U1–U11, memória
 ├── modulos\            ← lidos só quando o pedido é daquele tipo (consolidados por domínio)
 │   ├── briefing.md     ← tradutor de briefing (só o que é do designer)
-│   ├── ads.md          ← criativos estáticos Feed/Story e carrossel (SVG-First)
+│   ├── ads.md          ← direção de arte, composição e bancada flexível de ads
 │   ├── video.md        ← edição de vídeo do cliente (legenda + KV) + roteiro/UGC/IA + motion
 │   ├── html.md         ← LP/site novo, ajuste, formulário, SEO, a11y, QA
 │   ├── html-extrair.md ← anexo: clonar/otimizar construtor, embed `</>`, recriar de print
@@ -55,11 +55,11 @@ O agente pode ser salvo em qualquer pasta (`<PASTA_DO_AGENTE>`). A cópia editad
 │   ├── imagem.md       ← arsenal, prompt por motor, fotografia, compositing, Vision Decomposer, Pass³
 │   ├── imagem-produto.md ← anexo: produto fiel / 360 / turnaround
 │   ├── imagem-personagem.md ← anexo: rosto recorrente
-│   ├── deck.md         ← apresentações 1600×900
+│   ├── deck.md         ← apresentações e preview iterável; engine/formato por necessidade
 │   ├── referencias.md  ← decodificador de referências em fichas e receitas no KV
 │   ├── figma.md        ← montagem 1:1 no Figma após aprovação
 │   ├── pen.md          ← prototipação rápida (absorveu `pen_engine\SKILL.md`)
-│   └── qualidade.md    ← checagem final por tipo (anti-IA, a11y, motion, deck, copy, QA)
+│   └── qualidade.md    ← checagem final por tipo (artefatos genéricos, a11y, motion, deck, copy, QA)
 ├── assets\             ← gerar_imagem.py · img_qa.py · reels_legenda.py · base_lp.html · qa_html.py · validacao-forms.js/.css · base_deck.html · validate_deck.py
 ├── engines\uiux\       ← motor offline de paletas, fontes, padrões de LP e regras UX
 ├── references\  figma_engine\
@@ -78,10 +78,10 @@ A memória de cada cliente fica em `D:\Clientes\[Cliente]\_DESIGN\` (`design_sys
 Só regras universais entram aqui. Preferência de cliente vai no `design_system.md` dele.
 
 ## Changelog
+- v19.31 (22/10/2026, instalada em 7 destinos): preserva a pesquisa criativa v19.30 — proposição/prova publicitária, direção fotográfica e cinematográfica, pôster, oferta/funil opcionais e beats de vídeo — retirando SVG/PNG e HTML de deck como formatos obrigatórios. Nova peça escolhe a engine/bancada mais potente adequada ao conceito e itera em preview; após aprovação, o usuário escolhe formato final e padrão de saída. HTML/CSS/JS, SVG, PPTX/Python, raster, Figma e composições híbridas são opções conforme ferramenta e uso; sites HTML continuam pixel-perfect. A cópia instalada foi conferida por SHA-256.
+- v19.30 (22/10/2026, somente na fonte): pesquisa de GitHub sobre direção de arte, fotografia publicitária, criação de anúncio, cinema e pôster; síntese preservada na v19.31.
 - v19.29 (22/10/2026): formaliza o ciclo aprovado: atualizar a fonte, reinstalar e verificar por SHA-256, publicar no GitHub e manter somente quatro notas públicas.
 - v19.28 (22/10/2026): fortalece a criação de ads com handoffs entre composição, referências, direção fotográfica e gate visual pós-render; instalado e verificado em 7 destinos.
-- v19.27 (22/10/2026): inventário de capacidades e síntese por resultado; reutiliza o que está coberto, estende o módulo dono quando parcial e preserva especialistas com artefatos distintos; instalado.
-- v19.26 (22/10/2026): estabelece o KV validado como contrato visual e limita referências externas a técnicas compatíveis, com evidência por camada e revisão pós-render; instalado.
 ## Eficiência de Modelos na IDE
 Escolha pelo trabalho, não por uma marca fixa. Nomes, disponibilidade e limites mudam; use o seletor da IDE para confirmar o modelo atual. Prefira tarefas mecânicas determinísticas a um modelo generativo quando o script/ferramenta já resolve o trabalho. Modelos de visão analisam referências, mas isso não significa que também gerem ou editem imagens.
 
@@ -109,6 +109,6 @@ As recomendações resumem capacidades e perfis declarados pelos fornecedores; n
 - v19.8 (20/10/2026): U9 conecta copy literal à cena por prova, uso, consequência ou tensão; teste de concordância antes da geração e no QA; proporção imagem/texto livre.
 - v19.7 (20/10/2026): Direção visual de imagem comercial vem da escolha do usuário, das referências atuais, da receita aprovada do cliente ou de base adaptável; referências opcionais decodificam câmera, luz, profundidade e atmosfera sem supor EXIF; removido rim light obrigatório.
 - v19.6 (20/10/2026): Imagem comercial exige argumento e prova visual antes do prompt; direção cinematográfica física e ligada ao KV; 3 direções internas com 1 primeira geração; teste contra imagem genérica.
-- v19.5 (20/10/2026): Leitura seletiva para imagem e QA; formato pedido entregue na v1 com prévia visível; aprovação só em decisões materiais; matriz de modelos removida do núcleo; evolução exige localizar função equivalente, preservar capacidade e medir tokens, tempo e qualidade.
+- v19.5 (20/10/2026): Leitura seletiva para imagem e QA; preview visível durante criação; aprovação antes de escolher/exportar o arquivo final, salvo pedido direto; matriz de modelos removida do núcleo; evolução exige localizar função equivalente, preservar capacidade e medir tokens, tempo e qualidade.
 - v19.2 (20/10/2026): Pacote 360 é entrada do gerador com referência, nunca recorte colado em cenário; Rota Híbrida restrita a logo/texto/rótulo; §0.6 para e avisa quando o fallback troca o método (gate em `imagem-produto.md` §3).
 - v19.1 (20/10/2026): Prévia visível obrigatória (§2) e subagente só devolve caminhos; árvore única de imagens `Imagens\{Originais, Banco de Imagens, Tratadas, IA}` (Lei 5) + trava de destino no `gerar_imagem.py`; `imagem-produto.md`: curadoria da mestra, fundo neutro na referência 360 (também personagem), mestra provisória `_gerada`, inventário de interior; `imagem.md` Parte C (imagem publicitária/hero); template de cliente com `Tratadas\` e pastas de Produtos/Personagens; novo `EVOLUCAO.md` (memória do agente, lido só ao alterá-lo).

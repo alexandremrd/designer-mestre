@@ -17,5 +17,5 @@ Usado quando a peça mostra **a mesma pessoa** de forma recorrente (fundador, es
 
 ### 3. Execução, Verificação e Homologação
 - Usar geradores com suporte a referência de imagem (Antigravity / Nano Banana Pro com até 14 referências indexadas, subagente da IDE, ou motor local com `--ref`, enviando mestra + ângulo mais próximo, 3–4 fotos). No prompt, descrever **apenas o que muda** (cenário, luz, pose, enquadramento) + repetir o descritor 1×. Nunca posicionar texto sobre o rosto.
-- Comparar resultado × mestra item a item do checklist. Se desviar (máx. 3 tentativas): (1) reforçar regra corretiva no prompt; (2) usar referência mais limpa e no mesmo ângulo; (3) gerar a cena/corpo primeiro e fazer inpainting/edição localizada só na cabeça com a mestra.
+- Comparar resultado × mestra item a item do checklist. Se desviar, diagnosticar a causa e escolher entre reforçar a regra corretiva, usar referência mais limpa/no mesmo ângulo ou editar a região necessária. Continuar enquanto houver progresso sem comprometer a identidade; parar se a ferramenta bloquear ou novas tentativas não melhorarem o resultado.
 - **Homologação inicial:** validar 3 cenas (frontal neutra, ¾ sorrindo, meio corpo sentado) no KV do cliente antes de liberar para produção em escala.

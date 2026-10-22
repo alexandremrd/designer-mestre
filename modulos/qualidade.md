@@ -1,24 +1,19 @@
-# Módulo Qualidade — Checagem Final por Tipo e Taxonomia Anti-Slop
+# Módulo Qualidade — Checagem Final por Tipo e Riscos de Execução
 Ler só a seção do tipo da entrega. Criativo estático novo abre §§A e H depois do render; U6–U8 continuam sendo os padrões base, e esta revisão é o gate independente de conceito e craft. O KV vence qualquer regra daqui. Consulta offline: `python engines\uiux\scripts\search.py "<tema>" --domain ux|typography|color|landing|chart|brand -n 3`. Ferramentas locais: `assets\img_qa.py` (§G).
 
-## A. Anti-"cara de IA" e Taxonomia das 10 Famílias de AI Slop (toda peça)
+## A. Revisão de artefatos genéricos e riscos de execução (toda peça)
 **P0:** U6 do núcleo.
 
-**As 10 Famílias de AI Slop (auditar e eliminar o que não tem função):**
-1. **Concept slop:** conceito baseado só em adjetivos (*"premium, futurista, cinematográfico"*) — se remover os efeitos especiais, a ideia desaparece.
-2. **Composition slop:** tudo centralizado por inércia; 3+ elementos com o mesmo peso visual (*equal-emphasis*); fragmentos flutuando em volta do herói sem relação espacial; tangências acidentais entre bordas.
-3. **Effect-stack slop:** glow + partículas + fumaça + lens flare + feixe holográfico empilhados sem fonte de luz motivada.
-4. **Material slop:** cromo líquido, vidro, plástico translúcido e degradê brilhante misturados sem física de material; reflexos incompatíveis com o ambiente.
-5. **Typography slop:** microcopy falso/ilegível, excesso de papéis tipográficos, cada linha com um estilo diferente ou texto jogado onde sobrou espaço.
-6. **Photography slop:** pele plastificada, poros hiper-nitidificados artificialmente, bokeh extremo em todos os planos, grade cyan-orange gratuita, mãos/sombras fisicamente inconsistentes.
-7. **Decorative UI slop:** dashboards, gráficos, pílulas ou porcentagens falsas usados como enfeite de fundo.
-8. **3D-object slop:** esferas, anéis, fitas, cubos ou blobs 3D flutuando no fundo sem papel conceitual.
-9. **Brand slop:** marca reduzida a um "banho de cor" genérico que serviria para qualquer concorrente, ou logo redesenhada/deformada.
-10. **Detail entropy:** textura repetitiva e ruído de fundo que aumentam sem apoiar o ponto focal.
+Use estes sinais para localizar problemas, **não como blacklist nem reprovação automática**. Complexidade, centralização, múltiplos focos, tipografia expressiva, cromo, bokeh, cor intensa, UI decorativa e textura podem ser decisões válidas quando intencionais, coerentes com o KV e legíveis. Investigue quando não houver função demonstrável, houver conflito de camada ou a execução distrair da mensagem:
+1. **Conceito:** adjetivos substituem uma ideia específica; ao retirar o efeito, a relação com a mensagem desaparece.
+2. **Composição:** disputa acidental, elementos sem relação espacial ou tangências não intencionais.
+3. **Efeitos e materiais:** iluminação/reflexos incompatíveis com a cena, ou efeitos empilhados sem motivação visual.
+4. **Tipografia:** texto falso/ilegível, papéis sem distinção funcional ou estilos que dificultam a leitura.
+5. **Imagem:** anatomia/identidade alterada, detalhe artificial ou tratamento que contradiz a cena/KV.
+6. **Elementos de apoio:** dashboards, gráficos, objetos 3D, rótulos, texturas ou ornamentos sem papel claro.
+7. **Marca:** identidade reduzida a um código genérico, ou logo alterada.
 
-**Score de Pressão de Slop e Ordem Cirúrgica de Subtração:**
-- **Severidade:** `Crítico` (1 = veto imediato: anatomia quebrada, identidade do produto alterada, logo corrompida, conceito trocado por efeito) · `Major` (3 pts cada; 2 Majors = veto) · `Minor` (1 pt cada; soma ≥ 6 pts = veto por acúmulo de aparência sintética).
-- **Ordem Cirúrgica de Subtração (quando a peça estiver carregada):** remover nesta ordem exata até a hierarquia ficar cristalina: (1) efeitos sem função → (2) objetos de apoio duplicados → (3) containers/caixas e rótulos redundantes → (4) acentos de cor concorrentes → (5) microdetalhes que somem em tamanho normal de leitura → (6) famílias secundárias de estilo.
+**Correção cirúrgica:** aponte o elemento observável e a consequência; corrija a camada causadora. Não aplique pontuação, quantidade-limite nem ordem fixa de subtração. Remova ou altere um elemento apenas quando ele causar o problema — não para tornar toda peça minimalista.
 
 ## B. LP / HTML / app
 1. **Estados:** carregando, vazio, erro, sucesso (ou "n/a" com motivo).
@@ -49,7 +44,7 @@ Ler só a seção do tipo da entrega. Criativo estático novo abre §§A e H dep
 - Conferir U9 na prancha final: a cena sustenta a afirmação da copy, e a copy dá contexto à cena? Foto genérica de produto ao lado de promessa específica reprova; proporção entre ambos depende da leitura, não de percentual fixo.
 
 ## F. Imagem por IA
-- Rodar o **Teste Pass³** (`imagem.md` Parte B §6: Física 2s · Detalhe 5s · Marca 3s) e conferir contra a mestra: silhueta, cores, proporção, sombras de contato AO + Cast Shadow e itens proibidos (`PRODUTO_*.md` / `PERSONAGEM_*.md`). Falhou: 1 mutação atômica na camada responsável (máx. 3 tentativas).
+- Rodar o **Teste Pass³** (`imagem.md` Parte B §6: Física 2s · Detalhe 5s · Marca 3s) e conferir contra a mestra: silhueta, cores, proporção, sombras de contato relevantes e itens proibidos (`PRODUTO_*.md` / `PERSONAGEM_*.md`). Se falhar, corrigir a causa por edição, nova geração ou outro método adequado; iterar enquanto houver progresso, sem teto fixo, e parar quando novas tentativas não melhorarem o resultado.
 - Nada de texto/logo/marca d'água na imagem; rótulo vem do SVG.
 
 ## G. Conferência técnica local (`assets\img_qa.py`)
@@ -65,9 +60,13 @@ Ler só a seção do tipo da entrega. Criativo estático novo abre §§A e H dep
 Compare briefing, KV, referências aprovadas e render final lado a lado; não atribua notas. Copy literal, identidade, direitos ou relação cena↔argumento violados = rejeição imediata. Examine cinco perguntas com evidência visível: **Conceito** — há um mecanismo específico que torna a tese visível, além de adjetivos e tema? **Hierarquia** — em miniatura, o olhar entra na ideia certa e a percorre sem disputa acidental? **Craft** — crop, escala tipográfica, alinhamentos, ritmo, contraste e acabamento parecem decisões deliberadas, não defaults do gerador? **KV** — cada camada importante (fundo, foto/luz, tipo, textura/efeito, forma/assinatura) tem origem autorizada e foi adaptada sem copiar a composição? **Distinção** — a peça difere estruturalmente de layouts anteriores e das referências sem perder a família visual do cliente?
 **Não aprovar** quando a direção só combina elementos corretos (cor, logo, foto, headline e grafismo) sem explicar por que essas relações são específicas à mensagem; quando um motivo de campanha vira máscara decorativa sem função; ou quando a peça continua reconhecível como um template genérico ao ocultar logo e nome da marca. Reprovação deve apontar a camada e a mudança concreta; corrigir essa causa e conferir o novo render. Só relatar uma pontuação se o usuário pedir.
 
+**Publicidade:** confirme que a proposição é compreensível, que a prova visual/textual está autorizada e que a ação corresponde ao briefing. Sem dados comparáveis, isso é revisão de qualidade e intenção — não previsão de vendas. Se houver métricas, registre fonte, janela, formato e contexto; não atribua causalidade ao visual sem comparação adequada.
+
+**Pôster/key visual:** confira o primeiro impacto em miniatura e a recuperação da informação essencial no tamanho/distância de leitura previstos. Avalie a relação entre tipografia, imagem, campo e material; não exija número fixo de níveis, densidade, sobreposições ou efeito de acabamento.
+
 ## I. Tipografia e hierarquia (estático, LP, deck)
-- 1 ponto de entrada dominante; no máximo 3 níveis visíveis por tela. Peso **salta** (400→700), não escorrega (400/500/600/700 juntos).
-- Em estático, começar com 3–5 tamanhos por peça; web/deck usam a escala necessária à função. Famílias, entrelinha, tracking, medida e fundos: U3/U4.
+- Defina entrada, percurso e quantidade de níveis para a mensagem, formato e distância. Um ponto de entrada dominante ajuda muitas peças, mas pôsteres, composições editoriais e narrativas podem usar percurso/múltiplos focos deliberados; não imponha teto de três níveis. Prefira contrastes tipográficos claros quando ajudam, mas escala, peso, largura, posição e espaço podem graduar a hierarquia. Em interface, preserve a usabilidade; em criativos, não reduza expressão só para cumprir quota.
+- Use os tamanhos distintos exigidos pelos papéis reais da peça; 3–5 podem servir de referência inicial em uma composição simples, nunca como quota ou teto. Web/deck usam a escala necessária à função. Famílias, entrelinha, tracking, medida e fundos: U3/U4.
 
 ## J. Auditoria Cirúrgica de Código, Scripts e Componentes (`HTML/CSS/JS/Python`)
 Ao revisar, auditar ou refatorar código, LPs, embeds ou motores internos, inspecionar e corrigir na ordem exata de prioridade:
