@@ -1,13 +1,17 @@
-# Módulo Deck — Apresentações e Relatórios Executivos 1600×900 (HTML Single-File Autônomo)
+# Módulo Deck — Apresentações, Narrativas Visuais e Bancada Iterável
 
-Módulo unificado para criação de apresentações comerciais, propostas estratégicas e decks executivos de alto impacto em HTML/CSS/JS único (`1600×900`, proporção `16:9`), 100% portáteis (offline) e fiéis ao `design_system.md` do cliente.
+Módulo unificado para criar apresentações e narrativas visuais de acordo com o briefing e o sistema do cliente. Separe a bancada iterável do arquivo final. HTML/CSS/JS no Browser canvas é uma opção de preview e autoria — não um formato obrigatório; PowerPoint (`python-pptx`), PDF, formato nativo ou outro meio pode ser escolhido quando servir ao uso e estiver disponível.
 
 ---
 
-## 1. Geometria Canônica, Escala Responsiva e Portabilidade
+## 1. Definir a bancada e o canvas
 
-- **Canvas nativo fixo:** `width: 1600px; height: 900px` (`overflow: hidden` em cada `<section class="slide">`). Margens seguras internas: `76px` topo, `96px` laterais, `108px` base (reservando a faixa inferior para logo de rodapé a `32px` da base, paginação e controles circulares de `48px` a `25px` da base / `52px` da direita).
-- **Centralização e Escala Matemática no Viewport (Obrigatória):** o deck nunca depende de zoom manual do navegador e nunca ultrapassa `scale(1)` em telas grandes:
+- **Escolha guiada pela utilização:** identifique audiência, contexto de apresentação, conteúdo disponível, destino final, necessidade de edição, colaboração, impressão e capacidade do ambiente. Não transforme o nome "deck" em HTML, PPTX, proporção, quantidade de slides ou layout predeterminados. A bancada pode ser independente do arquivo que será exportado.
+- **Preview no Browser:** quando estiver disponível, abra um canvas visual com a peça em andamento e ajuste HTML/CSS/JS ou conteúdo embutido ao iterar. Um canvas `16:9` é útil para slides widescreen, mas use proporção/dimensão provisória quando houver incerteza; não confunda o canvas do preview com a página ou slide final.
+- **PowerPoint:** use `python-pptx` quando o usuário escolher PPTX ou quando requisitos de editabilidade/interoperabilidade justificarem propor esse formato. Crie elementos nativos sempre que possível; preservar imagem/render como imagem é opção apenas quando essa for a escolha/necessidade, não mecanismo automático de composição.
+- **Outros meios:** PDF é exportação, não fonte editável; use ferramenta de conversão disponível apenas após o formato e qualidade requeridos estarem definidos. Figma nativo só quando pedido, pela rota `figma.md`.
+- **Dimensões e segurança:** use o template/tokens do cliente apenas quando aprovados e pertinentes; caso contrário defina canvas e margens pela proporção, quantidade/tipo de conteúdo, ambiente de exibição e requisitos atuais de destino. Nunca confunda DPI de metadado com resolução física final. Para impressão, confirme trim, bleed, escala, perfil e prova com a gráfica/conferência.
+- **Referência de preview widescreen (opcional):** quando 16:9 fizer sentido, este CSS de escala pode ajudar a inspecionar um slide no viewport; não é requisito de autoria ou exportação:
 ```css
 html, body { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; }
 #viewport { position: fixed; inset: 0; overflow: hidden; }
@@ -32,22 +36,17 @@ window.addEventListener('resize', fitDeck);
 if (window.visualViewport) window.visualViewport.addEventListener('resize', fitDeck);
 fitDeck();
 ```
-- **Escala Tipográfica Recomendada (`1600×900`):**
-  - `h1`: `72px–88px`, `line-height: 0.98–1.05`, `letter-spacing: -0.04em a -0.055em`, peso `600–800`.
-  - `h2`: `48px–60px`, `line-height: 1.02–1.08`, `letter-spacing: -0.035em a -0.045em`, peso `600–700` (nunca abaixo de `44px`).
-  - `h3` (título de card): `22px–26px`, `line-height: 1.15`, peso `600` (nunca abaixo de `20px`).
-  - `.lede` (abertura): `24px–27px`, `line-height: 1.42`; corpo de card ≥ `17px` (nunca diminuir fonte antes de ajustar largura, quebras de linha ou grid).
-  - `.eyebrow` / badges / números de slide: `12px`, `font-weight: 700`, `letter-spacing: +0.09em a +0.14em`, `text-transform: uppercase`.
-- **Portabilidade 100% Offline (Inlining de Logos e Grafismos):** antes de entregar o `index.html`, converter todas as logos e imagens locais para Data URIs Base64 (`data:image/png;base64,...` ou SVG inline) para que o arquivo funcione isoladamente ao ser enviado ao cliente. Esconder a logo de rodapé na capa e no slide de encerramento quando a logo principal já estiver em destaque no centro/topo.
-- **Partir sempre de `<AG>\assets\base_deck.html`** (escala, navegação, teclado, swipe, progresso e reduced-motion prontos); trocar só tokens e slides.
+- **Tipografia e respiro:** escolha pela hierarquia da narrativa, tamanho real de apresentação, distância/viewport, conteúdo e tokens; evite reduzir o tipo apenas para forçar conteúdo em um slide. As medidas antigas de 1600×900 podem ser usadas como referência quando esse for o canvas escolhido, não como pisos/tetos universais.
+- **Assets e arquivos:** inlining ajuda na portabilidade HTML/offline, mas não é obrigatório para preview ou quando caminhos/ativos externos forem parte da edição. Não embuta fontes/logos nem altere licenças sem necessidade.
+- `assets\base_deck.html` é uma base opcional para decks compatíveis com HTML; não precisa ser usada para uma direção visual diferente ou para PPTX.
 
 ---
 
 ## 2. Seleção Semântica de Arquétipos e Cadência de Fundos
 
-Escolher o arquétipo de cada slide pela **estrutura semântica da copy aprovada** (proibido repetir o mesmo grid de cards em todos os slides):
+Escolher estrutura e ritmo pela **história, conteúdo, audiência e direção visual**. As ideias abaixo são repertório de opções, não mapeamento obrigatório por contagem:
 
-| Conteúdo aprovado | Arquétipo visual obrigatório |
+| Sinal de conteúdo | Estruturas que podem servir |
 |---|---|
 | 1 afirmação decisiva de impacto | **Statement / Hero:** 1 frase dominante + 1 sistema abstrato/geométrico do KV |
 | 4 capacidades ou pilares | **Grid 2×2** de cards com ícones |
@@ -62,33 +61,31 @@ Escolher o arquétipo de cada slide pela **estrutura semântica da copy aprovada
 | Indicadores operacionais | **Mockup de Dashboard** no estilo do produto/KV |
 | Preço e condição comercial | **Price Card** + painel lateral de condições/entregáveis |
 
-- **Cadência e Ritmo de Fundos (4 tratamentos derivados do `design_system.md`):**
-  - Alternar entre `.slide.hero` (cor/gradiente institucional de impacto na capa, statements e fechamento), `.slide` (base editorial de leitura), `.slide.depth` (fundo escuro de profundidade) e `.slide.spotlight` (contraste limpo de marca).
-  - Se o KV do cliente for 100% Dark Mode (ex.: preto + ouro/neon), manter os mesmos 4 tratamentos variando a densidade e a iluminação de fundo (base dark editorial · hero com glow ascendente na cor de acento · depth com radial superior · spotlight em carvão `#101010` com halo superior).
-  - **Regra de ritmo:** proibido mais de 2 slides consecutivos com o mesmo fundo **e** a mesma composição.
-- Quebrar fundo e composição em ~1/3 e ~2/3 do deck (picos de atenção). Gráficos: regras do `html-relatorio.md` (SVG inline).
-- Espaço morto: o conteúdo ocupa a altura útil; cards de métrica e tabelas crescem para não deixar faixa vazia.
+- **Ritmo:** contraste de composição, densidade, escala e fundo pode criar cadência; escolha pelo material e pela linguagem visual, não por número obrigatório de tratamentos nem por limite de slides iguais.
+- **Dados:** só transformar em gráfico os dados autorizados; seguir `html-relatorio.md` quando o artefato for relatório/dashboard e usar formas/técnicas adequadas ao conteúdo.
+- **Espaço:** áreas vazias, respiro e composições assimétricas são escolhas legítimas; não ampliar cards ou preencher canvas só para eliminar espaço.
 
 ---
 
-## 3. Guardrails de Copy, Tipografia e Integridade de Dados
+## 3. Guardrails de conteúdo e integridade de dados
 
 1. **Copy literal e transformações permitidas:** usar exclusivamente os fatos, números e argumentos fornecidos. É permitido quebrar frases longas em blocos paralelos, transformar listas em cards com ícones e converter pares em tabelas comparativas — mantendo 100% dos conceitos originais. É **proibido** inventar subtítulos explicativos, batizar metodologias não citadas, inferir números/eixos/períodos ou criar CTAs finais genéricos não presentes na copy.
-2. **Higiene tipográfica obrigatória nos slides:**
-   - **Proibido hífen solto em prosa (` - `), meia-risca (`–`), travessão (`—`) e til de aproximação (`~`):** substituir por dois-pontos, vírgula, ponto final ou separação visual em colunas/cards.
-   - **Zero metalinguagem:** nunca escrever *"neste slide"*, *"nesta apresentação"*, *"como podemos ver"*, *"o layout mostra"* ou mencionar IA/prompts.
-   - **Todo item de lista (`<li>`) exige ícone SVG:** usar apenas ícones SVG outline (`viewBox="0 0 24 24"`, `stroke-width: 2–2.3px`, `stroke-linecap: round`) dentro de contêineres de `50–68px`. Proibido bullet padrão sem ícone e proibido emojis.
-   - **Zero palavras órfãs (viúvas):** nenhuma headline (`h1/h2/h3`) ou parágrafo pode terminar com 1 única palavra isolada na última linha. Ajustar com `<br>` semântico ou `max-width` e revalidar após o carregamento das fontes.
-   - **Zero parágrafos longos (> 230 caracteres):** converter em estrutura visual (cards, comparativo, fluxo ou métricas).
+2. **Acabamento editorial (quando fizer diferença):** ajuste quebras, órfãs, contraste, espaçamento, densidade e hierarquia para o meio e para a audiência. Hífen, travessão, emoji, bullets, lista sem ícones, parágrafo longo ou metalinguagem não são falhas automáticas; corrija apenas quando enfraquecer a leitura, o tom ou a intenção.
 
 ---
 
-## 4. Interação, QA Estático e Inspeção Visual Obrigatória
+## 3. Iterar, aprovar e exportar
+
+- Apresente a composição no Browser canvas quando disponível; caso contrário, mostre a representação visual viável do meio de criação. Receba feedback e edite a bancada, sem exigir que cada iteração tenha formato final ou arquivo exportado.
+- Requisitos de conteúdo, claims, números, fonte e marca precisam continuar fiéis ao briefing. Review é ferramenta de melhoria; não reprove por preferência de estilo ou falta de um arquétipo.
+- Depois da aprovação, confirme formato final, dimensão, compatibilidade e destino que ainda não estejam definidos. Exportar apenas formatos escolhidos; uma imagem da bancada não é o PPTX nem o PDF final.
+- Se o formato escolhido for PPTX, verificar abertura do arquivo, número de slides, dimensões, texto, assets locais e bounds das formas. A validação estrutural não comprova fidelidade visual: renderizar/revisar no PowerPoint ou exportador disponível quando houver uma exigência visual/print. Se não houver conversor, declarar e não afirmar que houve revisão de render.
+- Se o formato for HTML, seguir a rota de preview e inspeção do deck. Para páginas/sites que não sejam slides, `html.md` preserva o requisito pixel-perfect em relação à referência/briefing e aos viewports-alvo.
+- Se o formato final for impressão, seguir requisitos exatos de organizador/gráfica; requisitos ausentes são uma pergunta após aprovação, não motivo para inventar dimensões, sangria, DPI, cor ou certificado.
+
+## 4. Interação e QA do preview HTML (quando HTML for a bancada ou arquivo escolhido)
 
 - **Navegação e Acessibilidade:** botões anterior/próximo (`data-testid="prev-slide"` e `data-testid="next-slide"`, desabilitados no primeiro e no último slide), setas do teclado (`ArrowLeft`/`ArrowRight`), `Space`/`PageDown`, `Home`/`End`, swipe touch ≥ 50 px, barra `.progress-fill` chegando a 100% no último slide, contador atualizado e `@media (prefers-reduced-motion: reduce)` desativando animações contínuas.
-- **Verificação Obrigatória antes da entrega (`qualidade.md` §D):**
-  1. Validar ausência de `–`, `—`, `~`, ` - `, placeholders, metalinguagem, `<li>` sem `<svg>` e logos externas não embutidas em base64.
-  2. Testar centralização matemática (`left margin == right margin ±1px` e `top margin == bottom margin ±1px`, sem cortar bordas) nos 4 viewports canônicos: **`1024×768`**, **`1366×768`**, **`1600×900`** e **`1920×1080`**.
-  3. Renderizar os slides em `1600×900`, montar prancha de contato (`python assets\img_qa.py prancha Trabalho\slides\*.png -o Trabalho\_prancha_deck.jpg`) e inspecionar individualmente slides densos (tabelas, processos, 5+ cards, hub) garantindo zero espaço morto acidental, zero colisão com o rodapé e console JS limpo.
-- **QA estático primeiro:** `python <AG>\assets\validate_deck.py deck.html` (travessões, metalinguagem, `<li>` sem SVG, asset externo, nav/escala ausentes, parágrafo > 230, 3 fundos iguais). Zerar ERRO, depois o QA visual.
-- Texto sobre vidro/gradiente: medir contraste na região mais clara. Ajuste pontual: alterar só os slides citados.
+- Confirme funcionamento de navegação/controles apenas se implementados e pertinentes; inspecione o preview em viewports que representem seu uso, sem lista canônica compulsória.
+- A validação existente (`assets\validate_deck.py`) assume convenções específicas de HTML/slide. Rode apenas quando o arquivo se encaixar nesse contrato, explique avisos válidos para a peça e não imponha travessão, ícone em cada lista, fundos rotativos ou palavras máximas como regra geral de design.
+- Revise contraste, overflow, fontes, interações, metadados e console conforme o conteúdo e o uso. Em artefato fora de HTML, use a ferramenta de validação correspondente, se disponível.
