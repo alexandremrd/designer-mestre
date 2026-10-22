@@ -4,6 +4,8 @@ Componentes de terceiros incluídos nesta pasta (MIT). Arquivo de conformidade; 
 - engines/uiux/data/design_md e brands.csv (derivado) — Copyright (c) 2026 VoltAgent
 - figma_engine/talk_to_figma — Copyright (c) 2025 sonnylazuardi
 - figma_engine (ENGINE.md, rules) — Copyright (c) 2025 YouWare Labs
+- references/design_skills/social-media-graphic — Copyright (c) 2026 Arnav Puri (MIT; licença incluída na pasta)
+- references/design_skills/visual-design — Copyright (c) 2026 Nima Dorostkar (MIT; licença incluída na pasta)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 

@@ -1,6 +1,6 @@
 # Módulo Referências & Taste Engine · Decodificar Referência → Regras Transferíveis no KV
 
-Ativar com `/designer-mestre ref` (aliases: `referencia`, `moodboard`) ou quando o usuário mandar imagens dizendo "referência", "inspiração", "analisa", "faz nesse estilo". Transforma imagens soltas em **fichas curtas reutilizáveis e regras transferíveis**. Objetivo: analisar UMA vez, nunca reabrir a imagem.
+Ativar com `/designer-mestre ref` (aliases: `referencia`, `moodboard`) ou quando o usuário mandar imagens dizendo "referência", "inspiração" ou "faz nesse estilo". Transforma referências estéticas em **fichas curtas reutilizáveis e regras transferíveis**. Se o usuário pedir análise ou ajuste de um criativo próprio em SVG, use `ads.md` §6: não confunda diagnóstico da peça com decodificação de referências. Objetivo: analisar a referência uma vez, nunca reabrir a imagem.
 
 ## 1. Economia de Análise
 - Ver as referências **uma vez**, juntas: montar uma prancha (`_prancha_refs.jpg`, ≤ 2000 px de largura, 4–8 por folha) e ler só a prancha. Abrir uma imagem isolada só se um detalhe não der para ler na prancha.

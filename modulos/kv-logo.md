@@ -30,24 +30,44 @@ D:\Clientes\[Cliente]\
 Tipos: `CA` criativo Ads · `PA` pauta/orgânico · `EV` vídeo editado · `MT` motion · `LP` landing page/HTML · `KV` identidade · `DK` deck · `IM` imagem · `OT` outros.
 Cliente antigo com `KV.md`, `NAO_FAZER.md`, `aprovados.md`, `inteligencia.md` separados: unificar no `design_system.md` (sem apagar os antigos).
 
-### 2. Análise profunda (MIV Scanner & Extração Web — uma vez)
+### 2. Análise profunda e inteligência de marca (uma vez)
 1. `Compartilhada\Identidade Visual\`: MIV, guia de marca e logos. Renderizar cada logo uma única vez e anotar arquivo, layout, cor e proporção do bbox.
 2. Links de Figma do briefing (`get_design_context` / `get_screenshot`).
 3. Peças anteriores: inventariar as séries relevantes e estudar **todas as referências que o usuário indicar**. Para cliente novo ou sem `design_system.md`, a leitura inicial deve revelar padrões e exceções, não se limitar a 2–3 peças. Usar prancha de todos os criativos pertinentes; nos SVGs, inspecionar `viewBox`, cores, fontes, hierarquia, máscaras, fotos embutidas e elementos recorrentes sem despejar base64 no contexto. Registrar o **papel** de cada elemento recorrente (logo, motivo de marca, máscara, imagem ou ornamento), não só sua forma e cor; ver `ads.md` §2. Abrir peças individuais só para detalhes que a prancha não mostra. Depois de consolidar no KV, sessões futuras usam o Fast-Track.
-4. Site ou Instagram informados no briefing (extrair variáveis CSS `--*`, paleta computada, escada de superfícies, famílias de fonte, raios de borda e estilos de botão diretamente via DOM/headless browser; bloqueado = núcleo §6).
-5. Se o cliente não tiver KV ou pedir inspiração em grandes marcas globais, consultar o motor interno de **84 Design Systems reais**:
+4. Site ou Instagram: se os links não vierem no briefing, localizar a presença pública pelo nome da marca e região quando a correspondência for inequívoca; se houver perfis homônimos, confirmar antes de atribuir conteúdo. Combinar conteúdo e aparência. No site, priorizar home e páginas que expliquem empresa, oferta, casos/provas e contato; extrair texto, estrutura, imagens e, quando acessível, tokens CSS (`--*`), cores computadas, fontes, superfícies e componentes. No Instagram, observar bio/link, destaques e fixados, grade recente e amostra de Reels/publicações acessíveis; não inferir alcance nem intenção por uma única peça. Registrar janela e data observadas. Acesso bloqueado = núcleo §6; não contornar login, bloqueio ou limite da plataforma.
+5. **Posicionamento e benchmark** (cliente novo; também quando pedido para cliente existente):
+   - Reúna evidências da presença própria antes de formular estratégia: o que a marca afirma, para quem, qual necessidade atende, qual benefício promete, que provas apresenta, que linguagem e códigos visuais repete. Separe sempre **observado**, **inferido** e **não confirmado**; uma bio, estética ou alegação isolada não comprova posicionamento ou diferencial.
+   - Faça amostragem manejável e representativa: até 5 páginas-chave do site e até 12 conteúdos recentes/fixados por perfil, ampliando apenas se houver séries/campanhas relevantes ou a amostra for insuficiente. Examine o render/visual quando disponível, não apenas captions ou metadados. Preserve URL, título/posição e data de acesso para cada achado estratégico.
+   - Quando métricas públicas estiverem disponíveis, registre-as como fotografia da coleta. Se usadas, calcule proxy de interação por publicação `(curtidas + comentários) / seguidores × 100` e informe numerador, denominador, amostra e data. É descritiva; não equivale a alcance, conversão ou causalidade. Não compare posts de formatos/idades diferentes sem ressalva, nem preencha métricas ocultas.
+   - Se o segmento e a região forem claros, identifique até 3–5 referências comparáveis, distinguindo concorrente direto, adjacente e aspiracional. Compare as mesmas dimensões entre marcas: público explícito, categoria/território, promessa, prova, oferta, tom, códigos visuais e formatos de conteúdo. Se o conjunto for incerto, apresente a seleção como hipótese ou peça confirmação antes de tratar como concorrência direta.
+   - Extraia padrões e diferenças, não um ranking inventado. Frequência de anúncios é sinal de investimento/continuidade criativa, não evidência de conversão; curtidas/visualizações públicas não provam vendas nem performance relativa sem contexto comparável. Nunca invente market share, audiência, resultado, oferta ou atributo técnico.
+   - Termine com síntese acionável: posicionamento observado vs. desejado (se houver briefing), pontos de prova e lacunas, coerência site↔social, códigos visuais/verbais a preservar, oportunidades de diferenciação e 1–3 territórios criativos possíveis. Defina voz com 3–5 atributos comportamentais (o que significam e o que não significam), exemplos observados e como o tom muda por canal sem perder identidade. Cada recomendação deve apontar a evidência que a motivou; territórios são hipóteses para criação, não novo KV aprovado.
+   - Registre no `design_system.md` apenas conhecimento durável e conciso. Para análise aprofundada ou matriz comparativa, entregue relatório separado no diretório da solicitação; não despeje pesquisa bruta na memória da marca.
+   - Scraping via Apify/serviço externo é opcional e só se já estiver configurado e o pedido justificar. Antes de qualquer execução paga, coleta ampla ou envio de dados, confirme plataforma, escopo, volume e custo/limite com o usuário. Sem isso, use fontes públicas acessíveis, ferramentas já disponíveis ou insumos fornecidos pelo usuário. Não instalar CLI, dependências ou conectores como parte automática do Cold Start.
+7. Se o cliente não tiver KV ou pedir inspiração em grandes marcas globais, consultar o motor interno de **84 Design Systems reais**:
    - Busca por segmento/estética: `python "<AG>\engines\uiux\scripts\search.py" "<segmento ou estética>" --domain brand -n 3`
    - Leitura completa do `DESIGN.md` de uma marca de referência (ex.: `linear.app`, `stripe`, `apple`, `ferrari`, `bugatti`, `lamborghini`, `nike`, `airbnb`, `runwayml`, `vercel`, `raycast`, `oura`): `python "<AG>\engines\uiux\scripts\search.py" "<slug>" --brand`
-6. Extrair e consolidar no `_DESIGN\design_system.md`:
+8. Extrair e consolidar no `_DESIGN\design_system.md`:
    - conceito, sensação e símbolo;
    - versões da logo (nome · layout · cor · bbox);
    - paleta por papel (HEX, RGB, CMYK, **Escada de Superfícies de 4 níveis** `canvas` → `surface-1`..`surface-4` + `hairline`, cores semânticas, contraste WCAG, regra de escassez do acento e cores proibidas);
    - tipografia por nível (oficial com peso, caixa, **polaridade de tracking** — negativo em display, neutro em body, positivo em eyebrow/label — + substituta Google Fonts para Figma/SVG);
    - grafismos, arquétipos SVG, composição/respiro/posição da logo/rodapé, fotografia (tema · pessoas · enquadramento · luz · tratamento · relação com a copy), safe zones, tom de voz e pilares, O Que Fazer (Aprovados) e O Que Não Fazer (Vetos);
    - ofertas/produtos mencionados nas fontes, em 1–3 linhas por item com a origem e o grau de confirmação; separar descrição comercial observada de atributo técnico confirmado. Isso orienta a próxima cena sem inventar benefícios.
-7. Contradições ou itens ausentes essenciais (logo, paleta ou fonte) vão para `## 5. Decisões Pendentes` mantendo `PARCIAL`; quando completo, marcar `STATUS_KV: VALIDADO`.
-8. Cliente já `VALIDADO` num template antigo: campos novos vazios **não** rebaixam o status nem disparam nova análise.
+9. Contradições ou itens ausentes essenciais (logo, paleta ou fonte) vão para `## 5. Decisões Pendentes` mantendo `PARCIAL`; quando completo, marcar `STATUS_KV: VALIDADO`.
+10. Cliente já `VALIDADO` num template antigo: campos novos vazios **não** rebaixam o status nem disparam nova análise.
 - E-mails do cliente como fonte: registrar por bloco (cabeçalho, corpo, rodapé) fundo, lista/ícone e botão; vira KV só com confirmação.
+
+**Matriz curta de evidências (na análise/relatório; memória recebe só síntese):**
+| Tipo | Regra |
+|---|---|
+| Observado | Citação curta, elemento visual ou dado presente na fonte; incluir URL/arquivo, localização e data. |
+| Inferência | Interpretação estratégica derivada de evidências citadas; marcar como hipótese e indicar confiança alta/média/baixa. |
+| Lacuna | Informação importante sem evidência pública; registrar como não confirmada, sem preencher por plausibilidade. |
+
+Mantenha a fonte e a inferência lado a lado. Descreva estilo visual por elementos verificáveis (paleta, tipografia, enquadramento, luz, composição, ritmo e recorrência), não por adjetivos soltos como “premium” ou “moderno”.
+
+**Referências de método consultadas** (inspiração, não dependências instaladas): [Apify Ultimate Scraper](https://github.com/apify/agent-skills/tree/f22557f15941aa6a5bc7539f0408d509d4a32ab6/skills/apify-ultimate-scraper) para seleção de fonte/fluxo e limites; [Apify Ads Intelligence](https://github.com/apify/awesome-skills/tree/1eb0cd0c12e35a0d0a17c23f0f462d7062fd5813/skills/apify-ads-intelligence) e [Competitive Ads Extractor](https://github.com/ComposioHQ/awesome-claude-skills/tree/be2a406907dbc61b73e6827ded415c96139d13a2/competitive-ads-extractor) para análise de mensagens e criativos; [Brand Review](https://github.com/anthropics/knowledge-work-plugins/tree/a266ab8c3c754a3ccf7a634044fc1595fc06e50e/marketing/skills/brand-review) para dimensões de voz; [Competitor Analysis](https://github.com/langchain-ai/deepagents/tree/a2f88434c5a4b5ce5244c468bb9f69b27831842d/examples/deploy-gtm-agent/skills/competitor-analysis) para matriz comparativa e lacunas. Padrões foram reescritos para este fluxo; não incorporar comandos que contornem bloqueios nem afirmar resultados sem dados.
 
 ---
 
