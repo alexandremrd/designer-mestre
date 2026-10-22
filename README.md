@@ -4,7 +4,7 @@ O **Designer Mestre** é uma skill para produção e leitura de materiais visuai
 
 ## Como instalar sem complicação
 
-Na v19.33, leitura de imagem usa primeiro a capacidade multimodal nativa da sessão, sem instalar skills, SDKs ou configurar API externa; locução e efeitos sonoros usam a API ElevenLabs só quando há chave configurada. O fluxo de mudança aprovada é: atualizar a fonte, escolher a combinação de engine e bancada com maior potência adequada ao conceito, executar `Instalador.cmd`, conferir os destinos por SHA-256 e publicar os arquivos e informações relevantes no repositório GitHub (remoto `origin`). O instalador preserva arquivos extras. Recarregue a IDE para descobrir a skill; destinos opcionais dependem do ambiente. A página do GitHub mantém apenas as quatro atualizações mais recentes.
+Na v19.34, leitura de imagem usa primeiro a capacidade multimodal nativa da sessão, sem instalar skills, SDKs ou configurar API externa; locução e efeitos sonoros usam a API ElevenLabs só quando há chave configurada. O fluxo de mudança aprovada é: atualizar a fonte, escolher a combinação de engine e bancada com maior potência adequada ao conceito, executar `Instalador.cmd`, conferir os destinos por SHA-256 e publicar os arquivos e informações relevantes no repositório GitHub canônico (remoto `origin` da fonte). O instalador preserva arquivos extras, nunca copia credenciais (`.env*`, `*.key`) e não toca na memória dos clientes nem nas credenciais do usuário, que ficam fora da pasta da skill. Recarregue a IDE para descobrir a skill; destinos opcionais dependem do ambiente. A página do GitHub mantém apenas as quatro atualizações mais recentes.
 
 ## Visão geral técnica
 
@@ -34,7 +34,7 @@ No Cold Start, distingue observação de inferência, registra fontes e datas, m
 - **Geração de imagem:** os módulos documentam adaptadores e opções de motor, incluindo motores locais e integrados quando instalados e disponíveis. A skill não garante acesso a um modelo ou execução de geração em toda sessão.
 - **QA de imagem:** `assets\img_qa.py` oferece operações como prancha, paridade RMSE, paleta, contraste WCAG, trim de bbox e conversão WebP; cada operação depende dos requisitos e do runtime disponível.
 - **Vídeo e legenda:** `assets\reels_legenda.py` oferece sincronização de legenda, cortes e tratamentos descritos no módulo; valide dependências e disponibilidade antes de prometer execução.
-- **Locução e efeitos sonoros:** `assets\gerar_audio.py` gera TTS e efeitos pela API ElevenLabs (só biblioteca padrão do Python); exige `ELEVENLABS_API_KEY` criada pelo `npx -y @elevenlabs/cli@latest onboard init`, e cada geração gasta créditos da conta.
+- **Locução e efeitos sonoros:** `assets\gerar_audio.py` gera TTS e efeitos pela API ElevenLabs (só biblioteca padrão do Python); cada usuário faz o próprio login (`npx -y @elevenlabs/cli@latest onboard init` em `%USERPROFILE%\.designer-mestre\`, guiado pela IA), a chave fica fora da skill e cada geração gasta créditos da conta dele.
 - **Motor offline UI/UX e 84 Design Systems:** `engines\uiux` inclui coleções locais consultáveis por `--domain brand` e `--brand <slug>`, sem substituir o KV validado do cliente.
 
 ## Onde fica o agente
@@ -79,10 +79,10 @@ A memória de cada cliente fica em `D:\Clientes\[Cliente]\_DESIGN\` (`design_sys
 Só regras universais entram aqui. Preferência de cliente vai no `design_system.md` dele.
 
 ## Changelog
+- v19.34 (22/10/2026, instalada e conferida por SHA-256): pacote sem dados pessoais (nome, usuário, códigos de cliente removidos; instalador ignora `.env*` e `*.key`). Integração por API usa a conta de cada usuário, com login guiado pela IA; credenciais ficam em `%USERPROFILE%\.designer-mestre\` e memória em `D:\Clientes\`, ambas preservadas nas atualizações.
 - v19.33 (22/10/2026, instalada e conferida por SHA-256): locução (TTS) e efeitos sonoros pela API ElevenLabs em `assets\gerar_audio.py`, roteados para `video.md` Parte B §1.1. Chave só via `.env.local`/ambiente (onboarding da CLI ElevenLabs), texto falado = copy literal, voz aprovada vai para a memória do cliente, clonagem de voz real exige autorização e geração extra que gasta créditos exige ok.
 - v19.32 (22/10/2026, instalada em 7 destinos): integra leitura de imagens, OCR, comparação e análise semântica pela capacidade multimodal nativa, sem exigir skill/API/SDK externo. Consolida as capacidades comuns Azure Vision Python/Java numa rota de computer vision estruturada opcional, só para integração solicitada e autorizada. Mantém `ads.md` e `referencias.md` como donos das análises especializadas; cópias conferidas por SHA-256.
 - v19.31 (22/10/2026, instalada em 7 destinos): preserva a pesquisa criativa v19.30 — proposição/prova publicitária, direção fotográfica e cinematográfica, pôster, oferta/funil opcionais e beats de vídeo — retirando SVG/PNG e HTML de deck como formatos obrigatórios. Nova peça escolhe a engine/bancada mais potente adequada ao conceito e itera em preview; após aprovação, o usuário escolhe formato final e padrão de saída. HTML/CSS/JS, SVG, PPTX/Python, raster, Figma e composições híbridas são opções conforme ferramenta e uso; sites HTML continuam pixel-perfect. A cópia instalada foi conferida por SHA-256.
-- v19.30 (22/10/2026, somente na fonte): pesquisa de GitHub sobre direção de arte, fotografia publicitária, criação de anúncio, cinema e pôster; síntese preservada na v19.31.
 ## Eficiência de Modelos na IDE
 Escolha pelo trabalho, não por uma marca fixa. Nomes, disponibilidade e limites mudam; use o seletor da IDE para confirmar o modelo atual. Prefira tarefas mecânicas determinísticas a um modelo generativo quando o script/ferramenta já resolve o trabalho. Modelos de visão analisam referências, mas isso não significa que também gerem ou editem imagens.
 
