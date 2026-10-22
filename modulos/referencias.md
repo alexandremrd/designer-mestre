@@ -43,19 +43,28 @@ Monte uma pequena trilha de evidências com arquivo/URL, canal ou campanha e dat
 
 Compare relações e funções, não apenas cores ou objetos: papel e comportamento da logo; papéis cromáticos e contrastes; hierarquia e uso expressivo da tipografia; formas, grafismos e texturas recorrentes; tratamento de imagem e retrato; construção da composição, ritmo, densidade e espaço negativo; hierarquia de mensagem e adaptação por canal. Marque cada achado como **código recorrente**, **dispositivo de campanha**, **convenção de canal** ou **escolha pontual** e anote uma exceção relevante.
 
+### Transferência para uma peça de cliente
+1. Leia primeiro o `design_system.md`, as peças aprovadas pertinentes e as restrições deste briefing. Trate o KV comprovado como contrato para cor, tipografia, fotografia, luz/grade, efeitos, elementos gráficos e composição — não apenas como paleta ou logo.
+2. Classifique a intenção das referências como **ambição**, **técnica** ou **pedido explícito de mudança de identidade**. Na ausência deste último, nenhuma referência externa revoga o KV. A falta de informação sobre um código do cliente não transforma automaticamente esse código em campo livre.
+3. Para duas ou mais referências, siga §5 para atribuir funções sem misturar sistemas visuais. Em cada técnica escolhida, explicite a adaptação aos códigos do cliente e o que foi deliberadamente descartado.
+4. Entregue uma direção executável, não adjetivos: crop e posição do retrato; luz e gradação compatíveis com a foto/KV; efeitos e grafismos permitidos; percurso e massas da composição; família e hierarquia tipográfica do cliente; paleta do cliente. Cada decisão visual deve apontar para a fonte do KV ou para a técnica específica que está sendo adaptada.
+5. Faça uma comparação de preservação após o render. Se fotografia, contraste, cor, tipografia, efeitos ou assinatura gráfica passaram a pertencer à referência em vez do cliente, a adaptação falhou mesmo que a peça esteja bem acabada; corrija antes de entregar. Só altere um código do KV com pedido explícito do usuário.
+
+O [VoltAgent/awesome-design-md](https://github.com/VoltAgent/awesome-design-md) informa agentes com regras concretas e organizadas por papel — tema, cores semânticas, hierarquia tipográfica, componentes, layout, profundidade e elevação, do's/don'ts e guia de prompt. Essa estrutura é útil para tornar um KV operacional e verificável. O repositório descreve principalmente sistemas de interfaces web; aplique sua clareza de papéis e restrições, não seus tokens ou componentes, a anúncios e fotografia de campanha.
+
 Entregue a síntese em quatro blocos:
 1. **Gramática visual observada** — elementos, relações e evidências que se repetem.
 2. **Variação e limites** — o que muda entre peças/canais e quais hipóteses ainda são fracas.
-3. **Tradução para o KV do cliente** — princípios compatíveis, mecanismos que podem ser reinterpretados e conflitos/vetos com o KV validado.
-4. **Direção original** — uma proposta que preserve a mensagem e a identidade do cliente, mas crie novo conceito, composição e copy; não faça mera troca de paleta nem trace o layout da referência.
+3. **Tradução para o KV do cliente** — códigos do cliente que permanecem fixos; mecanismo de referência escolhido para cada camada; adaptação compatível; itens conflitantes descartados.
+4. **Direção original** — uma execução específica que preserve os códigos do cliente em todas as camadas, melhore a relação entre mensagem e imagem e não copie o layout. Copy continua literal conforme a Lei 4; a análise de referência não autoriza reescrevê-la.
 
 Uma referência de terceiros não se torna KV do cliente. Transfira a lógica visual em nível abstrato; não reutilize logo, assinatura, slogan, texto, mascote, assets proprietários nem composição distintiva. Para uma única imagem, descreva apenas o que ela permite observar e apresente o restante como hipótese, sem alegar que reconstruiu um brand book completo.
 
 Calibração: um cartaz isolado → descreva a peça e deixe a identidade ampla como hipótese; vários anúncios de uma campanha → extraia o KV daquela campanha; os mesmos códigos em site, social e campanhas diferentes → considere-os candidatos a códigos recorrentes de marca, sempre citando as fontes. Guarde a leitura da referência em `referencias.md`; ela não substitui nem altera o `design_system.md` validado do cliente.
 
-## 5. Mixagem de Referências por Função Exclusiva
+## 5. Atribuição de Função a Referências Múltiplas
 Quando o usuário enviar **2 ou mais referências** para uma mesma peça:
-- **Proibido misturar tudo num meio-termo confuso.** Dar a cada referência um papel explícito, conforme a indicação do usuário ou a característica mais útil: câmera/composição, luz/profundidade, atmosfera/paleta, material/acabamento ou gesto narrativo. Uma referência pode fornecer mais de um eixo quando for coerente; declarar prioridade se houver conflito.
+- **Escolha uma referência principal** pela compatibilidade com o KV e a mensagem. Nomeie a função de cada complementar (por exemplo, luz, profundidade ou acabamento) e use sua técnica somente numa camada distinta e compatível do KV. Várias técnicas podem coexistir; não importe uma estética inteira nem combine paletas, tipografias ou gramáticas de composição conflitantes. A indicação explícita do usuário orienta a seleção, mas não altera o KV sem pedido claro de redesign.
 - Produto/rosto real e KV do cliente não são substituídos por referência estética. Transferir mecanismos, não o assunto ou a identidade de terceiros.
 - Se o usuário pedir engenharia reversa completa de 1 foto para gerar cena idêntica em IA, acionar o **Vision Decomposer** (`imagem.md` Parte B §5).
 
