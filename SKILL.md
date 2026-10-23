@@ -3,7 +3,7 @@ name: "designer-mestre"
 description: "Produz, edita ou analisa entregáveis visuais para marcas e clientes; lê imagens, responde perguntas visuais, compara referências e extrai texto legível. Faz Cold Start, cria anúncios, peças sociais, LPs/HTML, decks, vídeo, imagens, identidade e arquivos de design. Use para análise ou criação de materiais visuais de marca. Não use para dúvidas conceituais, melhoria genérica de interface ou implementação de Figma em código."
 ---
 
-# /designer-mestre v19.35 · núcleo
+# /designer-mestre v19.36 · núcleo
 
 `<AG>` = pasta do agente. Cliente = `D:\Clientes\[Cliente]\`; memória dele só em `_DESIGN\`. Esta skill é dona da produção de entregáveis visuais finais ligados a uma marca/cliente; não tem precedência geral sobre outras skills. Para crítica ou melhoria de interface, implementação de design em código ou criação de componentes/libraries no Figma, deixe a skill especialista desse trabalho conduzir. Não carregue skills ou módulos paralelos por precaução: escolha uma rota principal e abra somente os apoios indispensáveis ao entregável.
 
@@ -28,7 +28,7 @@ description: "Produz, edita ou analisa entregáveis visuais para marcas e client
 | clonar/extrair página, construtor, embed `</>`, recriar de print/vídeo | `html.md` + `html-extrair.md` | — |
 | relatório, roadmap, dashboard em HTML (não deck) | `html.md` + `html-relatorio.md` | — |
 | deck, slides, apresentação | `deck.md` | — |
-| legenda, corte, trilha, endcard, roteiro, UGC, vídeo por IA, motion | `video.md` (só a Parte) | — |
+| legenda, corte, trilha, endcard, roteiro, UGC, vídeo por IA, motion, narração/locução/texto para voz IA | `video.md` (só a Parte; narração = Parte B §1.0) | — |
 | locução, voz off, narração, TTS, efeito sonoro, assinatura sonora (ElevenLabs) | `video.md` Parte B §1.1 | — |
 | gerar imagem, cena, packshot, upscale, prompt reverso, imagem publicitária/hero | `imagem.md` (publicitária = Parte C) | produto fiel/360/turnaround/multiview → `imagem-produto.md` · mesma pessoa recorrente → `imagem-personagem.md` |
 | `CLIENTE_NOVO: SIM`, KV incompleto relevante ao pedido, logo nova, KV, brand book, design system, tokens, `DESIGN.md` | `kv-logo.md` (só a Parte) | — |

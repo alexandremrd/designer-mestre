@@ -70,10 +70,21 @@ python "<AG>\assets\reels_legenda.py" ^
   - **Regra dos 6 de Murch no corte:** Emoção (51%) > História (23%) > Ritmo (10%) > Eye-trace (7%) > Plano 2D (5%) > Espaço 3D (4%).
   - **Escada de Montagem:** `longo → mais curto → mais curto → pausa respiratória → impacto`. A câmera só se move quando há mudança na cena.
 
+### 1.0 Texto de narração para voz por IA (ElevenLabs, Artlist, Murf…)
+- **Quando:** todo motion/vídeo com voz, já na análise do briefing (`briefing.md` §3), antes de qualquer cena. Também quando o usuário pedir só o texto da locução.
+- **Objetivo único:** extrair do briefing/roteiro/copy o que é **falado**, em texto corrido e limpo, pronto para colar no gerador de voz. Não é revisão de copy nem roteiro novo.
+- **Entra:** fala, locução, voz off, narração, diálogo e CTA **falado**, na ordem em que acontecem.
+- **Sai (filtragem total):** indicações de cena e direção visual, tempos/cronometragem, texto na tela (lettering, telas, cartelas, chips), instruções de câmera, CTA visual, copy de anúncio/legenda do post, hashtags, fontes/créditos e disclaimers legais.
+- **Limpeza:** remover marcadores ("Cena 3", "Narração:", "Áudio:", "Locução:", "VO:", "Fala:", nome do personagem antes da fala, colchetes de direção como "[pausa]" ou "(sorrindo)"). Um parágrafo por bloco de fala; sem bullets, aspas de abertura nem numeração.
+- **Fidelidade:** manter palavras, ordem e variante linguística do original (PT-BR, PT-PT, EN…). Mexer só na pontuação para fluidez de leitura (vírgula, ponto, interrogação). Grafia de pronúncia (sigla, número, marca) só com ok do usuário.
+- **Planos A/B/C com a mesma fala:** extrair uma vez e avisar. Falas diferentes: um texto por plano, identificado fora do texto.
+- **Sem fala no material:** não inventar. Avisar e perguntar se cria a partir do lettering/copy; texto criado só segue após aprovação e é marcado como criado no `.txt`.
+- **Saída:** mostrar o texto ao usuário e gravar `Trabalho\narracao.txt` (só o texto falado). Informar palavras e duração estimada (~2,5 palavras/s em PT-BR) contra a duração pedida; se passar, apontar quanto antes de gerar a voz.
+
 ### 1.1 Locução e efeitos sonoros (ElevenLabs · `assets\gerar_audio.py`)
 - **Quando:** locução/voz off, narração de vídeo/motion/deck, TTS, efeito sonoro, assinatura sonora. Gera o áudio que o §1 (Voz Primeiro) aprova antes do corte.
 - **Chave (conta do próprio usuário, núcleo §6):** procurada em `ELEVENLABS_API_KEY`, `--env-file`, `.env.local`/`.env` da pasta atual e `%USERPROFILE%\.designer-mestre\.env.local`. Sem chave: rodar `checar` primeiro; se faltar, criar `%USERPROFILE%\.designer-mestre\`, rodar ali `npx -y @elevenlabs/cli@latest onboard init` e seguir o que ele imprime — o usuário faz login/autoriza no navegador com a conta dele. Feito uma vez, vale para todos os projetos e sobrevive às atualizações da skill. Nunca pedir/aceitar chave no chat, nunca abrir/imprimir o `.env`, nunca pôr a chave em código. `checar` valida a chave e mostra o saldo sem gastar.
-- **Texto falado = copy literal** (lei 4): roteiro aprovado, sem CTA, número ou tradução a mais; pronúncia de marca/sigla se ajusta na grafia do texto falado, não na copy da peça.
+- **Texto falado = `Trabalho\narracao.txt` do §1.0** (lei 4): roteiro aprovado, sem CTA, número ou tradução a mais; pronúncia de marca/sigla se ajusta na grafia do texto falado (com ok do usuário), não na copy da peça.
 - **Voz:** a aprovada no `design_system.md` do cliente vence. Sem registro: `vozes [--busca]` e propor 2–3 opções coerentes com o tom de voz do KV; padrão George (`JBFqnCBsd6RMkjVDRZzb`) + `eleven_multilingual_v2` para PT-BR. Clonar voz de pessoa real só com autorização registrada (mesma regra de pessoa real da lei 5).
 - **Comandos:** `python "<AG>\assets\gerar_audio.py" falar "<texto>" -o "Trabalho\locucao_v1.mp3" [--voz ID --estabilidade --similaridade --estilo --velocidade]` (ajustes = parâmetros do §1) · `falar --arquivo roteiro.txt` · `efeito "<descrição física do som>" --duracao 3 -o "Trabalho\sfx.mp3"`. Cada saída ganha `.txt` com voz, modelo, ajustes e texto; nunca sobrescreve (`_v2`).
 - **Créditos:** toda geração gasta créditos da conta. Gerar só o que o pedido exige; teste avulso, variações A/B e regravação sem mudança de texto/ajuste só com ok do usuário.
