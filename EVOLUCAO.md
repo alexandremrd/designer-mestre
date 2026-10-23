@@ -1,7 +1,8 @@
 # EVOLUCAO · memória do agente /designer-mestre
 > Ler ao alterar a skill. Manter conciso (~5 KB); preferências específicas ficam no `design_system.md` do cliente.
 
-## Estado atual (v19.34 instalada e publicada · 2026-10-22)
+## Estado atual (v19.35 instalada · 2026-10-22; v19.34 publicada)
+- v19.35: regras universais aprovadas item a item pelo mantenedor. `briefing.md` §1: copy não achada → perguntar "tem a copy ou crio com IA?" (removida a exceção que conflitava com a lei 4); §4: fonte que não entrega na 1ª tentativa → perguntar. Núcleo §0.5: medir render e confirmar exportação antes da 1ª prévia (absorveu a pendência Toolchain); §2: em autocorreção, ajustar elemento antes de apagar.
 - v19.34: privacidade e credenciais (núcleo §6). Pacote sem dados pessoais do mantenedor/usuário/clientes; instalador não copia `.env*`/`*.key`. API externa = conta de cada usuário, login oficial guiado pela IA, chave nunca no chat. Credenciais em `%USERPROFILE%\.designer-mestre\` e memória em `D:\Clientes\`, fora da pasta da skill, para que atualizações não exijam refazer login nem perder memória. Regressão: nenhuma busca por nome/e-mail/caminho de usuário/chave deve achar resultado no pacote antes de publicar.
 - v19.33: lacuna comprovada de geração de áudio. `video.md` já tinha os parâmetros de voz (§1 Voz Primeiro) mas nenhum motor; a capacidade parcial foi estendida no próprio módulo (§1.1) + `assets\gerar_audio.py` (stdlib, comandos `checar`/`vozes`/`falar`/`efeito`, `.txt` de origem, sem sobrescrever). Aprendido no onboarding real: `npx -y @elevenlabs/cli@latest onboard init` → autorizar no navegador → chave em `.env.local` já no gitignore; nunca pedir chave no chat nem imprimir o `.env`; teste de TTS gasta créditos e só roda com ok; George + `eleven_multilingual_v2` soou bem em PT-BR. `runway-api:rw-generate-audio` continua alternativa quando for a ferramenta pedida.
 - Conteúdo sob demanda: uma rota principal e anexos pertinentes. Skills especialistas conduzem crítica de interface e design-to-code.
@@ -34,7 +35,6 @@
 - Crédito de terceiros só é removido se a licença permitir; créditos obrigatórios ficam discretos.
 - Cliente novo/sem KV: estudar fontes pertinentes uma vez e registrar `CLIENTE_NOVO: SIM|NÃO`.
 - Mudanças ficam na fonte até aprovação explícita para instalação; publicação externa também requer pedido explícito.
-
 ## Aprendizados e pendências
 - Falha V8 (card de citação): nomear camadas do KV não garante tradução. O retrato de close, a forma de nuvem e a linha de dados estavam presentes, mas não articulavam visualmente a tese; a composição ainda lia como retrato recortado + headline sans em três linhas. A regra causal está no gate de Ads e Qualidade, não numa nova skill ou num carregamento indiscriminado de todas as skills.
 - **Casos de regressão v19.28 (revisão qualitativa; não executados como benchmark):** (1) “Crie um card de citação para CEO com retrato, copy fechada e carrossel aprovado como referência; o layout anterior foi recusado.” Esperado: ads + KV + referências + direção fotográfica + gate A/H; três conceitos realmente distintos, nenhuma cópia, claim ou layout genérico. (2) “Monte seis cards com uma história e imagens do mesmo ensaio; preserve o sistema da marca sem repetir enquadramento.” Esperado: ads + referências + imagem + U10 + gate A/H, uma gramática comum com variação funcional de cena/crop e leitura contínua. (3) “Converta a peça aprovada em frames e camadas nativas no Figma.” Esperado: ads fornece a direção aprovada e a rota Figma cuida da estrutura nativa; não carregar UI web, vídeo ou duplicar o editor Figma dentro da rota de ads.
@@ -47,4 +47,11 @@
 - Regressão de workflow v19.31: não gerar a peça em um formato único nem reduzir o poder de render/criação ao trocar a bancada. Não exportar arquivo final antes da aprovação; depois dela, confirmar formato se não indicado. Iterar sem teto arbitrário quando cada passagem fizer progresso; parar quando não houver avanço, a ferramenta bloquear ou faltar uma decisão material. Testar preview de peça em canvas iterável e que HTML de site continua pixel-perfect; deck pode usar HTML, PPTX ou outra saída escolhida, sem template obrigatório.
 - Casos de regressão v19.32: descrever imagem anexada sem solicitar API key/SDK; transcrever rótulo pequeno sem completar texto incerto; analisar anúncio sem deslocar de `ads.md` §6; orientar implementação Azure Python/Java somente quando a stack for requisito explícito.
 - Copy literal não exige ilustração literal; metáforas e abstrações podem expressar a ideia sem fingir evidência.
-- Avaliar v19.24 em peça executiva/editorial, anúncio heroico e ajuste mecânico. Considerar OCR leve em `img_qa.py` para sinalizar texto acidental.
+- Avaliar v19.24 em peça executiva/editorial, anúncio heroico e ajuste mecânico.
+## Pendências do agente (princípios universais; não aplicados nos módulos)
+- **Entregável completo desde o briefing:** listar todas as camadas do formato (vídeo = imagem + texto + voz + trilha + licença; peça estática = arte + legenda/CTA + formatos) e resolver as ausentes no início, não na revisão. Usar primeiro a capacidade já instalada (`video.md` §1.1 + `gerar_audio.py` para voz) antes de propor serviço externo.
+- **Pergunta com contexto:** ao pedir decisão, mostrar fonte A × fonte B, o trecho exato e o efeito de cada opção. Pergunta solta gera retrabalho.
+- **Leitura antes de ritmo:** tempo de tela proporcional ao texto (leitura confortável na velocidade real) e hierarquia perceptível entre níveis (peso + tamanho, não só tamanho). Validar tocando em tempo real, não só em quadro parado.
+- **Movimento serve à informação:** câmera, zoom, cortes e transições nunca escondem texto, dado ou prova. Em documento, print ou UI, movimento é sutil e o conteúdo fica legível inteiro.
+- **Insumo na resolução de saída:** pedir cedo arquivos em alta (prints, logos, fotos). Captura feita pelo ambiente pode sair limitada; não basear a peça final nela.
+- **Bancada é dependência:** limpar só temporários próprios que nada referencia; nunca arquivos usados pela prévia ou pelo script de export. Considerar OCR leve em `img_qa.py` para sinalizar texto acidental.
