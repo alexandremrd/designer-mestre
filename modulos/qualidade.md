@@ -28,6 +28,7 @@ Use estes sinais para localizar problemas, **não como blacklist nem reprovaçã
 - Movimento só se chama atenção, mostra estado ou dá continuidade. `prefers-reduced-motion`: só fade ≤ 0.2 s.
 - Corte no beat: 60/BPM s por batida (30 fps: 1800/BPM frames). Um acento de cor por cena.
 - Saída ≈ 60–70% da duração da entrada; máx. 1–2 elementos animados por tela; LP = 1 entrada orquestrada no carregamento (stagger acima), CSS antes de JS; animação nunca é a única via de estado.
+- **Gate antes de mostrar a prévia** (o usuário não deve ser o QA): tocar em tempo real, não só quadro parado. (1) Cada texto fica na tela o tempo de ser lido inteiro e entra no trecho da voz conferido pelo conteúdo da fala, não só pela contagem de pausas. (2) Nenhum elemento cortado por contêiner (`overflow` de SVG ou caixa) nem pela câmera/zoom; sair da safe zone pode, cortar não. (3) O item em destaque nunca fica encoberto por outro. (4) Espaços entre blocos empilhados são medidos no render e ficam iguais. (5) Níveis de texto diferem em peso e tamanho, e destaques ficam proporcionais aos vizinhos.
 
 ## D. Deck (1600×900)
 - Cada slide cabe no canvas `1600×900` (`overflow:hidden`), centralizado com `translate(-50%, -50%) scale(var(--deck-scale, 1))` via `visualViewport`; conteúdo demais = dividir ou mudar arquétipo, nunca encolher a fonte abaixo do mínimo (`h2 >= 44px`, `h3 >= 20px`, corpo `>= 17px`).
