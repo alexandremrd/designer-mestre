@@ -26,6 +26,7 @@ Linha sem conteúdo some (não escrever "nenhum"). Várias peças podem usar tab
 
 ## 3. Depois da tradução
 - Nada bloqueia: seguir direto para a primeira ação na mesma resposta (organização, análise ou peça).
+- Motion/vídeo com voz: na mesma resposta, extrair o texto de narração por `video.md` Parte B §1.0 e gravar `Trabalho\narracao.txt`; a voz é camada do entregável desde o início, não da revisão.
 - Gravar a lista e insumos aplicáveis como `briefing.md` na pasta da solicitação (`[AAAA]\[MM - Mês]\[AAAA-MM-DD] [TIPO] Título\`). O `design_system.md` recebe apenas aprendizado durável da marca, não a lista da campanha.
 - Resposta do usuário a um "Bloqueia" atualiza a linha afetada, sem refazer a triagem inteira.
 
