@@ -8,6 +8,9 @@
 - Mandar o caminho local clicável de toda prévia, inclusive das reprovadas.
 - No PC, só o que é script (recorte, máscara, montagem, conversão, exportação).
 - Pergunta de decisão com o trecho de cada fonte e o efeito de cada opção.
+- Ideia visual antes do arranjo: "card de citação" é formato, não direção; copy literal não pede ilustração literal.
+- Referência editorial ousada indica ambição, não preset: adaptar o mecanismo, nunca a identidade, o layout ou a copy.
+- Uma peça não prova sistema de marca; repetição numa campanha é hipótese de KV, não regra.
 
 ## Tende a ser reprovado
 - Vista ou lado gerado sem foto real daquele trecho: o gerador inventa porta, janela, motor ou logo.
