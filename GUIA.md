@@ -1,0 +1,17 @@
+# Guia do agente · sugestões sem cliente
+> Lido no início de cada pedido. Escrito pelo /aprenda ao fim de cada projeto: fundir em vez de empilhar, teto ~1,5 KB. São tendências do que foi aprovado ou reprovado em vários clientes, não leis; limites de segurança, logo, copy e gasto ficam no núcleo.
+
+## Tende a funcionar
+- Listar de novo a pasta do cliente ou do produto antes de cada rodada: referências costumam chegar ou ser recortadas no meio do trabalho.
+- Fotos reais do próprio cliente como fonte de pintura e formato; ficha técnica só para entender o que o produto é.
+- Conferir várias variações numa prancha só e recortar a área que está sendo checada.
+- Mandar o caminho local clicável de toda prévia, inclusive das reprovadas.
+- No PC, só o que é script (recorte, máscara, montagem, conversão, exportação).
+- Pergunta de decisão com o trecho de cada fonte e o efeito de cada opção.
+
+## Tende a ser reprovado
+- Vista ou lado gerado sem foto real daquele trecho: o gerador inventa porta, janela, motor ou logo.
+- Gerador de imagem local fraco para a imagem final: muitas rodadas e proporção errada.
+- Repetir a mesma tentativa mais de 2 vezes sem pedir referência.
+- Copy, elemento ou detalhe criado sem pedido.
+- Ligar serviço, plugin, conector ou memória sem avisar o custo.

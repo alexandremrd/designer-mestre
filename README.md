@@ -30,7 +30,8 @@ No Cold Start, distingue observação de inferência, registra fontes e datas, m
 - **Evolução unificada:** regra nova substitui a antiga no módulo dono do tema; valor usado por 2+ módulos mora nos Padrões `U1–U11` do núcleo.
 
 ## Memória e ferramentas disponíveis
-- **Memória por cliente:** `D:\Clientes\[Cliente]\_DESIGN\` (`design_system.md` e `historico.md`). Registre apenas conhecimento durável e feedback efetivamente recebido; não presuma aprovação, reprovação ou aprendizado automático.
+- **Memória por cliente:** `D:\Clientes\[Cliente]\_DESIGN\` (`guia.md` com aprovado/reprovado em sugestões, `design_system.md` com KV e negócio, `historico.md`).
+- **Guia do agente:** `GUIA.md` reúne tendências sem cliente, em sugestões breves; o `/aprenda` reescreve os guias ao fim de cada projeto. Registre apenas conhecimento durável e feedback efetivamente recebido; não presuma aprovação, reprovação ou aprendizado automático.
 - **Geração de imagem:** os módulos documentam adaptadores e opções de motor, incluindo motores locais e integrados quando instalados e disponíveis. A skill não garante acesso a um modelo ou execução de geração em toda sessão.
 - **QA de imagem:** `assets\img_qa.py` oferece operações como prancha, paridade RMSE, paleta, contraste WCAG, trim de bbox e conversão WebP; cada operação depende dos requisitos e do runtime disponível.
 - **Vídeo e legenda:** `assets\reels_legenda.py` oferece sincronização de legenda, cortes e tratamentos descritos no módulo; valide dependências e disponibilidade antes de prometer execução.
@@ -44,6 +45,7 @@ O agente pode ser salvo em qualquer pasta (`<PASTA_DO_AGENTE>`). A cópia editad
 
 ```text
 <PASTA_DO_AGENTE>\
+├── GUIA.md            ← sugestões sem cliente, lidas no início
 ├── SKILL.md            ← núcleo (v19): carga mínima, rotas, ciclo de entrega, Gate de KV, leis hierárquicas, padrões U1–U11, memória
 ├── modulos\            ← lidos só quando o pedido é daquele tipo (consolidados por domínio)
 │   ├── briefing.md     ← tradutor de briefing (só o que é do designer)
@@ -79,12 +81,10 @@ A memória de cada cliente fica em `D:\Clientes\[Cliente]\_DESIGN\` (`design_sys
 Só regras universais entram aqui. Preferência de cliente vai no `design_system.md` dele.
 
 ## Changelog
-- v19.39 (23/10/2026, instalada e conferida por SHA-256): autoria HTML/CSS ou SVG escolhida pela peça; SVG opcional com editabilidade real, planejamento de conversão e declaração de rasterização.
-- v19.38 (23/10/2026, instalada e conferida por SHA-256): Adobe Express/Firefly como motor opcional para design, ads, imagem e motion; cada usuário conecta a própria conta pelo conector oficial no chat, sem credenciais no pacote.
-- v19.37 (23/10/2026, instalada e conferida por SHA-256): gate de motion antes da prévia (leitura no trecho certo da voz, nada cortado por contêiner ou câmera, destaque nunca encoberto, espaços medidos, hierarquia por peso e tamanho). Motion abre a parte de voz desde o início; locução feminina padrão Christine v4, rascunho com voz premade no plano free. Entrega de motion = MP4 + telas em PNG + SVG ou arquivo original, com `assets\motion_export.py`. Safe zone com prioridade topo > base e logo discreta no rodapé; perguntas de decisão sempre com contexto; conferir antes de apagar ou publicar.
-- v19.36 (22/10/2026, instalada e conferida por SHA-256): extração do texto de narração para voz IA (ElevenLabs, Artlist, Murf) em `video.md` Parte B §1.0, disparada na análise do briefing de todo motion com voz. Só o que é falado, em texto corrido, sem cenas, tempos, lettering, câmera, CTA visual, legenda ou disclaimers; mantém palavras e variante linguística, ajusta só a pontuação; sem fala no roteiro, pergunta antes de criar. Saída em `Trabalho\narracao.txt` com estimativa de duração.
-- v19.35 (22/10/2026, instalada e conferida por SHA-256): copy ausente vira pergunta "tem a copy ou crio com IA?"; parar e perguntar quando a fonte não entrega na 1ª tentativa; medir render e checar exportação antes da 1ª prévia; ajustar elemento antes de apagar.
-- v19.34 (22/10/2026, instalada e conferida por SHA-256): pacote sem dados pessoais (nome, usuário, códigos de cliente removidos; instalador ignora `.env*` e `*.key`). Integração por API usa a conta de cada usuário, com login guiado pela IA; credenciais ficam em `%USERPROFILE%\.designer-mestre\` e memória em `D:\Clientes\`, ambas preservadas nas atualizações.
+- v19.47 (23/10/2026): guias de sugestões em duas camadas: `GUIA.md` do agente (sem cliente) e `_DESIGNguia.md` de cada cliente (aprovado/reprovado), escritos pelo /aprenda ao fim de cada projeto, que também enxuga o núcleo.
+- v19.46 (23/10/2026): detecta motores e IAs locais já instalados antes de propor instalação; papéis definidos: Claude raciocina e confere, local faz o determinístico, imagem final usa o gerador que acerta em menos rodadas.
+- v19.45 (23/10/2026): motor local é opção oferecida ao usuário, não regra; nova opção de modelo 3D local + img2img para vistas de produto sem foto real; imagens reprovadas vão para `IANão aprovadas` com o motivo.
+- v19.44 (23/10/2026): pasta do produto relistada antes de cada rodada; visual e formato vêm das referências locais (formato com peso maior); pesquisa técnica só depois de mais de 2 erros, para entender o produto, sem nada estético.
 
 ## Eficiência de Modelos na IDE
 Escolha pelo trabalho, não por uma marca fixa. Nomes, disponibilidade e limites mudam; use o seletor da IDE para confirmar o modelo atual. Prefira tarefas mecânicas determinísticas a um modelo generativo quando o script/ferramenta já resolve o trabalho. Modelos de visão analisam referências, mas isso não significa que também gerem ou editem imagens.
