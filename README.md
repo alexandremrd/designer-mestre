@@ -81,10 +81,10 @@ A memória de cada cliente fica em `D:\Clientes\[Cliente]\_DESIGN\` (`design_sys
 Só regras universais entram aqui. Preferência de cliente vai no `design_system.md` dele.
 
 ## Changelog
-- v19.47 (23/10/2026): guias de sugestões em duas camadas: `GUIA.md` do agente (sem cliente) e `_DESIGNguia.md` de cada cliente (aprovado/reprovado), escritos pelo /aprenda ao fim de cada projeto, que também enxuga o núcleo.
+- v19.48 (23/10/2026): `EVOLUCAO.md` vira caderno de manutenção (estado, casos de teste, pendências; ~2 KB); tendências de criação passam ao `GUIA.md`; publicar no GitHub só com pedido explícito.
+- v19.47 (23/10/2026): guias de sugestões em duas camadas: `GUIA.md` do agente (sem cliente) e `_DESIGN\guia.md` de cada cliente (aprovado/reprovado), escritos pelo /aprenda ao fim de cada projeto, que também enxuga o núcleo.
 - v19.46 (23/10/2026): detecta motores e IAs locais já instalados antes de propor instalação; papéis definidos: Claude raciocina e confere, local faz o determinístico, imagem final usa o gerador que acerta em menos rodadas.
-- v19.45 (23/10/2026): motor local é opção oferecida ao usuário, não regra; nova opção de modelo 3D local + img2img para vistas de produto sem foto real; imagens reprovadas vão para `IANão aprovadas` com o motivo.
-- v19.44 (23/10/2026): pasta do produto relistada antes de cada rodada; visual e formato vêm das referências locais (formato com peso maior); pesquisa técnica só depois de mais de 2 erros, para entender o produto, sem nada estético.
+- v19.45 (23/10/2026): motor local é opção oferecida ao usuário, não regra; nova opção de modelo 3D local + img2img para vistas de produto sem foto real; imagens reprovadas vão para `IA\Não aprovadas\` com o motivo.
 
 ## Eficiência de Modelos na IDE
 Escolha pelo trabalho, não por uma marca fixa. Nomes, disponibilidade e limites mudam; use o seletor da IDE para confirmar o modelo atual. Prefira tarefas mecânicas determinísticas a um modelo generativo quando o script/ferramenta já resolve o trabalho. Modelos de visão analisam referências, mas isso não significa que também gerem ou editem imagens.
