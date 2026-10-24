@@ -2,7 +2,7 @@
 > Caderno de manutenção: lido só ao alterar a skill, por isso não pesa nos pedidos de peça. Guarda estado, casos de teste e pendências; regras vigentes ficam no núcleo e nos módulos, tendências de criação no `GUIA.md`, cliente no `_DESIGN\guia.md` dele, histórico de versões no git. Teto ~2 KB.
 
 ## Estado atual
-- v19.53 instalada em 23/10/2026 nas cópias locais: motor local ComfyUI sem interface (t2i e edição por referência, ~1 min/imagem numa GPU de 8 GB) e aval único gravado (`consentimento.py`, vale em toda IA; conta paga = sim único dentro do contratado, excedente ou API por uso = sim a cada geração com aviso de que quem cobra é o provedor). Não publicada no GitHub (v19.48 é a última publicada). Memória em duas camadas de sugestões: `GUIA.md` (agente) e `_DESIGN\guia.md` (cliente); o `design_system.md` fica com KV e negócio.
+- v19.53 instalada em 23/10/2026 nas cópias locais: motor local ComfyUI sem interface (t2i e edição por referência, ~1 min/imagem numa GPU de 8 GB) e aval único gravado (`consentimento.py`, vale em toda IA; conta paga = sim único dentro do contratado, excedente ou API por uso = sim a cada geração com aviso de que quem cobra é o provedor). Publicada no GitHub como release v19.53. Memória em duas camadas de sugestões: `GUIA.md` (agente) e `_DESIGN\guia.md` (cliente); o `design_system.md` fica com KV e negócio.
 
 ## Casos de teste ao alterar a skill
 - Card de citação com retrato, copy fechada e referência aprovada: três conceitos distintos, nenhum layout genérico ou cópia.
