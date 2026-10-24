@@ -1,3 +1,6 @@
+# -Sim: sincroniza sem perguntar (atualização aprovada) e não instala o sharp opcional.
+param([switch]$Sim)
+
 $ErrorActionPreference = 'Stop'
 
 $source = $PSScriptRoot
@@ -21,7 +24,9 @@ $optionalTargets = @(
     @{ Root = '.gemini\antigravity'; Name = 'Antigravity'; Path = '.gemini\antigravity\skills\designer-mestre' },
     @{ Root = '.claude'; Name = 'Claude Code'; Path = '.claude\skills\designer-mestre' },
     @{ Root = '.cursor'; Name = 'Cursor'; Path = '.cursor\skills\designer-mestre' },
-    @{ Root = '.codeium\windsurf'; Name = 'Windsurf'; Path = '.codeium\windsurf\skills\designer-mestre' }
+    @{ Root = '.codeium\windsurf'; Name = 'Windsurf'; Path = '.codeium\windsurf\skills\designer-mestre' },
+    @{ Root = '.config\opencode'; Name = 'OpenCode'; Path = '.config\opencode\skills\designer-mestre' },
+    @{ Root = '.qwen'; Name = 'Qwen Code'; Path = '.qwen\skills\designer-mestre' }
 )
 
 foreach ($entry in $optionalTargets) {
@@ -54,6 +59,18 @@ foreach ($entry in $legacyTargets) {
             Name = $entry.Name
             Path = $path
         }
+    }
+}
+
+# Toda e qualquer outra cópia no perfil (pasta designer-mestre com SKILL.md), para nenhuma IA ou cópia esquecida ficar para trás.
+$sourceFullPath = [System.IO.Path]::GetFullPath($source).TrimEnd('\')
+foreach ($top in Get-ChildItem -LiteralPath $homePath -Directory -Force -ErrorAction SilentlyContinue | Where-Object Name -ne 'AppData') {
+    foreach ($dir in Get-ChildItem -LiteralPath $top.FullName -Directory -Recurse -Depth 5 -Force -Filter 'designer-mestre' -ErrorAction SilentlyContinue) {
+        $path = $dir.FullName.TrimEnd('\')
+        if ($path -match '\\(node_modules|\.git)\\') { continue }
+        if (-not (Test-Path -LiteralPath (Join-Path $path 'SKILL.md') -PathType Leaf)) { continue }
+        if ($path -eq $sourceFullPath -or $path -in $targets.Path) { continue }
+        $targets += [pscustomobject]@{ Name = 'Copia encontrada'; Path = $path }
     }
 }
 
@@ -106,7 +123,7 @@ foreach ($target in $targets) {
     Write-Host "  - $($target.Name): $($target.Path)"
 }
 
-$confirmation = Read-Host "`nInstalar/sincronizar nesses destinos? [S/N]"
+$confirmation = if ($Sim) { 'S' } else { Read-Host "`nInstalar/sincronizar nesses destinos? [S/N]" }
 if ($confirmation.Trim() -notmatch '^(s|sim)$') {
     Write-Host 'Instalacao cancelada; nenhum arquivo foi alterado.'
     exit 0
@@ -175,7 +192,7 @@ if ($installedTargets.Count -gt 0 -and (Test-Path -LiteralPath $imageScript -Pat
         Write-Host '[AVISO] npm.cmd nao encontrado; sharp opcional nao foi instalado.'
     }
     else {
-        $answer = Read-Host "`nInstalar sharp opcional para tratar_imagem.mjs? Isso baixa um pacote npm por destino. [S/N]"
+        $answer = if ($Sim) { 'N' } else { Read-Host "`nInstalar sharp opcional para tratar_imagem.mjs? Isso baixa um pacote npm por destino. [S/N]" }
         if ($answer.Trim() -match '^(s|sim)$') {
             foreach ($target in $installedTargets) {
                 $assetsPath = Join-Path $target.Path 'assets'

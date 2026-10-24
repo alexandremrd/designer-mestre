@@ -4,7 +4,8 @@
 gerar_imagem.py - Utilitario de geracao local, upscale e registro universal de imagens do /designer-mestre.
 
 A IDE tem autonomia para decidir o melhor caminho de geracao (ferramenta/subagente nativo da IDE,
-motor local via Easy Diffusion em http://127.0.0.1:9000, ou composicao hibrida).
+motor local via ComfyUI sem interface em http://127.0.0.1:8188 (instalado e ligado por motor_local.py),
+Easy Diffusion em http://127.0.0.1:9000 se ja existir, ou composicao hibrida).
 Toda imagem gerada por qualquer motor e salva/registrada em Compartilhada\\Imagens\\IA\\ com seu .txt
 contendo ferramenta, modelo, seed, referencias e prompt para aprendizado continuo.
 
@@ -13,13 +14,22 @@ Comandos:
   python gerar_imagem.py gemini "PROMPT" [--ref mestra.jpg] [--pro] -a 4:5 -o "...\\IA\\nome.png"   (exige GEMINI_API_KEY)
   python gerar_imagem.py ping
   python gerar_imagem.py modelos
-  python gerar_imagem.py gerar "PROMPT EN" [--ref mestra.jpg] [--init base.jpg --forca 0.45] -a 4:5 -o "...\\IA\\nome.png"
+  python gerar_imagem.py gerar "PROMPT EN" [--ref mestra.jpg] [--init base.jpg --forca 0.45] -a 4:5 -o "...\\IA\\nome.png" [--motor comfy|ed]
+    (exige o aval unico motor_local.usar, gravado por consentimento.py; o ComfyUI liga sozinho)
   python gerar_imagem.py upscale foto.png -o foto_4x.png [--escala 2|4]
 """
-import argparse, base64, json, os, shutil, sys, time, uuid
-import urllib.request, urllib.error
+import argparse, base64, json, os, shutil, subprocess, sys, time, uuid
+import urllib.request, urllib.error, urllib.parse
+
+AQUI = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, AQUI)
+import consentimento
 
 ED = os.environ.get("ED_URL", "http://127.0.0.1:9000").rstrip("/")
+COMFY = os.environ.get("COMFY_URL", "http://127.0.0.1:8188").rstrip("/")
+# FLUX.2 klein 4B destilado: 4 passos, cfg 1 (workflow oficial Comfy-Org/workflow_templates)
+KLEIN = {"unet": "flux-2-klein-4b-fp8.safetensors", "clip": "qwen_3_4b_fp4_flux2.safetensors",
+         "vae": "flux2-vae-klein4b.safetensors"}  # arquivos do catalogo do motor_local.py (todos Apache 2.0)
 SESSION = "designer-mestre"
 SIZES = {"1:1": (1024, 1024), "4:5": (896, 1088), "3:4": (832, 1088),
          "9:16": (768, 1344), "16:9": (1344, 768), "4:3": (1088, 832)}
@@ -97,15 +107,121 @@ def save_outputs(res, out):
     return paths
 
 
-def sidecar(path, a, extra):
+def sidecar(path, a, extra, ferramenta=f"Motor local ({ED})"):
     with open(os.path.splitext(path)[0] + ".txt", "w", encoding="utf-8") as f:
-        f.write(f"ferramenta: Motor local ({ED})\n{extra}\ndata: {time.strftime('%Y-%m-%d %H:%M')}\n\n"
+        f.write(f"ferramenta: {ferramenta}\n{extra}\ndata: {time.strftime('%Y-%m-%d %H:%M')}\n\n"
                 f"PROMPT:\n{getattr(a, 'prompt', '-')}\n\nNEGATIVO:\n{getattr(a, 'neg', '-')}\n")
 
 
+def comfy_no_ar(timeout=3):
+    try:
+        with urllib.request.urlopen(COMFY + "/system_stats", timeout=timeout):
+            return True
+    except (urllib.error.URLError, OSError):
+        return False
+
+
+def comfy_req(method, path, body=None, raw=None, ctype=None, timeout=60):
+    data = raw if raw is not None else (json.dumps(body).encode() if body is not None else None)
+    hdr = {"Content-Type": ctype or "application/json"} if data else {}
+    try:
+        with urllib.request.urlopen(urllib.request.Request(COMFY + path, data=data, method=method, headers=hdr),
+                                    timeout=timeout) as r:
+            return r.read()
+    except urllib.error.HTTPError as e:
+        sys.exit(f"[erro] ComfyUI {path} HTTP {e.code}: {e.read()[:800]!r}")
+    except urllib.error.URLError as e:
+        sys.exit(f"[indisponivel] ComfyUI nao respondeu em {COMFY} ({e.reason}). "
+                 "Ligar: python assets\\motor_local.py iniciar")
+
+
+def comfy_upload(path):
+    if not os.path.isfile(path):
+        sys.exit(f"[erro] arquivo nao encontrado: {path}")
+    b = uuid.uuid4().hex
+    nome = os.path.basename(path)
+    corpo = (f"--{b}\r\nContent-Disposition: form-data; name=\"image\"; filename=\"{nome}\"\r\n"
+             f"Content-Type: {MIME.get(os.path.splitext(path)[1].lower(), 'image/png')}\r\n\r\n").encode() \
+        + open(path, "rb").read() + f"\r\n--{b}\r\nContent-Disposition: form-data; name=\"overwrite\"\r\n\r\ntrue" \
+        f"\r\n--{b}--\r\n".encode()
+    return json.loads(comfy_req("POST", "/upload/image", raw=corpo, ctype=f"multipart/form-data; boundary={b}"))["name"]
+
+
+def comfy_workflow(prompt, w, h, seed, n, passos, refs):
+    """Grafo da API equivalente ao template oficial do klein 4B destilado (t2i e edicao multirreferencia)."""
+    g = {
+        "unet": {"class_type": "UNETLoader", "inputs": {"unet_name": KLEIN["unet"], "weight_dtype": "default"}},
+        "clip": {"class_type": "CLIPLoader", "inputs": {"clip_name": KLEIN["clip"], "type": "flux2", "device": "default"}},
+        "vae": {"class_type": "VAELoader", "inputs": {"vae_name": KLEIN["vae"]}},
+        "pos": {"class_type": "CLIPTextEncode", "inputs": {"text": prompt, "clip": ["clip", 0]}},
+        "neg": {"class_type": "ConditioningZeroOut", "inputs": {"conditioning": ["pos", 0]}},
+    }
+    pos, neg = ["pos", 0], ["neg", 0]
+    for i, nome in enumerate(refs):
+        g[f"img{i}"] = {"class_type": "LoadImage", "inputs": {"image": nome}}
+        g[f"esc{i}"] = {"class_type": "ImageScaleToTotalPixels",
+                        "inputs": {"image": [f"img{i}", 0], "upscale_method": "nearest-exact",
+                                   "megapixels": 1.0, "resolution_steps": 1}}
+        g[f"lat{i}"] = {"class_type": "VAEEncode", "inputs": {"pixels": [f"esc{i}", 0], "vae": ["vae", 0]}}
+        g[f"rp{i}"] = {"class_type": "ReferenceLatent", "inputs": {"conditioning": pos, "latent": [f"lat{i}", 0]}}
+        g[f"rn{i}"] = {"class_type": "ReferenceLatent", "inputs": {"conditioning": neg, "latent": [f"lat{i}", 0]}}
+        pos, neg = [f"rp{i}", 0], [f"rn{i}", 0]
+    g.update({
+        "guia": {"class_type": "CFGGuider", "inputs": {"model": ["unet", 0], "positive": pos, "negative": neg, "cfg": 1.0}},
+        "amostr": {"class_type": "KSamplerSelect", "inputs": {"sampler_name": "euler"}},
+        "sigmas": {"class_type": "Flux2Scheduler", "inputs": {"steps": passos, "width": w, "height": h}},
+        "vazio": {"class_type": "EmptyFlux2LatentImage", "inputs": {"width": w, "height": h, "batch_size": n}},
+        "ruido": {"class_type": "RandomNoise", "inputs": {"noise_seed": seed}},
+        "sample": {"class_type": "SamplerCustomAdvanced",
+                   "inputs": {"noise": ["ruido", 0], "guider": ["guia", 0], "sampler": ["amostr", 0],
+                              "sigmas": ["sigmas", 0], "latent_image": ["vazio", 0]}},
+        "dec": {"class_type": "VAEDecode", "inputs": {"samples": ["sample", 0], "vae": ["vae", 0]}},
+        "salvar": {"class_type": "SaveImage", "inputs": {"images": ["dec", 0], "filename_prefix": SESSION}},
+    })
+    return g
+
+
+def cmd_gerar_comfy(a, w, h, seed):
+    refs = ([a.init] if a.init else []) + a.ref[:4]
+    if a.init:
+        print("[info] klein edita por referencia: --init vira a imagem 1 e --forca nao se aplica; "
+              "descreva no prompt o que muda e o que preserva.")
+    passos = a.passos
+    if a.dry_run:
+        print(json.dumps(comfy_workflow(a.prompt, w, h, seed, a.n, passos, [os.path.basename(r) for r in refs]),
+                         ensure_ascii=False, indent=1))
+        return
+    nomes = [comfy_upload(r) for r in refs]
+    wf = comfy_workflow(a.prompt, w, h, seed, a.n, passos, nomes)
+    pid = json.loads(comfy_req("POST", "/prompt", {"prompt": wf, "client_id": SESSION}))["prompt_id"]
+    t0 = time.time()
+    while time.time() - t0 < 900:
+        hist = json.loads(comfy_req("GET", f"/history/{pid}")).get(pid)
+        if hist and hist.get("status", {}).get("status_str") == "error":
+            sys.exit("[erro] ComfyUI falhou: " + json.dumps(hist["status"].get("messages", []))[:800])
+        if hist and hist.get("outputs", {}).get("salvar"):
+            break
+        time.sleep(1.5)
+    else:
+        sys.exit("[erro] tempo esgotado no ComfyUI")
+    os.makedirs(os.path.dirname(os.path.abspath(a.out)) or ".", exist_ok=True)
+    base, ext = os.path.splitext(a.out)
+    for k, im in enumerate(hist["outputs"]["salvar"]["images"]):
+        q = urllib.parse.urlencode({"filename": im["filename"], "subfolder": im["subfolder"], "type": im["type"]})
+        p = a.out if k == 0 else f"{base}_{k + 1}{ext}"
+        with open(p, "wb") as f:
+            f.write(comfy_req("GET", f"/view?{q}"))
+        sidecar(p, a, f"modelo: {KLEIN['unet']}\nseed: {seed} (lote {k + 1})\npassos: {passos}\n"
+                      f"tamanho: {w}x{h} ({a.aspect})\nreferencias: {'; '.join(refs) or '-'}\n"
+                      f"tempo: {time.time() - t0:.0f}s", ferramenta=f"Motor local ComfyUI ({COMFY})")
+        print(f"[ok] {p}  seed {seed}")
+
+
 def cmd_ping(_):
-    code, buf = req("GET", f"/ping?session_id={SESSION}")
-    print(code, buf.decode("utf-8", "replace")[:800])
+    print(f"ComfyUI {COMFY}: {'no ar' if comfy_no_ar() else 'parado'}")
+    code, buf = req("GET", f"/ping?session_id={SESSION}") if not comfy_no_ar() else (0, b"")
+    if code:
+        print(code, buf.decode("utf-8", "replace")[:800])
 
 
 def cmd_modelos(_):
@@ -124,14 +240,30 @@ def _destino_ok(out, pasta):
         sys.exit(f"[erro] destino fora de Imagens\\{pasta}\\: {out}")
 
 
+def _aval_motor_local():
+    """Motor local so roda com o sim unico do usuario, gravado por consentimento.py (vale em toda IA)."""
+    if not consentimento.aprovado("motor_local.usar"):
+        sys.exit("[sem-aval] motor local ainda nao aprovado pelo usuario. Rodar `motor_local.py detectar`, "
+                 "fazer a pergunta 1 vez e, com o sim, `consentimento.py registrar motor_local.usar`.")
+
+
 def cmd_gerar(a):
     if not a.dry_run:
         _destino_ok(a.out, 'IA')
     w, h = SIZES[a.aspect]
+    seed = a.seed if a.seed is not None else int(time.time()) % 2**31
+    if not a.dry_run:
+        _aval_motor_local()
+    if a.motor == "comfy":
+        if not a.dry_run and not comfy_no_ar():
+            r = subprocess.run([sys.executable, os.path.join(AQUI, "motor_local.py"), "iniciar"])
+            if r.returncode:
+                sys.exit("[erro] motor local nao ligou; ver: motor_local.py status / guia")
+        return cmd_gerar_comfy(a, w, h, seed)
     body = {
         "request_id": uuid.uuid4().hex, "session_id": SESSION,
         "prompt": a.prompt, "negative_prompt": a.neg,
-        "seed": a.seed if a.seed is not None else int(time.time()) % 2**31,
+        "seed": seed,
         "width": w, "height": h, "num_outputs": a.n,
         "num_inference_steps": a.passos, "guidance_scale": a.cfg,
         "output_format": "png", "output_lossless": True,
@@ -207,6 +339,7 @@ def cmd_gemini(a):
 
 
 def cmd_upscale(a):
+    _aval_motor_local()
     _destino_ok(a.out, 'IA' if '\\ia\\' in os.path.abspath(a.out).replace('/', '\\').lower() else 'Tratadas')
     filtros = ["realesrgan"] + (["codeformer"] if a.rosto else [])
     body = {"request_id": uuid.uuid4().hex, "session_id": SESSION, "image": data_url(a.imagem),
@@ -256,6 +389,8 @@ def main():
     g.add_argument("--cfg", type=float, default=1.0)
     g.add_argument("--modelo", help="nome do modelo local")
     g.add_argument("--vram", default="balanced", choices=["low", "balanced", "high"])
+    g.add_argument("--motor", default="comfy", choices=["comfy", "ed"],
+                   help="comfy = motor local da skill (liga sozinho); ed = Easy Diffusion ja instalado")
     g.add_argument("--dry-run", action="store_true")
     g.set_defaults(f=cmd_gerar)
     gm = sub.add_parser("gemini", help="gera pela Gemini API (chave propria em GEMINI_API_KEY)")

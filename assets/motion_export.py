@@ -5,8 +5,9 @@ e window.__DUR (duração em s), e estar servida por HTTP local (fontes e caminh
 
 Uso:
   uv run --with imageio-ffmpeg --with playwright python motion_export.py mp4 <url> <saida.mp4> \
-      [--voz narracao.mp3] [--trilha trilha.mp3] [--vol 0.18] [--fps 30]
-  uv run --with playwright python motion_export.py telas <url> <pasta> <prefixo> nome=tempo [nome=tempo ...]
+      [--voz narracao.mp3] [--trilha trilha.mp3] [--vol 0.18] [--fps 30] [--tamanho 1080x1350]
+  uv run --with playwright python motion_export.py telas <url> <pasta> <prefixo> nome=tempo [nome=tempo ...] [--tamanho 1080x1350]
+--tamanho (padrão 1080x1920) define viewport e recorte; o palco da prévia precisa ter esse tamanho.
 
 Render pelo Edge do sistema (channel msedge), sem baixar navegador. O ffmpeg vem do imageio-ffmpeg,
 porque o ffmpeg reduzido do Playwright não tem codecs de áudio.
@@ -17,7 +18,7 @@ from pathlib import Path
 
 from playwright.sync_api import sync_playwright
 
-W, H = 1080, 1920
+W, H = 1080, 1920  # padrão; --tamanho troca
 
 
 def abrir(p, url):
@@ -53,10 +54,11 @@ def mp4(a):
         so_video.replace(saida); print("ok", saida); return
     ins, filtros, mix = ["-i", str(so_video)], [], []
     if a.voz:
-        ins += ["-i", a.voz]; filtros.append(f"[{len(mix) + 1}:a]apad,atrim=0:{dur}[v]"); mix.append("[v]")
+        ins += ["-i", a.voz]; filtros.append(f"[{len(mix) + 1}:a]aformat=channel_layouts=stereo,apad,atrim=0:{dur}[v]"); mix.append("[v]")
     if a.trilha:
         ins += ["-i", a.trilha]
-        filtros.append(f"[{len(mix) + 1}:a]volume={a.vol},afade=t=in:st=0:d=1,"
+        # voz mono + trilha estéreo: forçar estéreo nas duas, senão o amix sai mono
+        filtros.append(f"[{len(mix) + 1}:a]aformat=channel_layouts=stereo,volume={a.vol},afade=t=in:st=0:d=1,"
                        f"afade=t=out:st={dur - 2}:d=2,atrim=0:{dur}[m]"); mix.append("[m]")
     filtros.append(f"{''.join(mix)}amix=inputs={len(mix)}:normalize=0,alimiter=limit=0.95[a]")
     subprocess.run([ff, "-y", "-loglevel", "error", *ins, "-filter_complex", ";".join(filtros),
@@ -88,4 +90,8 @@ if __name__ == "__main__":
     m.add_argument("--fps", type=int, default=30); m.set_defaults(f=mp4)
     t = sub.add_parser("telas"); t.add_argument("url"); t.add_argument("pasta"); t.add_argument("prefixo")
     t.add_argument("pares", nargs="+"); t.set_defaults(f=telas)
-    a = ap.parse_args(); a.f(a)
+    for p in (m, t):
+        p.add_argument("--tamanho", default="1080x1920", help="LxA do palco, ex.: 1080x1350")
+    a = ap.parse_args()
+    W, H = (int(x) for x in a.tamanho.lower().split("x"))
+    a.f(a)

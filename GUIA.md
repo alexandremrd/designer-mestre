@@ -1,6 +1,9 @@
 # Guia do agente · sugestões sem cliente
 > Lido no início de cada pedido. Escrito pelo /aprenda ao fim de cada projeto: fundir em vez de empilhar, teto ~1,5 KB. São tendências do que foi aprovado ou reprovado em vários clientes, não leis; limites de segurança, logo, copy e gasto ficam no núcleo.
 
+## Regra fixa do usuário (todos os clientes)
+- H1 sem ponto final, em toda peça (estático, motion, carrossel), mesmo quando a copy do doc traz o ponto. Vale para a headline e para frases de tela no papel de H1; texto de apoio e narração mantêm a pontuação. (23/10/2026)
+
 ## Tende a funcionar
 - Listar de novo a pasta do cliente ou do produto antes de cada rodada: referências costumam chegar ou ser recortadas no meio do trabalho.
 - Fotos reais do próprio cliente como fonte de pintura e formato; ficha técnica só para entender o que o produto é.
