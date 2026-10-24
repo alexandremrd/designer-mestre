@@ -81,10 +81,10 @@ A memória de cada cliente fica em `D:\Clientes\[Cliente]\_DESIGN\` (`design_sys
 Só regras universais entram aqui. Preferência de cliente vai no `design_system.md` dele.
 
 ## Changelog
-- v19.48 (23/10/2026): `EVOLUCAO.md` vira caderno de manutenção (estado, casos de teste, pendências; ~2 KB); tendências de criação passam ao `GUIA.md`; publicar no GitHub só com pedido explícito.
-- v19.47 (23/10/2026): guias de sugestões em duas camadas: `GUIA.md` do agente (sem cliente) e `_DESIGN\guia.md` de cada cliente (aprovado/reprovado), escritos pelo /aprenda ao fim de cada projeto, que também enxuga o núcleo.
-- v19.46 (23/10/2026): detecta motores e IAs locais já instalados antes de propor instalação; papéis definidos: Claude raciocina e confere, local faz o determinístico, imagem final usa o gerador que acerta em menos rodadas.
-- v19.45 (23/10/2026): motor local é opção oferecida ao usuário, não regra; nova opção de modelo 3D local + img2img para vistas de produto sem foto real; imagens reprovadas vão para `IA\Não aprovadas\` com o motivo.
+- v19.53 (23/10/2026): aval único: motor local, IA parceira e conector/MCP sem custo pedem o sim uma vez, gravado por `consentimento.py` e válido em toda IA; depois rodam em silêncio. Conta paga: sim único dentro do contratado; passar do contratado ou API cobrada por uso pede sim a cada geração, avisando que quem cobra é o provedor da IA, não a skill (`consentimento.py excedente`). `motor_local.py` analisa o PC, recomenda só o que cabe, traz a pergunta pronta, mostra o plano antes de baixar e tem o roteiro `guia` para a IA instalar sozinha (sem git usa o zip oficial; sem Python compatível instala o oficial). `gerar_imagem.py` recusa sem aval e liga o motor sozinho.
+- v19.52 (23/10/2026): motor local opcional sem app de terceiros: `motor_local.py` instala (com permissão, fora da skill) e liga/desliga o ComfyUI como servidor sem interface com FLUX.2 klein 4B + encoder fp4 (Apache 2.0 conferida em cada arquivo, ~7,7 GB); `gerar_imagem.py gerar` comanda o ComfyUI pela API (`--motor auto|comfy|ed`), com edição multirreferência.
+- v19.51 (23/10/2026): toda resposta fecha com o bloco **Onde está** (pasta do projeto + cada arquivo da rodada); pasta da entrega usa o nome da tarefa enviado pelo usuário; exportar abre `Exportados\` no explorador.
+- v19.50 (23/10/2026): instalador acha toda e qualquer cópia da skill no perfil (inclui OpenCode e Qwen) e aceita `-Sim` para atualizar sem perguntar; atualização aprovada vai para todas as cópias.
 
 ## Eficiência de Modelos na IDE
 Escolha pelo trabalho, não por uma marca fixa. Nomes, disponibilidade e limites mudam; use o seletor da IDE para confirmar o modelo atual. Prefira tarefas mecânicas determinísticas a um modelo generativo quando o script/ferramenta já resolve o trabalho. Modelos de visão analisam referências, mas isso não significa que também gerem ou editem imagens.

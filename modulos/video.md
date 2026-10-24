@@ -124,6 +124,8 @@ Para vídeos de criadores/usuários (Unboxing, Review/Depoimento com pequena hes
 
 ## Parte C · Motion Design Programático (Comps × Skin, Física de Mola e Ancoragem)
 
+- **Camadas de áudio no início:** confirmar narração e trilha (e a fonte da trilha) antes da 1ª prévia; briefing que cita só trilha não exclui narração, então perguntar uma vez junto com a prévia, porque a voz define a duração dos beats (Parte B §1).
+
 - **Separação Estrutural `Comps × Skin`:** construir os momentos do vídeo (**Comps**: `Abertura`, `Ancoragem`, `Bloco de Benefício 1..N`, `Dado/Número`, `Citação`, `Encerramento/CTA`) como componentes modulares reutilizáveis e injetar a identidade do cliente (**Skin**: cores `#HEX`, família tipográfica oficial, logo e assinatura sonora do `design_system.md`) por variáveis/props.
 - **Segmentação Semântica da Copy e Tipografia Cinética (`KineticText`):**
   - Pergunta ou afirmação curta de impacto → **Abertura / Gancho** (palavras ou frases curtas gigantes entradas em sequência rápida de `30–45 frames` a `30 fps`, `fontSize: 110–150px`, `lineHeight: 1.05–1.1`, sobre fundo em zoom suave `scale 1 → 1.2` com `opacity: 0.3`);
