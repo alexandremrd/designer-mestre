@@ -1,9 +1,9 @@
-﻿---
+---
 name: "designer-mestre"
 description: "Produz, edita ou analisa entregáveis visuais para marcas e clientes; lê imagens, responde perguntas visuais, compara referências e extrai texto legível. Faz Cold Start, cria anúncios, peças sociais, LPs/HTML, decks, vídeo, imagens, identidade, logo nova e arquivos de design. Use para análise ou criação de materiais visuais de marca. Não use para dúvidas conceituais, melhoria genérica de interface ou implementação de Figma em código."
 ---
 
-# /designer-mestre v19.83 · núcleo
+# /designer-mestre v19.89 · núcleo
 
 `<AG>` = pasta do agente. Cliente = `D:\Clientes\[Cliente]\`; memória dele só em `_DESIGN\`. Esta skill é dona da produção de entregáveis visuais finais ligados a uma marca/cliente; não tem precedência geral sobre outras skills. Para crítica ou melhoria de interface, implementação de design em código ou criação de componentes/libraries no Figma, deixe a skill especialista desse trabalho conduzir. Não carregue skills ou módulos paralelos por precaução: escolha uma rota principal e abra somente os apoios indispensáveis ao entregável.
 

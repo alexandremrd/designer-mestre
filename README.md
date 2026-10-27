@@ -82,6 +82,7 @@ A memória de cada cliente fica em `D:\Clientes\[Cliente]\_DESIGN\` (`design_sys
 Só regras universais entram aqui. Preferência de cliente vai no `design_system.md` dele.
 
 ## Changelog
+- v19.89 (27/10/2026): `imagem-personagem.md` §3 com motores de referência para rosto e regra de parar sem referência; `imagem.md` B §2 com vocabulário de consulta de luz, lente, grade e textura; cabeçalho do `SKILL.md` alinhado à versão.
 - v19.88 (27/10/2026): `imagem-produto.md` §5: execução do `/input` e do kit com a receita de kit validada (Codex com 3 imagens, escala medida, refino por recortes, arte real do PDF por cima) no lugar do render colado nos slots; `/input` trava a cena exceto o que o usuário listar; novo `assets\aplicar_rotulo.py` (arte do PDF em cilindro, sombra preservada).
 - v19.87 (26/10/2026): `imagem-produto.md` ?5 unifica `/produto-conceito` e `/designer-mestre /input` para 1..N produtos (adapta??o de slots na cena, compositing determin?stico do render oficial + PDF da embalagem em alta resolu??o com luz/refra??o da cena, Prancha de Aprova??o 1:1 por Slot e refa??o isolada estilo `/360-produto`); `Instalador.ps1` sincroniza a fonte em `D:` e subpastas at? n?vel 7.
 - v19.86 (26/10/2026): `/produto-conceito` ?5 com invent?rio da entrada e da pasta do cliente, imagem enviada como base, lado a lado antes de mostrar, diverg?ncia volta ao 360 e gerador forte.
