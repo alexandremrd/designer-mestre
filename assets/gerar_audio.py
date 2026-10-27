@@ -90,6 +90,15 @@ def cmd_vozes(a, chave):
             print(linha)
 
 
+ASSINATURAS = (b"ID3", b"\xff\xfb", b"\xff\xf3", b"\xff\xf2", b"RIFF", b"OggS", b"fLaC")
+
+
+def audio_valido(audio, saida):
+    """Resposta vazia ou nao-audio (ex.: JSON de erro) nao pode virar 'salvo'; checa antes de gravar."""
+    if not audio or not audio.startswith(ASSINATURAS):
+        sys.exit(f"[erro] audio vazio ou invalido, nada gravado: {saida}")
+
+
 def cmd_falar(a, chave):
     texto = open(a.arquivo, encoding="utf-8").read().strip() if a.arquivo else (a.texto or "").strip()
     if not texto:
@@ -100,6 +109,7 @@ def cmd_falar(a, chave):
     audio = req(chave, "POST", f"/v1/text-to-speech/{a.voz}",
                 {"text": texto, "model_id": a.modelo, "voice_settings": ajustes},
                 {"output_format": a.formato})
+    audio_valido(audio, a.o)
     with open(a.o, "wb") as f:
         f.write(audio)
     registrar(a.o, {"tipo": "locucao (TTS)", "voz": a.voz, "modelo": a.modelo, "formato": a.formato,
@@ -114,6 +124,7 @@ def cmd_efeito(a, chave):
     if a.duracao:
         corpo["duration_seconds"] = a.duracao
     audio = req(chave, "POST", "/v1/sound-generation", corpo, {"output_format": a.formato})
+    audio_valido(audio, a.o)
     with open(a.o, "wb") as f:
         f.write(audio)
     registrar(a.o, {"tipo": "efeito sonoro", "descricao": a.descricao, "duracao": a.duracao or "auto",

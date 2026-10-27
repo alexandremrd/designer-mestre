@@ -94,15 +94,38 @@ def wait(task_resp, timeout=900):
     sys.exit("[erro] tempo esgotado")
 
 
-def save_outputs(res, out):
+ASSINATURAS = (b"\x89PNG\r\n\x1a\n", b"\xff\xd8\xff", b"RIFF", b"GIF8")  # PNG, JPEG, WEBP(RIFF), GIF
+
+
+def livre(p, substituir):
+    """Nao sobrescreve entrega existente sem --substituir (versao nova = nome novo)."""
+    if os.path.exists(p) and not substituir:
+        sys.exit(f"[erro] {p} ja existe; use outro nome (versao) ou --substituir")
+
+
+def verificar(p):
+    """Sucesso so com arquivo nao vazio e cabecalho de imagem real (PIL nao e dependencia desta skill)."""
+    try:
+        with open(p, "rb") as f:
+            cab = f.read(12)
+        ok = os.path.getsize(p) > 0 and cab.startswith(ASSINATURAS)
+    except OSError:
+        ok = False
+    if not ok:
+        sys.exit(f"[erro] saida vazia ou invalida: {p}")
+
+
+def save_outputs(res, out, substituir=False):
     paths = []
     base, ext = os.path.splitext(out)
     for n, item in enumerate(res["output"]):
         raw = item.get("data", "")
         raw = raw.split(",", 1)[1] if raw.startswith("data:") else raw
         p = out if n == 0 else f"{base}_{n + 1}{ext}"
+        livre(p, substituir)
         with open(p, "wb") as f:
             f.write(base64.b64decode(raw))
+        verificar(p)
         paths.append((p, item.get("seed")))
     return paths
 
@@ -209,8 +232,10 @@ def cmd_gerar_comfy(a, w, h, seed):
     for k, im in enumerate(hist["outputs"]["salvar"]["images"]):
         q = urllib.parse.urlencode({"filename": im["filename"], "subfolder": im["subfolder"], "type": im["type"]})
         p = a.out if k == 0 else f"{base}_{k + 1}{ext}"
+        livre(p, a.substituir)
         with open(p, "wb") as f:
             f.write(comfy_req("GET", f"/view?{q}"))
+        verificar(p)
         sidecar(p, a, f"modelo: {KLEIN['unet']}\nseed: {seed} (lote {k + 1})\npassos: {passos}\n"
                       f"tamanho: {w}x{h} ({a.aspect})\nreferencias: {'; '.join(refs) or '-'}\n"
                       f"tempo: {time.time() - t0:.0f}s", ferramenta=f"Motor local ComfyUI ({COMFY})")
@@ -288,7 +313,7 @@ def cmd_gerar(a):
         sys.exit(f"[erro] /render HTTP {code}: {buf[:500]!r}"
                  + ("\n  Referencias exigem o motor v4 (Settings > Backend)." if a.ref else ""))
     res = wait(buf)
-    for p, seed in save_outputs(res, a.out):
+    for p, seed in save_outputs(res, a.out, a.substituir):
         sidecar(p, a, f"modelo: {modelo or 'padrao'}\nseed: {seed}\npassos: {a.passos} cfg: {a.cfg}\n"
                       f"tamanho: {w}x{h} ({a.aspect})\nreferencias: {'; '.join(a.ref) or '-'}\n"
                       f"init: {a.init or '-'} forca: {a.forca if a.init else '-'}")
@@ -330,8 +355,10 @@ def cmd_gemini(a):
     base, ext = os.path.splitext(a.out)
     for n, raw in enumerate(imgs):
         p = a.out if n == 0 else f"{base}_{n + 1}{ext}"
+        livre(p, a.substituir)
         with open(p, "wb") as f:
             f.write(base64.b64decode(raw))
+        verificar(p)
         with open(os.path.splitext(p)[0] + ".txt", "w", encoding="utf-8") as f:
             f.write(f"ferramenta: Gemini API ({modelo})\nstatus: gerado\nreferencias: {'; '.join(a.ref) or '-'}\n"
                     f"proporcao: {a.aspect}\ndata: {time.strftime('%Y-%m-%d %H:%M')}\n\nPROMPT:\n{a.prompt}\n")
@@ -348,7 +375,7 @@ def cmd_upscale(a):
     code, buf = req("POST", "/filter", body)
     if code != 200:
         sys.exit(f"[erro] /filter HTTP {code}: {buf[:500]!r}")
-    for p, _ in save_outputs(wait(buf), a.out):
+    for p, _ in save_outputs(wait(buf), a.out, a.substituir):
         sidecar(p, a, f"upscale: {'+'.join(filtros)} x{a.escala}\norigem: {a.imagem}")
         print(f"[ok] {p}")
 
@@ -362,7 +389,9 @@ def cmd_registrar(a):
     base, ext = os.path.splitext(a.out)
     src_ext = os.path.splitext(a.imagem)[1].lower() or ".png"
     out = base + src_ext if ext.lower() != src_ext else a.out
+    livre(out, a.substituir)
     shutil.copy2(a.imagem, out)
+    verificar(out)
     with open(base + ".txt", "w", encoding="utf-8") as f:
         f.write(f"ferramenta: {a.ferramenta}\nstatus: {a.status}\norigem: {a.imagem}\n"
                 f"referencias: {'; '.join(a.ref) or '-'}\nnotas: {a.notas or '-'}\n"
@@ -391,6 +420,7 @@ def main():
     g.add_argument("--vram", default="balanced", choices=["low", "balanced", "high"])
     g.add_argument("--motor", default="comfy", choices=["comfy", "ed"],
                    help="comfy = motor local da skill (liga sozinho); ed = Easy Diffusion ja instalado")
+    g.add_argument("--substituir", action="store_true", help="permite sobrescrever saida existente")
     g.add_argument("--dry-run", action="store_true")
     g.set_defaults(f=cmd_gerar)
     gm = sub.add_parser("gemini", help="gera pela Gemini API (chave propria em GEMINI_API_KEY)")
@@ -399,12 +429,14 @@ def main():
     gm.add_argument("-a", "--aspect", default="4:5", choices=list(SIZES))
     gm.add_argument("--ref", action="append", default=[], help="referencia (ate 14; mestra primeiro)")
     gm.add_argument("--pro", action="store_true", help="Nano Banana Pro (mais caro, melhor em texto/detalhe)")
+    gm.add_argument("--substituir", action="store_true", help="permite sobrescrever saida existente")
     gm.set_defaults(f=cmd_gemini)
     u = sub.add_parser("upscale")
     u.add_argument("imagem")
     u.add_argument("-o", "--out", required=True)
     u.add_argument("--escala", type=int, default=2, choices=[2, 4])
     u.add_argument("--rosto", action="store_true", help="+ CodeFormer (nunca usar em pessoa real do cliente)")
+    u.add_argument("--substituir", action="store_true", help="permite sobrescrever saida existente")
     u.set_defaults(f=cmd_upscale)
     r = sub.add_parser("registrar", help="registra imagem gerada na IDE/qualquer motor com metadados de aprendizado")
     r.add_argument("imagem")
@@ -414,6 +446,7 @@ def main():
     r.add_argument("--ref", action="append", default=[])
     r.add_argument("--status", default="gerado", choices=["gerado", "aprovado", "descartado"])
     r.add_argument("--notas", default="")
+    r.add_argument("--substituir", action="store_true", help="permite sobrescrever saida existente")
     r.set_defaults(f=cmd_registrar)
     a = ap.parse_args()
     a.f(a)

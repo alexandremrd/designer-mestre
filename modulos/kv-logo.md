@@ -30,6 +30,16 @@ D:\Clientes\[Cliente]\
 Tipos: `CA` criativo Ads · `PA` pauta/orgânico · `EV` vídeo editado · `MT` motion · `LP` landing page/HTML · `KV` identidade · `DK` deck · `IM` imagem · `OT` outros.
 Cliente antigo com `KV.md`, `NAO_FAZER.md`, `aprovados.md`, `inteligencia.md` separados: unificar no `design_system.md` (sem apagar os antigos).
 
+### 1.1 Protocolo de ativos de marca (marca nomeada em qualquer peça)
+Vale para o cliente e para qualquer marca ou produto reconhecível que apareça na peça (comparativo, ranking, avaliação). Ativo pesa mais que regra: logo, imagem do produto e captura da interface identificam a marca mais do que cor e fonte. Cor e fonte sem logo, produto ou interface não bastam, e silhueta desenhada no lugar do produto real não vale.
+1. **Pedir a lista de uma vez:** logo (SVG ou PNG), imagens oficiais do produto, capturas da interface, cores, fontes e manual. O que o usuário tiver, ele envia.
+2. **Buscar no canal oficial:** `/brand`, `/press`, página do produto, loja de aplicativos, vídeo de lançamento. O cliente sempre usa o arquivo dele (Lei 3), nunca o de agregador. Para marca de terceiros apenas citada na peça, agregadores de ícones (svgl.app, simpleicons.org) servem, com o aval de rede.
+3. **Baixar e conferir de verdade:** o arquivo abre e não é uma página vazia de poucos bytes; logo com versão para fundo claro e escuro; imagem de produto com 2000 px ou mais, limpa e de mais de um ângulo; captura de interface atual e sem dados de outra pessoa.
+4. **Poucas boas valem mais que muitas médias:** buscar em várias fontes, juntar candidatas e ficar com as melhores (resolução, origem clara, coerência com a marca, luz e estilo que combinam, papel próprio na peça). Logo é exceção: existindo, usa; sem achar, parar e pedir (Lei 3).
+5. **Registrar** no `_DESIGN\design_system.md` §3 KV: origem, data e caminhos. Cores só do arquivo oficial. Cor de demonstração dentro de uma captura não é a cor da marca, e uma marca pode ter duas faces (site de marketing e interface do produto): registrar as duas e escolher pelo uso.
+6. **Fatos antes de suposições:** existência, versão e lançamento de produto se verificam na internet antes de qualquer decisão (postura do núcleo).
+Falha total: sem logo, parar e perguntar; produto físico, pedir ao usuário ou usar imagem gerada a partir de referência oficial (`imagem-produto.md`) e, por último, placeholder honesto; interface, pedir captura da conta do usuário. Nunca preencher em silêncio com silhueta ou degradê genérico. Detalhe e comandos: `references\huashu\brand-asset-protocol.md`.
+
 ### 2. Análise profunda e inteligência de marca (uma vez)
 1. `Compartilhada\Identidade Visual\`: MIV, guia de marca e logos. Renderizar cada logo uma única vez e anotar arquivo, layout, cor e proporção do bbox.
 2. Links de Figma do briefing (`get_design_context` / `get_screenshot`).
@@ -87,15 +97,12 @@ Salvar em `Compartilhada\Identidade Visual\` e, se solicitado após aprovação,
 - **Chrome:** header 12 px caixa-alta +0.12em (marca à esq.; `NN SEÇÃO / N.N` à dir.); rodapé 11 px `Brandbook [Marca] · v1.0` + página em 3 dígitos; capas e divisores sem header. Flat (sem gradiente/sombra) salvo se a marca usar.
 - **Paginação:** 2.3 com 8+ variações, 3.1 com 5+ cores ou 06 com 9+ aplicações = dividir em páginas, 1 mockup dominante por página. Aplicações só as pedidas/existentes (cartão 85×55 mm, A4, envelope DL/C5, assinatura de e-mail ≤ 600 px).
 
-### 2. Logo nova (somente sob pedido explícito)
-- Se o cliente já tem logo, confirmar que é redesign ou marca nova. Logo de cliente nunca é criada sem pedido explícito (faltou logo num pedido comum = pedir).
-- Etapas:
-  1. Briefing: nome, setor, valores, público, concorrentes e restrições.
-  2. Pesquisa de concorrência para diferenciar (avaliando Distintividade 30%, Relevância 25%, Versatilidade 20%, Atemporalidade 15%, Executabilidade 10%). Nunca imitar marca existente.
-  3. Três rotas (símbolo, lettering, combinação) em vetor, com versões horizontal e vertical, cor/positivo/negativo, área de proteção e tamanho mínimo.
-  4. Após aprovação, exportar no formato escolhido e salvar SVG/PNG em `Compartilhada\Identidade Visual\`, registrando na tabela de logos do `_DESIGN\design_system.md`. A partir daí vale a lei da logo existente.
-- **Testes antes de apresentar:** legível em 16×16, funciona em 1 cor e P&B, nada some em 32 px. Tipo pela função: wordmark (nome curto) · lettermark (nome longo) · símbolo (só com recall) · emblema (evitar).
-- **Entrega:** SVG (preferido) + PNG transparente 2× + PDF vetorial; versões positiva, negativa e monocromática.
+### 2. Logo nova (só com pedido de algo novo)
+- **Gatilho:** o usuário pede uma logo, marca ou identidade **nova** ("quero uma nova logo", "nova marca", "nova identidade", "criar uma logo"). "Marca" ou "identidade" sem "nova" nem verbo de criar não ativam e seguem o KV existente ("use a marca", "aplique a identidade"). Na dúvida entre aplicar e criar, perguntar em 1 linha. Logo ausente num pedido comum continua sendo a Lei 3 (placeholder `LOGO [CLIENTE]` e pedir o original). Cliente que já tem logo: confirmar se é redesign (`references\logo\redesign.md`) ou marca nova.
+- **Método:** `references\logo\METODO.md` (logo-design, MIT) conduz as fases: brief, pesquisa e clichês da categoria, 8 a 12 conceitos de uma frase, os 3 mais fortes em SVG (primeiro em preto), testes e refino em duas voltas e **checkpoint: mostrar os 3 conceitos e esperar** antes do kit; o kit só depois do sim. Aprofundamento sob demanda em `references\logo\` (`principles`, `discovery-brief`, `mark-types`, `visual-techniques`, `color`, `typography`, `svg-construction`, `testing-checklist`, `presentation-delivery`, `identity-system`, `redesign`, `critique`, `process`). A biblioteca de 1.432 logos do projeto original não vem (são marcas de terceiros): `search_library.py` e `--refs-industry`, citados no METODO.md, não existem aqui. Para ver a categoria, use pesquisa na internet e a concorrência real, só para estudar, nunca para copiar nem decalcar.
+- **Ferramentas** (`assets\logo\`, Python só com a biblioteca padrão, rodar com `python -I`): `svg_audit.py` confere o SVG; `preview_sheet.py` monta a folha de testes (tamanhos, 16/32 px, fundos, 1 cor, desfoque); `concept_sheet.py` gera a imagem de conceitos do checkpoint; `render_png.py` converte SVG em PNG (usa Chrome ou Edge); `export_variants.py` gera preto, branco, mono, ícone e favicon; `presentation_board.py` monta a apresentação com mockups do setor (modelo em `assets\logo\presentation-spec.example.json`).
+- **Regras do núcleo continuam:** Lei 3 (logo existente nunca alterada), Lei 4 (nome exatamente como o cliente escreveu), U3 (fonte com licença que permita logo; letras construídas como curvas, sem `<text>` no arquivo final) e marca de terceiros nunca imitada. Não há garantia de registro: recomendar busca de anterioridade profissional.
+- **Entrega:** SVG (preferido) + PNG transparente 2× + PDF vetorial; versões positiva, negativa e monocromática, em `Compartilhada\Identidade Visual\`, registradas na tabela de logos do `_DESIGN\design_system.md`. Daí em diante vale a lei da logo existente. O critério do conceito é uma ideia explicável em uma frase, distinta da categoria, simples, relevante e forte a 16 px.
 
 ---
 

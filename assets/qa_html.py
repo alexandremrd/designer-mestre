@@ -26,6 +26,7 @@ import os
 import re
 import sys
 from html.parser import HTMLParser
+from pathlib import Path
 
 FALHA, AVISO, OK = "FALHA", "AVISO", "OK"
 
@@ -149,11 +150,13 @@ def render(caminho, saida):
     r = []
     add = lambda nivel, item, det="": r.append((nivel, item, det))
     try:
+        sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+        import recursos; recursos.aplicar_env()  # navegador na raiz dos recursos
         from playwright.sync_api import sync_playwright
     except Exception:
         add(AVISO, "Render no navegador", "Playwright nao instalado: pip install playwright && playwright install chromium")
         return r
-    url = "file:///" + os.path.abspath(caminho).replace("\\", "/").lstrip("/")
+    url = Path(caminho).resolve().as_uri()  # escapa espacos, # e acentos do caminho
     exe = "/opt/pw-browsers/chromium" if os.path.exists("/opt/pw-browsers/chromium") else None
     with sync_playwright() as pw:
         try:

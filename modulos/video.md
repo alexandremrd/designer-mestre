@@ -6,21 +6,31 @@ Módulo autônomo e unificado para **edição mecânica** de vídeo do cliente (
 
 ## Parte A · Edição de vídeo do cliente (legenda + overlay + KV)
 
-Pedido **mecânico**: executar direto, sem prévia de frames. A v1 renderizada é a prévia. Pasta `[EV]` (ou a que o usuário já criou).
+Legenda, redimensionar ou trocar overlay é **mecânico**: executar direto, sem prévia de frames; a v1 renderizada é a prévia. O arquivo renderizado passa pela `qualidade.md` §K antes de entregar. Pasta `[EV]` (ou a que o usuário já criou).
+
+**Cortar ou montar a fala** (anúncio, Reels, selfie) é edição criativa: cortar só os silêncios deixa o vídeo longo e sem ritmo. Antes do comando, montar o plano de corte sobre a transcrição com a Parte B §1:
+- arco gancho > problema > solução > prova > CTA dentro da duração do briefing;
+- Lei das 3 Funções: fala que não muda a emoção nem avança a história sai, mesmo sem silêncio em volta;
+- Murch no ponto de corte: cortar na mudança de expressão ou olhar, não no meio de um gesto ou de uma respiração;
+- Escada de Montagem: frases cada vez mais curtas e uma pausa respiratória mantida antes do impacto e do CTA (`--respiro`);
+- trecho fora do briefing ou proibido sai (`--remover`);
+- cortar entre frases, preservando palavras completas e respiro natural. Posicionar transições fora da fala; não sobrepor fonemas. Ouvir cada emenda antes de entregar; fade visual não corrige áudio truncado.
+O plano vira `--srt` revisado + `--remover` + `--respiro`. A prévia vem com uma tabela curta (fala · mantém/corta · porquê) para o usuário aprovar o corte junto com o vídeo.
 
 ### 1. Entrega mínima (sempre)
-Legenda queimada no KV + overlay da marca + exportação 1080×1920. Todo o resto é extra declarado em 1 linha, nunca bloqueio:
+H1 animada de abertura + legenda queimada no KV + overlay da marca + fechamento com H1 e CTA aprovados + exportação 1080×1920. Abertura e fechamento seguem o KV, mesmo sem imagens prontas; criar os elementos necessários. Extras:
 
 | Extra | Padrão sem resposta |
 |---|---|
 | Cortar pausas | Sim, `--cortar-pausas 0.6` (o roteiro curto pede; a fala fica intacta) |
-| Trilha | Usar a da pasta `Música\` se existir; senão sem trilha e avisar |
-| Hook/headline no início | Usar o PNG de intro se existir no Figma/pasta; senão sem |
-| Endcard/CTA | Só se o arquivo existir; não inventar copy |
+| Trilha | Usar da pasta `Música\` do cliente (arquivo de áudio e comprovante de licença comercial salvos juntos na pasta); sem trilha com licença confirmada, produzir sem trilha e avisar |
+| H1 de abertura | Forte e contextual, preferindo pergunta da copy ou da fala; animar com leitura clara. Sem H1 adequada, propor texto para aprovação antes de produzir |
+| Fechamento H1 + CTA | Usar textos aprovados no KV; sem texto adequado, propor para aprovação, sem inventar copy na exportação |
 | Divergência de headline no briefing | Afeta só a capa/intro; não bloqueia o vídeo |
 - Reframe do master 9:16 para 1:1 ou 16:9 só se pedido, conferindo o enquadramento do rosto/produto em cada um.
 
 ### 2. Overlay
+Projetar entradas e saídas suaves para logo, molduras, divisores e CTA, com aceleração e desaceleração e sequência coerente. Preservar pausas de leitura; não manter tudo em movimento. Conferir em reprodução, pois frames isolados não validam fluidez.
 1. Frame 9:16 no Figma do cliente (link do pedido ou `_DESIGN\templates\overlay_9x16.png`): exportar PNG 1080×1920 **com transparência** (`get_screenshot` não preserva alpha; preferir export do Figma ou montar via SVG).
 2. Sem frame: montar SVG 1080×1920 com moldura/gradiente/logo do `design_system.md`, renderizar PNG RGBA autonomamente no navegador headless da IDE e salvar em `Trabalho\`.
 3. A faixa de legenda fica em área de leitura: gradiente escuro sob ela, nunca sobre o rosto. O parâmetro `--y` marca a **base (linha inferior)** da legenda: manter `base ≤ 1470` no frame 1080×1920 (ex.: `--y 1380` ou `--y 1400` deixa margem de segurança acima da UI inferior do Reels).
@@ -30,7 +40,7 @@ A máquina escolhe o método disponível na sessão sem depender de serviços ex
 1. `.srt` já existente na pasta → `--srt`.
 2. Transcrição multimodal nativa da própria IDE/agente (lendo o áudio/vídeo diretamente) ou motor de transcrição offline local → gera o `.srt` palavra a palavra.
 3. Fala enviada pelo usuário → sincronização automática por detecção de silêncio e distribuição proporcional por sílaba/palavra (`--srt`).
-Nunca legendar a partir do roteiro sem conferir com a fala real.
+Nunca legendar a partir do roteiro sem conferir com a fala real. Animar legendas quando favorecer a leitura, sem atrasar a entrada, antecipar a saída ou prejudicar a sincronização com a fala. Na dúvida, preservar a legenda estável.
 
 ### 4. Comando
 ```
@@ -43,11 +53,13 @@ python "<AG>\assets\reels_legenda.py" ^
   --out "Exportados\<nome do briefing>.mp4"
 ```
 - 1ª rodada gera `<out>.srt`. Se o usuário corrigir uma palavra, rodar de novo com `--srt <out>.srt` (sem transcrever de novo).
-- `--palavras 3–4` e `--max-car 22–26` para Reels; `--caixa-alta` só se o KV pedir.
+- Legenda em 1 linha com no máximo 3 palavras (padrão do script: `--palavras 3 --max-car 24`, sem quebra de linha), porque fica mais rápida e dinâmica. Cada corte visual entra com cross dissolve curto (`--fade 0.25` como referência), limitado pelo silêncio disponível para preservar a voz; não sobrepor palavras para cumprir uma duração fixa. Os dois são regra fixa do usuário e valem mesmo quando o briefing pede outra coisa. `--caixa-alta` só se o KV pedir.
+- `--caixa` (legenda em caixa sólida na cor de `--contorno`, `--borda` = respiro) · `--remover A-B` (repetível, tira a fala que começa entre A e B s) · `--respiro T` (repetível, mantém a pausa que contém o instante T) · `--gancho "linha|linha" --gancho-s N` (texto no 1º frame, legendas começam depois) · `--endcard png --endcard-s 2.5` (entra com fade).
+- Sem ffmpeg no PATH: `uv run --with imageio-ffmpeg --with faster-whisper python reels_legenda.py ...`. A transcrição tenta GPU e cai para CPU sozinha.
 - Saída: H.264 16 Mbps, AAC 192 k, voz normalizada a -16 LUFS.
 
 ### 5. Conferência e Memória
-- **Conferência:** prancha com 3 frames (início, meio, fim) + duração + tamanho do arquivo. Checar: legenda dentro da safe zone, sem cobrir rosto/logo, fonte certa (não caiu em Arial), destaque legível, logo sem distorção, nenhuma palavra errada no `.srt`.
+- **Conferência:** prancha com 3 frames (início, meio, fim) + duração + tamanho do arquivo. Checar: legenda dentro da safe zone, sem cobrir rosto/logo, fonte certa (não caiu em Arial), destaque legível, logo sem distorção, nenhuma palavra errada no `.srt`. Conferir também o arquivo exportado pela `qualidade.md` §K (`assets\conferir_export.py`).
 - **Memória:** overlay aprovado vira `_DESIGN\templates\overlay_9x16.png` + linha em `## 2. O QUE FAZER` com os parâmetros usados (fonte, tamanho, cores, y). O próximo vídeo do cliente sai com um comando só.
 
 ---
@@ -78,8 +90,8 @@ python "<AG>\assets\reels_legenda.py" ^
 - **Limpeza:** remover marcadores ("Cena 3", "Narração:", "Áudio:", "Locução:", "VO:", "Fala:", nome do personagem antes da fala, colchetes de direção como "[pausa]" ou "(sorrindo)"). Um parágrafo por bloco de fala; sem bullets, aspas de abertura nem numeração.
 - **Fidelidade:** manter palavras, ordem e variante linguística do original (PT-BR, PT-PT, EN…). Mexer só na pontuação para fluidez de leitura (vírgula, ponto, interrogação). Grafia de pronúncia (sigla, número, marca) só com ok do usuário.
 - **Planos A/B/C com a mesma fala:** extrair uma vez e avisar. Falas diferentes: um texto por plano, identificado fora do texto.
-- **Sem fala no material:** não inventar. Avisar e perguntar se cria a partir do lettering/copy; texto criado só segue após aprovação e é marcado como criado no `.txt`. Narração criada é fala, não lettering: frases completas e naturais, perguntas com "?", acentos certos e nenhum símbolo (/ * @ #) que não seja comando para a IA.
-- **Saída:** mostrar o texto ao usuário e gravar `Trabalho\narracao.txt` (só o texto falado). Informar palavras e duração estimada (~2,5 palavras/s em PT-BR) contra a duração pedida; se passar, apontar quanto antes de gerar a voz.
+- **Sem fala no material:** usar primeiro a fala que exista em outra parte dele (outro plano, roteiro, legenda); sem nenhuma, derivar do lettering/copy sem acrescentar informação. Texto derivado é marcado como criado no `.txt` e só segue após aprovação. Narração criada é fala, não lettering: frases completas e naturais, perguntas com "?", acentos certos e nenhum símbolo (/ * @ #) que não seja comando para a IA.
+- **Saída:** mostrar o texto ao usuário e gravar `Trabalho\narracao.txt` (só o texto falado). Informar palavras e duração estimada (~2,5 palavras/s em PT-BR) contra a duração pedida e o ritmo da plataforma (Stories ~15 s). Se passar, mostrar junto com a original uma versão condensada, derivada do material e sem informação nova, e só gerar a voz depois da escolha, porque fala longa segura a tela parada.
 
 ### 1.1 Locução e efeitos sonoros (ElevenLabs · `assets\gerar_audio.py`)
 - **Quando:** locução/voz off, narração de vídeo/motion/deck, TTS, efeito sonoro, assinatura sonora. Gera o áudio que o §1 (Voz Primeiro) aprova antes do corte.
@@ -124,7 +136,11 @@ Para vídeos de criadores/usuários (Unboxing, Review/Depoimento com pequena hes
 
 ## Parte C · Motion Design Programático (Comps × Skin, Física de Mola e Ancoragem)
 
-- **Camadas de áudio no início:** confirmar narração e trilha (e a fonte da trilha) antes da 1ª prévia; briefing que cita só trilha não exclui narração, então perguntar uma vez junto com a prévia, porque a voz define a duração dos beats (Parte B §1).
+- **Narração por padrão:** motion sai com narração por IA (Parte B §1.0–1.1) e trilha (quando houver na pasta `Música\` com sua licença comercial salva junto), porque a voz define a duração dos beats (Parte B §1). Briefing sem voz ou que cita só trilha não exclui narração: já propor o texto falado na 1ª prévia. Briefing que diz "sem locução" (ou equivalente): perguntar antes da 1ª prévia, citando o trecho exato do briefing e a fala disponível no material, e seguir a resposta. Confirmar a fonte da trilha no mesmo momento.
+- **Antes de animar:** frequency gate e peso por contexto de `qualidade.md` §C; receitas em `references\motion\motion-cookbook.md`; a mola do Remotion abaixo segue o contexto (produto polido: sem `bounce`; lúdico: livre).
+- **Roteiro de produção** (huashu-design, MIT; em `references\huashu\`): storyboard por cena com câmera e quadro de aceite (`storyboard-basics.md`), orçamento e gramática de câmera (`camera-language.md`), armadilhas conhecidas, para ler antes de escrever (`animation-pitfalls.md`, `animation-best-practices.md`), interface do produto como protagonista (`ui-demo-animation.md`), receitas GSAP (`gsap-recipes.md`) e exportação (`video-export.md`). Esses arquivos citam o `design_lint`, o HyperFrames, SFX e BGM prontos do projeto original e a marca d'água "Created by Huashu-Design": nada disso vem (o áudio segue a Parte B e crédito de terceiros não entra na peça, núcleo §6).
+- **GIF com paleta otimizada:** `assets\huashu\convert-formats.sh` mostra a receita em 2 passes (`palettegen` com `stats_mode=diff` e `paletteuse` com dither bayer). Precisa de ffmpeg; sem ele no PATH, usar o do `imageio-ffmpeg` (`uv run --with imageio-ffmpeg`). Cursor animado de demonstração e molduras de dispositivo (`cursor.jsx`, `ios_frame.jsx`, `android_frame.jsx`, `macos_window.jsx`, `browser_window.jsx`) são JSX do caminho com framework; em HTML puro servem de medida e estrutura.
+- **Densidade:** cada frase falada aciona uma mudança visível (entrada, troca, destaque); nenhuma tela fica parada mais de ~3 s e a cena troca a cada 4–6 s; câmera com deriva lenta e transições com direção (empurrar, zoom), não só fade. Indicador de progresso segue o sentido da informação: contagem regressiva esvazia, não enche.
 
 - **Separação Estrutural `Comps × Skin`:** construir os momentos do vídeo (**Comps**: `Abertura`, `Ancoragem`, `Bloco de Benefício 1..N`, `Dado/Número`, `Citação`, `Encerramento/CTA`) como componentes modulares reutilizáveis e injetar a identidade do cliente (**Skin**: cores `#HEX`, família tipográfica oficial, logo e assinatura sonora do `design_system.md`) por variáveis/props.
 - **Segmentação Semântica da Copy e Tipografia Cinética (`KineticText`):**

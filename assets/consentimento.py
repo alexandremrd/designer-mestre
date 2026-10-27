@@ -23,10 +23,17 @@ import argparse, json, os, sys, time
 ARQ = os.path.join(os.path.expanduser("~"), ".consentimentos-ia.json")
 
 
-def ler():
+def ler(estrito=False):
+    if not os.path.exists(ARQ):
+        return {}
     try:
-        return json.load(open(ARQ, encoding="utf-8"))
+        with open(ARQ, encoding="utf-8") as f:
+            return json.load(f)
     except (OSError, ValueError):
+        # arquivo existe mas nao le: quem grava nao pode seguir, senao apaga os avais existentes
+        if estrito:
+            sys.exit(f"[erro] {ARQ} ilegivel; nada foi gravado para nao apagar os avais existentes; "
+                     "corrigir ou mover o arquivo")
         return {}
 
 
@@ -34,11 +41,17 @@ def aprovado(cap):
     return cap in ler()
 
 
-def registrar(cap, nota=""):
-    d = ler()
-    d[cap] = {"data": time.strftime("%Y-%m-%d %H:%M"), "nota": nota}
-    with open(ARQ, "w", encoding="utf-8") as f:
+def gravar(d):
+    # grava em .tmp e troca, para uma queda no meio nao truncar o arquivo de avais
+    with open(ARQ + ".tmp", "w", encoding="utf-8") as f:
         json.dump(d, f, ensure_ascii=False, indent=1)
+    os.replace(ARQ + ".tmp", ARQ)
+
+
+def registrar(cap, nota=""):
+    d = ler(estrito=True)
+    d[cap] = {"data": time.strftime("%Y-%m-%d %H:%M"), "nota": nota}
+    gravar(d)
 
 
 def main():
@@ -72,10 +85,9 @@ def main():
         registrar(a.capacidade, a.nota)
         print(f"[ok] {a.capacidade} aprovado e gravado em {ARQ}")
     else:
-        d = ler()
+        d = ler(estrito=True)
         d.pop(a.capacidade, None)
-        with open(ARQ, "w", encoding="utf-8") as f:
-            json.dump(d, f, ensure_ascii=False, indent=1)
+        gravar(d)
         print(f"[ok] {a.capacidade} revogado")
 
 

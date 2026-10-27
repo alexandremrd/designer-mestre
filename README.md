@@ -27,7 +27,7 @@ No Cold Start, distingue observação de inferência, registra fontes e datas, m
 - **Site em HTML:** preserva o requisito pixel-perfect da rota HTML. A liberdade entre engines aplica-se à bancada de outras peças visuais e não relaxa esse requisito.
 - **Direção visual:** escolhas são julgadas pelo papel na ideia, no KV e na legibilidade; cor intensa, gradientes, texturas e recursos expressivos não são vetados por si.
 - **Fontes e direitos:** extrai só o que é acessível (DOM renderizado, CSS computado, arquivos enviados); bloqueio = pede HTML salvo ou print. Referência de terceiros transfere técnica, nunca identidade. Código absorvido mantém a licença original.
-- **Evolução unificada:** regra nova substitui a antiga no módulo dono do tema; valor usado por 2+ módulos mora nos Padrões `U1–U11` do núcleo.
+- **Evolução unificada:** regra nova substitui a antiga no módulo dono do tema; valor usado por 2+ módulos mora nos Padrões `U1–U12` do núcleo.
 
 ## Memória e ferramentas disponíveis
 - **Memória por cliente:** `D:\Clientes\[Cliente]\_DESIGN\` (`guia.md` com aprovado/reprovado em sugestões, `design_system.md` com KV e negócio, `historico.md`).
@@ -46,7 +46,7 @@ O agente pode ser salvo em qualquer pasta (`<PASTA_DO_AGENTE>`). A cópia editad
 ```text
 <PASTA_DO_AGENTE>\
 ├── GUIA.md            ← sugestões sem cliente, lidas no início
-├── SKILL.md            ← núcleo (v19): carga mínima, rotas, ciclo de entrega, Gate de KV, leis hierárquicas, padrões U1–U11, memória
+├── SKILL.md            ← núcleo (v19): carga mínima, rotas, ciclo de entrega, Gate de KV, leis hierárquicas, padrões U1–U12, memória
 ├── modulos\            ← lidos só quando o pedido é daquele tipo (consolidados por domínio)
 │   ├── briefing.md     ← tradutor de briefing (só o que é do designer)
 │   ├── ads.md          ← direção de arte, composição e bancada flexível de ads
@@ -65,7 +65,8 @@ O agente pode ser salvo em qualquer pasta (`<PASTA_DO_AGENTE>`). A cópia editad
 │   └── qualidade.md    ← checagem final por tipo (artefatos genéricos, a11y, motion, deck, copy, QA)
 ├── assets\             ← gerar_imagem.py · gerar_audio.py · img_qa.py · reels_legenda.py · base_lp.html · qa_html.py · validacao-forms.js/.css · base_deck.html · validate_deck.py
 ├── engines\uiux\       ← motor offline de paletas, fontes, padrões de LP e regras UX
-├── references\  figma_engine\
+├── engines\designlang\ ← extração de tokens de um site (instalar dependências só com aval)
+├── references\  figma_engine\  ← taste\ motion\ logo\ huashu\ variantes\ alternativas.md (anexos sob demanda)
 ├── Clientes\_TEMPLATE_CLIENTE\  ← design_system.md + historico.md
 ├── NOTICE.md           ← avisos de licença de terceiros (conformidade; não lido pelo agente)
 └── Instalador.cmd      ← instalador universal para todas as IDEs (não analisar)
@@ -81,10 +82,50 @@ A memória de cada cliente fica em `D:\Clientes\[Cliente]\_DESIGN\` (`design_sys
 Só regras universais entram aqui. Preferência de cliente vai no `design_system.md` dele.
 
 ## Changelog
+- v19.88 (27/10/2026): `imagem-produto.md` §5: execução do `/input` e do kit com a receita de kit validada (Codex com 3 imagens, escala medida, refino por recortes, arte real do PDF por cima) no lugar do render colado nos slots; `/input` trava a cena exceto o que o usuário listar; novo `assets\aplicar_rotulo.py` (arte do PDF em cilindro, sombra preservada).
+- v19.87 (26/10/2026): `imagem-produto.md` ?5 unifica `/produto-conceito` e `/designer-mestre /input` para 1..N produtos (adapta??o de slots na cena, compositing determin?stico do render oficial + PDF da embalagem em alta resolu??o com luz/refra??o da cena, Prancha de Aprova??o 1:1 por Slot e refa??o isolada estilo `/360-produto`); `Instalador.ps1` sincroniza a fonte em `D:` e subpastas at? n?vel 7.
+- v19.86 (26/10/2026): `/produto-conceito` ?5 com invent?rio da entrada e da pasta do cliente, imagem enviada como base, lado a lado antes de mostrar, diverg?ncia volta ao 360 e gerador forte.
+- v19.85 (26/10/2026): `/produto-conceito` cobre linha ou kit inteiro (um item por rodada, sem 360 parte do original) e usa `Imagens\IA\` como hist?rico quando n?o h? `[CONCEITO]`.
+- v19.84 (26/10/2026): Atalho `/produto-conceito`, `imagem-produto.md` ?5 e `references/conceito/` (foto conceito de produto: IA escolhe o conceito por estudo, anti-repeti??o, aprova??o e refa??o do 360); t?cnicas de 5 skills do GitHub em texto pr?prio.
+- v19.83 (26/10/2026): Fusão de Taste, design-motion, logo-design, designlang, huashu-design e variantes Anthropic nas rotas existentes; HTML pixel-perfect (LP, site, slides) como prioridade e framework/variantes como saída alternativa; logo nova só com "nova".
+- v19.82 (26/10/2026): Refação universal (ciclo do 360 para toda entrega) e produto com 360 condicional à insuficiência da extração do original.
+- v19.81 (26/10/2026): Fecho com gatilho explícito: qualquer resposta que cite task, peça ou entrega usa o bloco de entrega, sem títulos, listas nem tabelas.
+- v19.80 (26/10/2026): Rótulo de produto: arte real aplicada por cima como prioridade, gerador escreve só como caminho alternativo após falhas repetidas.
+- v19.79 (26/10/2026): Produto fiel: ordem das fontes de embalagem em 3 níveis (arquivo original da embalagem, referências locais, internet só sem as duas).
+- v19.78 (26/10/2026): Imagem gerada por qualquer motor (inclui IA parceira) salva na hora em `IA\` com `.txt`; fundo e cena de produto viram ativo reutilizável, criado e aprovado à parte e só depois aplicado na peça.
+- v19.77 (26/10/2026): Produto 360 em cena de kit: receita verificada (3 referências ao gerador, arte real do rótulo aplicada por cima, refino por recortes com contexto, ordem de geradores) e Figma sem cota: achar as peças sozinho antes de pedir arquivo ao usuário.
+- v19.76 (26/10/2026): Figma: cota do conector tratada como limitada (analisar/exportar com poucas chamadas, aplicar em lote só após o aprovado) e recuperação ao atingir o limite (pedir PNGs e comentários, entregar como imagem).
+- v19.75 (26/10/2026): Produto 360, rota 1b: rótulo ou adesivo na área reta, centralizado entre o início das curvas (a posição medida em render com perspectiva desloca); a perspectiva da fonte inclui a elipse de fundo e topo redondos vistos de cima ou de baixo (separar forma e ângulo; a forma tem que parar em pé); emendas com a curva saindo tangente da reta, sem inverter a curvatura.
+- v19.74 (26/10/2026): "Prova antes de afirmar" no ciclo de entrega (conferir em tamanho real contra a fonte, buscar insumo antes de dá-lo por ausente, medir após 2 falhas, não sobrescrever ativo aprovado, conferir o arquivo exportado) e `qualidade.md` §K por tipo de arquivo. Auditoria da skill inteira: módulos alinhados à prova; scripts sem sucesso falso, com `--substituir` para sobrescrever, avais protegidos contra arquivo ilegível e novo `assets\conferir_export.py`. Produto 360: qualidade da embalagem como Regra de Ouro (arte em PDF > render do fabricante > foto); rota 1b com perfil abaixo do pixel, relevo do adesivo e arte em alta e opaca, mantendo o realismo do render.
+- v19.73 (24/10/2026): Produto e Personagem 360 ampliados com técnicas de 6 skills do GitHub (texto próprio): U12 com execução consistente e motores externos como opção; Product Spin 360° (Blender, vídeo com referência, visualizador), vista explodida, corte, variantes da prancha e argila 3D em `imagem-produto.md`; biblioteca de identidade, Expression Sheet, referências com papel e pose travada em `imagem-personagem.md`; atalhos `/360-produto` e `/360-personagem`. Recursos locais: `motor_local.py` detecta motores já instalados e duplicatas, reaproveita em vez de instalar de novo, organiza tudo numa raiz escolhida pelo usuário (Geradores, Ferramentas, Modelos, Cache) com registro único em `assets\recursos.py`, reescreve os caminhos ao mover ou renomear e grava as variáveis do usuário dos caches do uv, npm e Playwright; sharp instalado uma vez em `Ferramentas\node`. Rota 1b do giro: produto de revolução modelado em 3D a partir da própria foto, com a impressão real aplicada; `img_qa.py` acha arquivos em pastas com `[TIPO]` no nome. Antes de declarar que não há foto melhor do produto, buscar na web e pedir à CDN da loja o arquivo original (`imagem-produto.md` §1).
+- v19.72 (24/10/2026): Insumos em baixa resolução checados na triagem (`briefing.md` §1); fluxo em `imagem.md` §4 com upscale determinístico local primeiro, pergunta de autorização para IA, prompt de cópia fiel 1:1, busca no GitHub via web após 2 falhas, parada após 2 falhas pós-busca e organização em `Imagens\IA\[Item]\`. Trilha no `video.md` exige licença comercial na pasta `Música\`.
+- v19.71 (24/10/2026): 360 um item por rodada (lei da marca em texto; apoio cruzado só entre itens semelhantes); construção da embalagem define verso e laterais sem foto; rótulo transcrito e escrito pela IA, com o SVG como reserva; prévia de prancha legendada.
+- v19.70 (24/10/2026): GUIA: pulsar = escala + brilho, sem mudar cor; selo e aviso usam a pílula do KV; feedback vago de movimento = uma camada por rodada.
+- v19.69 (24/10/2026): narração longa ganha versão condensada antes de gerar a voz; Parte C com densidade de motion (mudança por frase, cena a cada 4–6 s, transições com direção, regressiva esvazia).
+- v19.68 (24/10/2026): `Aprovação\` só com a peça (motion = prévia HTML autossuficiente com áudio; estático = imagem); prints e prancha ficam em `Trabalho\`.
+- v19.67 (24/10/2026): nova subpasta `Aprovação` só com o que o usuário avalia; o explorador abre nela (prévias) ou em `Exportados` (finais), nunca em `Trabalho`.
+- v19.66 (24/10/2026): Localização no formato que o agente abre (cartão de arquivo, explorador, file:///) + caminho para copiar; prévia reprovada é excluída quando substituída, exceto imagem gerada por IA.
+- v19.65 (24/10/2026): motion com narração IA por padrão ("sem locução" no briefing = perguntar citando o trecho); prévia autossuficiente conferida no visualizador do usuário; GUIA: respiro e contraste de pesos.
+- v19.64 (24/10/2026): Produto e Personagem 360 geram vistas ausentes após pesquisa, com revisão e aprovação; fontes seguras prevalecem sobre IA. Linguagem crítica e verificação de incertezas no núcleo.
+- v19.63 (24/10/2026): Three.js como opção pertinente; alternativas verificadas em falhas e autorização única para dependências necessárias.
+- v19.62 (23/10/2026): controle de qualidade de degradês animados cobre banding, precisão, resolução e compressão da exportação final.
+- v19.61 (23/10/2026): entradas e saídas suaves também para elementos gráficos do vídeo; avaliação temporal de fluidez.
+- v19.60 (23/10/2026): vídeo com H1 animada de abertura, fechamento H1 + CTA e cortes que preservam fala e respiro; animação de legenda não pode prejudicar sincronização.
+- v19.59 (23/10/2026): Localização inclui link para abrir a pasta das entregas, além dos links individuais dos arquivos.
+- v19.58 (23/10/2026): estáticos sociais entregam Feed e Stories com composição adaptada e conferência dos dois tamanhos antes da conclusão, salvo exceção explícita.
+- v19.57 (23/10/2026): fecho com um bloco por entrega, cada um só com o próprio contexto, arquivos e pedido; guia do agente: CTA sai no componente de CTA do KV, nunca como texto solto.
+- v19.56 (23/10/2026): `reels_legenda.py` com legenda de 1 linha e até 3 palavras por padrão (sem quebra) e cross dissolve em cada corte (`--fade`, padrão 0,25 s, áudio com acrossfade); regra fixa do usuário registrada no `GUIA.md`.
+- v19.55 (23/10/2026): corte de fala em vídeo segue plano de montagem da Parte B §1 (arco, 3 funções, Murch, respiro) mostrado em tabela com a prévia; `reels_legenda.py` sem dependência de ffmpeg no PATH, transcrição com queda GPU→CPU e novos `--caixa --remover --respiro --gancho --endcard`; escolha técnica sempre em pergunta com opções. Fecho por task sem rótulos, exceto `Localização:` (nome, emoji de status escolhido pelo contexto, contexto, impedimentos, arquivos) e última linha de estado em negrito: ⏸ Parado, esperando você / ✅ Concluído. Aviso de 1 linha antes de etapa longa. Abrir a pasta a cada prévia e aprovação final vira preferência perguntada uma única vez e gravada (`consentimento.py`, `preferencia.abrir_pasta`).
+- v19.54 (23/10/2026): fonte pedida e não instalada (U3): pergunta a cada fonte se pode instalar; com o sim, pesquisa a origem oficial, baixa só versão gratuita ou licenciada, instala para o usuário sem admin e usa o nome exato; fonte paga = pedir o arquivo; nunca fallback silencioso.
 - v19.53 (23/10/2026): aval único: motor local, IA parceira e conector/MCP sem custo pedem o sim uma vez, gravado por `consentimento.py` e válido em toda IA; depois rodam em silêncio. Conta paga: sim único dentro do contratado; passar do contratado ou API cobrada por uso pede sim a cada geração, avisando que quem cobra é o provedor da IA, não a skill (`consentimento.py excedente`). `motor_local.py` analisa o PC, recomenda só o que cabe, traz a pergunta pronta, mostra o plano antes de baixar e tem o roteiro `guia` para a IA instalar sozinha (sem git usa o zip oficial; sem Python compatível instala o oficial). `gerar_imagem.py` recusa sem aval e liga o motor sozinho.
 - v19.52 (23/10/2026): motor local opcional sem app de terceiros: `motor_local.py` instala (com permissão, fora da skill) e liga/desliga o ComfyUI como servidor sem interface com FLUX.2 klein 4B + encoder fp4 (Apache 2.0 conferida em cada arquivo, ~7,7 GB); `gerar_imagem.py gerar` comanda o ComfyUI pela API (`--motor auto|comfy|ed`), com edição multirreferência.
 - v19.51 (23/10/2026): toda resposta fecha com o bloco **Onde está** (pasta do projeto + cada arquivo da rodada); pasta da entrega usa o nome da tarefa enviado pelo usuário; exportar abre `Exportados\` no explorador.
 - v19.50 (23/10/2026): instalador acha toda e qualquer cópia da skill no perfil (inclui OpenCode e Qwen) e aceita `-Sim` para atualizar sem perguntar; atualização aprovada vai para todas as cópias.
+- v19.49 (23/10/2026): falha sem fallback automático vira pergunta com opções verificadas (IA parceira em apps instalados, MCP com a capacidade, motor local, API), escolha = sim do gasto; motion confirma narração e trilha no início; `motion_export.py` com `--tamanho` e saída sempre estéreo; regra fixa H1 sem ponto final no `GUIA.md`.
+- v19.48 (23/10/2026): `EVOLUCAO.md` vira caderno de manutenção (estado, casos de teste, pendências; ~2 KB); tendências de criação passam ao `GUIA.md`; publicar no GitHub só com pedido explícito.
+- v19.47 (23/10/2026): guias de sugestões em duas camadas: `GUIA.md` do agente (sem cliente) e `_DESIGN\guia.md` de cada cliente (aprovado/reprovado), escritos pelo /aprenda ao fim de cada projeto, que também enxuga o núcleo.
+- v19.46 (23/10/2026): detecta motores e IAs locais já instalados antes de propor instalação; papéis definidos: Claude raciocina e confere, local faz o determinístico, imagem final usa o gerador que acerta em menos rodadas.
+- v19.45 (23/10/2026): motor local é opção oferecida ao usuário, não regra; nova opção de modelo 3D local + img2img para vistas de produto sem foto real; imagens reprovadas vão para `IA\Não aprovadas\` com o motivo.
 
 ## Eficiência de Modelos na IDE
 Escolha pelo trabalho, não por uma marca fixa. Nomes, disponibilidade e limites mudam; use o seletor da IDE para confirmar o modelo atual. Prefira tarefas mecânicas determinísticas a um modelo generativo quando o script/ferramenta já resolve o trabalho. Modelos de visão analisam referências, mas isso não significa que também gerem ou editem imagens.

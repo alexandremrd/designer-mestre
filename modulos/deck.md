@@ -1,11 +1,12 @@
 # Módulo Deck — Apresentações, Narrativas Visuais e Bancada Iterável
 
-Módulo unificado para criar apresentações e narrativas visuais de acordo com o briefing e o sistema do cliente. Separe a bancada iterável do arquivo final. HTML/CSS/JS no Browser canvas é uma opção de preview e autoria — não um formato obrigatório; PowerPoint (`python-pptx`), PDF, formato nativo ou outro meio pode ser escolhido quando servir ao uso e estiver disponível.
+Módulo unificado para criar apresentações e narrativas visuais de acordo com o briefing e o sistema do cliente. Separe a bancada iterável do arquivo final. HTML/CSS/JS pixel-perfect (canvas 1600×900, arquivo único, sem framework nem build) é o padrão de autoria e entrega; PowerPoint (`python-pptx`), PDF ou formato nativo entram quando o usuário pedir ou o uso exigir.
 
 ---
 
 ## 1. Definir a bancada e o canvas
 
+- **Padrão:** slides em HTML pixel-perfect, conferido em relação ao briefing. Outro formato só por pedido ou necessidade real, sem trocar o padrão em silêncio.
 - **Escolha guiada pela utilização:** identifique audiência, contexto de apresentação, conteúdo disponível, destino final, necessidade de edição, colaboração, impressão e capacidade do ambiente. Não transforme o nome "deck" em HTML, PPTX, proporção, quantidade de slides ou layout predeterminados. A bancada pode ser independente do arquivo que será exportado.
 - **Preview no Browser:** quando estiver disponível, abra um canvas visual com a peça em andamento e ajuste HTML/CSS/JS ou conteúdo embutido ao iterar. Um canvas `16:9` é útil para slides widescreen, mas use proporção/dimensão provisória quando houver incerteza; não confunda o canvas do preview com a página ou slide final.
 - **PowerPoint:** use `python-pptx` quando o usuário escolher PPTX ou quando requisitos de editabilidade/interoperabilidade justificarem propor esse formato. Crie elementos nativos sempre que possível; preservar imagem/render como imagem é opção apenas quando essa for a escolha/necessidade, não mecanismo automático de composição.
@@ -62,6 +63,7 @@ Escolher estrutura e ritmo pela **história, conteúdo, audiência e direção v
 | Preço e condição comercial | **Price Card** + painel lateral de condições/entregáveis |
 
 - **Ritmo:** contraste de composição, densidade, escala e fundo pode criar cadência; escolha pelo material e pela linguagem visual, não por número obrigatório de tratamentos nem por limite de slides iguais.
+- **Argumento antes do layout:** liste o deck como afirmações (uma por slide, com a prova) e corte o slide sem afirmação; só então escolha a estrutura da tabela. A copy continua literal (§3). Revisão: passadas 1, 2, 4, 9 e 11 do roteiro de `qualidade.md` §H; transição entre slides pelo gate de `qualidade.md` §C (apresentação é momento raro).
 - **Dados:** só transformar em gráfico os dados autorizados; seguir `html-relatorio.md` quando o artefato for relatório/dashboard e usar formas/técnicas adequadas ao conteúdo.
 - **Espaço:** áreas vazias, respiro e composições assimétricas são escolhas legítimas; não ampliar cards ou preencher canvas só para eliminar espaço.
 
@@ -79,7 +81,8 @@ Escolher estrutura e ritmo pela **história, conteúdo, audiência e direção v
 - Apresente a composição no Browser canvas quando disponível; caso contrário, mostre a representação visual viável do meio de criação. Receba feedback e edite a bancada, sem exigir que cada iteração tenha formato final ou arquivo exportado.
 - Requisitos de conteúdo, claims, números, fonte e marca precisam continuar fiéis ao briefing. Review é ferramenta de melhoria; não reprove por preferência de estilo ou falta de um arquétipo.
 - Depois da aprovação, confirme formato final, dimensão, compatibilidade e destino que ainda não estejam definidos. Exportar apenas formatos escolhidos; uma imagem da bancada não é o PPTX nem o PDF final.
-- Se o formato escolhido for PPTX, verificar abertura do arquivo, número de slides, dimensões, texto, assets locais e bounds das formas. A validação estrutural não comprova fidelidade visual: renderizar/revisar no PowerPoint ou exportador disponível quando houver uma exigência visual/print. Se não houver conversor, declarar e não afirmar que houve revisão de render.
+- **PPTX editável a partir do deck HTML pronto:** `python -I -X utf8 <AG>\assets\huashu\pptx_from_rendered.py deck.html -o deck.pptx --selector ".slide"` (huashu-design, MIT). Lê as posições já renderizadas, então não pede reescrever o HTML: texto vira caixa editável, card vira forma, SVG e canvas viram imagem, e a conferência de texto perdido roda sozinha. Usa Playwright, python-pptx e Pillow, que já existem aqui; `-X utf8` evita erro de console no Windows. O canvas de 1600×900 sai com 22,2×12,5 pol (1 px = 1 pt). Com modelo do cliente: `--template modelo.pptx --layout "<nome>" --skip-class logo`, e a logo vem do layout. O HTML segue sendo a fonte e a entrega primária; o PPTX é derivado. Detalhes e armadilhas de texto: `references\huashu\pptx-from-rendered-html.md`. A rota que exige reescrever o HTML com 4 restrições (sem degradê, sem fundo em texto) contradiz o pixel-perfect e não vem.
+- Se o formato escolhido for PPTX, verificar abertura do arquivo, número de slides, dimensões, texto, assets locais e bounds das formas. A validação estrutural não comprova fidelidade visual: renderizar/revisar no PowerPoint ou exportador disponível sempre antes de entregar (`qualidade.md` §K). Se não houver conversor, declarar e não afirmar que houve revisão de render.
 - Se o formato for HTML, seguir a rota de preview e inspeção do deck. Para páginas/sites que não sejam slides, `html.md` preserva o requisito pixel-perfect em relação à referência/briefing e aos viewports-alvo.
 - Se o formato final for impressão, seguir requisitos exatos de organizador/gráfica; requisitos ausentes são uma pergunta após aprovação, não motivo para inventar dimensões, sangria, DPI, cor ou certificado.
 
