@@ -19,7 +19,8 @@ import argparse, base64, glob, math, os, re, shutil, subprocess, sys
 def expand(pats):
     out = []
     for p in pats:
-        out += sorted(glob.glob(p)) or [p]
+        # escapa a pasta: o "[TIPO]" das pastas de entrega vira classe de caracteres no glob e não casa nada
+        out += sorted(glob.glob(os.path.join(glob.escape(os.path.dirname(p)), os.path.basename(p)))) or [p]
     return [p for p in out if os.path.isfile(p)]
 
 
@@ -98,6 +99,7 @@ def cmd_paridade(a):
     js = """
     const load = src => new Promise(r => { const i = new Image(); i.onload = () => r(i); i.src = src; });
     const [i1, i2] = await Promise.all([load(a.u1), load(a.u2)]);
+    if (i1.width !== i2.width || i1.height !== i2.height) return {dif: [i1.width, i1.height, i2.width, i2.height]};
     const w = i1.width, h = i1.height;
     const c1 = document.createElement('canvas'), c2 = document.createElement('canvas'), cd = document.createElement('canvas');
     c1.width = c2.width = cd.width = w; c1.height = c2.height = cd.height = h;
@@ -117,6 +119,10 @@ def cmd_paridade(a):
     return {rmse: Math.sqrt(sumSq / n), diffUri: cd.toDataURL('image/png')};
     """
     res = _pw_eval(js, {"u1": _data_uri(a.previa), "u2": _data_uri(a.figma)})
+    if "dif" in res:  # esticar uma imagem esconderia a diferenca real
+        d = res["dif"]
+        print(f"[falha] tamanhos diferentes {d[0]}x{d[1]} vs {d[2]}x{d[3]}")
+        sys.exit(2)
     _save_data_uri(res["diffUri"], diff)
     val = float(res["rmse"])
     ok = val <= a.limite
@@ -178,6 +184,8 @@ def cmd_web(a):
     """
     uri = _pw_eval(js, {"u": _data_uri(a.imagem), "w": a.largura})
     out = f"{base}.webp"
+    if os.path.normcase(os.path.abspath(out)) == os.path.normcase(os.path.abspath(a.imagem)):
+        out = f"{base}_otim.webp"  # entrada ja e .webp: nunca sobrescrever o original
     _save_data_uri(uri, out)
     print(f"[ok] {out}  {os.path.getsize(out) // 1024} KB")
 

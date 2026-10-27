@@ -16,6 +16,10 @@ import argparse
 import subprocess
 from pathlib import Path
 
+import os, sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import recursos; recursos.aplicar_env()  # navegador e ffmpeg na raiz dos recursos
+import conferir_export
 from playwright.sync_api import sync_playwright
 
 W, H = 1080, 1920  # padrão; --tamanho troca
@@ -50,8 +54,10 @@ def mp4(a):
             if i % 150 == 0:
                 print(f"quadro {i}/{n}", flush=True)
         enc.stdin.close(); enc.wait(); b.close()
+    if enc.returncode != 0:
+        sys.exit(f"[erro] ffmpeg falhou ao codificar (codigo {enc.returncode}); {saida} nao foi gerado")
     if not a.voz and not a.trilha:
-        so_video.replace(saida); print("ok", saida); return
+        so_video.replace(saida); conferir_final(saida, dur, a); return
     ins, filtros, mix = ["-i", str(so_video)], [], []
     if a.voz:
         ins += ["-i", a.voz]; filtros.append(f"[{len(mix) + 1}:a]aformat=channel_layouts=stereo,apad,atrim=0:{dur}[v]"); mix.append("[v]")
@@ -65,6 +71,13 @@ def mp4(a):
                     "-map", "0:v", "-map", "[a]", "-c:v", "copy", "-c:a", "aac", "-b:a", "192k",
                     "-t", str(dur), "-movflags", "+faststart", str(saida)], check=True)
     so_video.unlink()  # temporário próprio, não referenciado por nada
+    conferir_final(saida, dur, a)
+
+
+def conferir_final(saida, dur, a):
+    # qualidade.md §K: so imprime ok se o arquivo passa na conferencia
+    if not conferir_export.conferir(str(saida), dur, a.fps, f"{W}x{H}"):
+        sys.exit(1)
     print("ok", saida)
 
 

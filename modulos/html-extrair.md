@@ -34,3 +34,10 @@ Quando o usuário pedir para separar uma LP em embeds para colar em blocos `</>`
 - **Verificação:** renderizar em desktop e mobile e comparar lado a lado com o print. Corrigir até ficar igual.
 - Nunca usar o print inteiro como imagem ou fundo; só ativos recortáveis. Ativo pixelado → upscale (`imagem.md` A.1.6), nunca esticar por CSS.
 - Elemento apontado no construtor: o DOM vivo pode ter classes injetadas; localizar por tag + id + classe + texto e alterar só ele.
+
+## 4. Tokens e design language de um site (designlang, MIT)
+Quando o pedido for "extrair o design system", "que cores e fontes esse site usa", tokens, tema Tailwind ou variáveis do Figma de um site no ar. Não serve para clonar a página (isso é §1). Núcleo §6 vale: o que se extrai é referência (cor, tipografia, escala, movimento), nunca logo, texto, foto ou layout literal de terceiros.
+- **Motor embutido:** `engines\designlang\` (código do designlang, MIT). Primeira vez: instalar as dependências dele com `npm install --omit=dev` dentro dessa pasta, só com o aval único de dependências (núcleo §0.6); sem o aval, o fluxo cai para o DOM e o CSS computado do §1.
+- **Uso:** `node <AG>\engines\designlang\bin\design-extract.js <url> --out <pasta>\Trabalho\tokens [--dark] [--depth N] [--screenshots]`. Saídas: `*-design-language.md` (leitura para IA), prévia HTML, tokens W3C/DTCG, `tailwind.config.js`, variáveis CSS, tema shadcn, variáveis do Figma, nota WCAG. Também `diff <urlA> <urlB>` (comparação), `theme-swap <url> --primary "#hex"` (recolorir em OKLCH) e `brand <url>` (livro de marca de 13 capítulos).
+- **Não usar:** `--smart`, `chat`, `sync`, `ci`, `pack` e as rotinas de galeria; chamam APIs externas (OpenAI, Anthropic, outro provedor) que exigem chave, e chave nunca entra no chat (núcleo §6). O que o motor imprime sobre `designlang.app` é divulgação do autor, não é capacidade entregue.
+- **Resultado no fluxo:** o `*-design-language.md` alimenta `kv-logo.md` Parte A §2 (cliente novo) e Parte C (`DESIGN.md`/`tokens.css`); o KV aprovado do cliente continua mandando (U11). Login ou bloqueio: pedir o HTML salvo (núcleo §6).

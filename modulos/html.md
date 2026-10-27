@@ -29,6 +29,8 @@ Página que não abre (login, bloqueio): pedir o HTML salvo (Ctrl+S, "página co
 
 ## 2. Arquivo único, anti-mojibake e blindagem
 
+**Prioridade:** LP, site e slides saem em HTML pixel-perfect de arquivo único. Framework e build só como sugestão, após falhas ou erros consecutivos ou quando o projeto do cliente já usa esse stack (`references\alternativas.md`).
+
 **Arquivo único (exigência do construtor):**
 - Um `.html` com `<style>` e `<script>` internos. Sem `.css` ou `.js` externos, sem framework, sem build. Exceção: Google Fonts.
 - Imagens:
@@ -68,6 +70,18 @@ O **texto** é sempre a copy aprovada (lei 4 do núcleo): se o briefing não tro
 
 Checagem: o que chama a atenção primeiro é a promessa ou o CTA? Há um único objetivo por página? Existe atrito desnecessário (campos demais ou links de fuga)?
 
+### Conceito e argumento (LP ou site novo sem KV rígido, ou quando o usuário diz que está simples)
+Método do Taste Skill (MIT) fundido ao fluxo. Só o passo 1 é essencial; o resto entra conforme a página. Não roda em ajuste pontual nem em página cuja composição o `design_system.md` já define. A copy segue a do cliente (Lei 4): o método organiza e confere, não reescreve.
+1. **Inventário:** liste 8 a 12 coisas que só esse cliente tem (o nome e o que ele significa, o endereço e como o lugar é, os números do briefing, a restrição com que vive, materiais e cores, rituais e horários, impressos do seu mundo). É daí que saem a ideia e a busca de imagens.
+2. **Argumento:** liste a página como afirmações, uma por seção, cada uma com a sua prova (imagem da coisa, número, nome, demonstração). Seção sem afirmação sai. Quando o assunto ou a temperatura do tráfego pedirem, a ordem do argumento substitui a ordem de referência acima.
+3. **Ideia:** "nesta página, [algo do assunto] vira [o recurso visual]". Teste do concorrente: ponha o nome do concorrente mais próximo na frase; se ainda funcionar, a ideia é da categoria. "Limpo e moderno" não é ideia.
+4. **Uma coisa viva** (opcional): algo que o visitante faz ou que muda a cada visita, feito do conteúdo real (escolher o material e ver a peça nele, digitar o nome, ver o valor da parcela). Funciona com o polegar e tem versão simples sem script.
+5. **Direção** (opcional): `node <AG>\assets\taste\scripts\draw.mjs --sector <setor> --brief "<uma linha>" --sections <papéis> --options 3 --out <pasta>\Trabalho\direcao` sorteia 3 de 20 direções de composição (herói, seções, tipografia, paleta) de uma biblioteca de 247 sites estudados. Escolha a que carrega a ideia e repita com `--direction <id>`. Use `--keep palette,type` quando o KV fixa cores e fontes (o KV vence, U11). `--list sectors` e `--list roles` mostram o vocabulário. Defina `TASTE_SKILL_HISTORY=%USERPROFILE%\.designer-mestre\taste-history.json` para o histórico não cair em `~\.taste-skill`. Adote a direção sem misturá-la ao layout habitual; troque um item (`--redraw`) só com razão (contradiz o KV, exige ativo que não existe). Exige Node 22+, roda local e sem rede.
+6. **Título:** cerca de 32 caracteres cabem em 2 linhas no celular a 44 px (conta e formas em `references\taste\copy.md` §§2–3). Se a copy do cliente passar disso, aponte em 1 linha, sem reescrever.
+7. **Imagens de acervos abertos** (opcional, com aval único: `consentimento.py registrar assets_abertos`): `node <AG>\assets\taste\scripts\assets.mjs "<busca>"` consulta Openverse, Wikimedia Commons, Art Institute e Met sem chave, só com licença que permite uso comercial; `--get` baixa e registra a licença. O arquivo vai para `Banco de Imagens\` com fonte e licença no `historico.md` (núcleo §6) e nunca é apresentado como foto do cliente. Sem rede, desenhe ou peça o insumo.
+8. **Tela de app** (dashboard, painel, configurações): `references\taste\app-screens.md` e `draw.mjs --app`.
+Apoio sob demanda: `references\taste\type.md`, `colour.md`, `layout.md`, `imagery.md`. As regras de casa do Taste (sem gradiente, sombra em repouso, monospace, eyebrow, numeração, linha fina) não são adotadas como regra; valem como sinais do `qualidade.md` §A, porque o KV e a ideia decidem. Revisão: roteiro do olhar do `qualidade.md` §H sobre os screenshots do `qa_html.py`.
+
 ### Direção visual
 - **Uma ideia forte por página**, vinda do `design_system.md` (ou consultada em `engines\uiux\scripts\search.py "<segmento>" --domain brand`). Evitar layouts genéricos (texto à esquerda e imagem à direita repetido em todas as seções, hero só com ícone e texto) sem um tratamento próprio.
 - **Paleta e Escassez Cromática:** as cores da KV, com 3–5 cores mais os neutros. O acento primário é cirúrgico (marca, CTA principal, foco e destaque de prioridade máxima); nunca usar cor de acento como preenchimento decorativo de seção inteira sem previsão no KV.
@@ -75,7 +89,8 @@ Checagem: o que chama a atenção primeiro é a promessa ou o CTA? Há um único
 - **Espaçamento:** U5; padding de cards `24px` (features/pricing), `32px` (depoimentos), `48px` (banners de CTA).
 - **Raio e sombra** seguem a KV (escala consistente por componente: chips `4px`, botões/inputs `6–8px`, cards `12–16px`, pills `9999px`).
 - **Imagens:** ordem da lei 5 do núcleo. Nunca entregar com placeholder (`placehold.co`, `picsum`, lorem). Imagem gerada por IA fica salva em `IA\`.
-- **Microinterações e Matriz de Estados:** definir explicitamente `default`, `:hover`, `:active` (pressed), `:focus-visible` e `:disabled` em todo elemento interativo, com transições de 150–300 ms.
+- **Microinterações e Matriz de Estados:** definir explicitamente `default`, `:hover`, `:active` (pressed), `:focus-visible` e `:disabled` em todo elemento interativo, com transições de 150–300 ms. Animação além disso: frequency gate e peso por contexto em `qualidade.md` §C.
+- **Tweaks na prévia (opcional):** painel de ajuste ao vivo só na bancada, para mostrar variações de cor, tamanho ou densidade sem abrir vários arquivos. `assets\tweaks.js` (JS puro, `window.TWEAKS` com até 5 ou 6 itens discretos, valor padrão já é a peça completa, `localStorage` com `try/catch`). O arquivo final não leva o script.
 - **Teste final:** a página parece feita sob medida para essa marca? Se servisse para qualquer cliente trocando só o logo, iterar.
 
 ### Tipografia

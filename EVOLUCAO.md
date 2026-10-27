@@ -1,23 +1,20 @@
-# EVOLUCAO · memória do agente /designer-mestre
-> Caderno de manutenção: lido só ao alterar a skill, por isso não pesa nos pedidos de peça. Guarda estado, casos de teste e pendências; regras vigentes ficam no núcleo e nos módulos, tendências de criação no `GUIA.md`, cliente no `_DESIGN\guia.md` dele, histórico de versões no git. Teto ~2 KB.
+# EVOLUCAO ? mem?ria do agente /designer-mestre
+> Caderno de manuten??o: lido s? ao alterar a skill, por isso n?o pesa nos pedidos de pe?a. Guarda o estado atual, os casos de teste e as pend?ncias. Regras vigentes ficam no n?cleo e nos m?dulos, tend?ncias no `GUIA.md`, cliente no `_DESIGN\` dele. Hist?rico completo fica no Changelog do `README.md` e no git; aqui ficam a vers?o vigente e no m?ximo as 4 anteriores, uma linha cada: ao entrar vers?o nova, sai a mais antiga. Teto ~5 KB.
 
 ## Estado atual
-- v19.53 instalada em 23/10/2026 nas cópias locais: motor local ComfyUI sem interface (t2i e edição por referência, ~1 min/imagem numa GPU de 8 GB) e aval único gravado (`consentimento.py`, vale em toda IA; conta paga = sim único dentro do contratado, excedente ou API por uso = sim a cada geração com aviso de que quem cobra é o provedor). Publicada no GitHub como release v19.53. Memória em duas camadas de sugestões: `GUIA.md` (agente) e `_DESIGN\guia.md` (cliente); o `design_system.md` fica com KV e negócio.
-
+- v19.88 (27/10/2026): `imagem-produto.md` §5 passo 3 troca 3a/3b (render colado nos slots, em conflito com o §3) pela receita de kit validada: Codex com 3 imagens, escala medida, refino por recortes e arte real do PDF por cima; `/input` trava a cena exceto o que o usuário listar; acentos do §5 e do atalho restaurados; `assets\aplicar_rotulo.py` aplica a arte do PDF em cilindro com a sombra do frasco (testado só com dados sintéticos; inclinação por slot pendente). Decisão do usuário.
+- v19.87 (26/10/2026): `imagem-produto.md` ?5 unifica `/produto-conceito` e `/designer-mestre /input` com 1..N produtos: adapta slots da cena para a contagem pedida, trava geometria/r?tulo com render oficial + PDF em alta resolu??o + luz/refra??o ambiental e exige Prancha de Aprova??o por Slot (`Original ? Cena 1:1`) e refa??o isolada por item estilo `/360-produto`; `Instalador.ps1` sincroniza tamb?m a fonte em `D:` e profundidade 7. Decis?o do usu?rio.
+- v19.86 (26/10/2026): `/produto-conceito` ?5 com passo 0 de invent?rio da entrada e da pasta do cliente (renders e PDFs existentes s?o o pacote), imagem enviada como base (`Replace Mode`) e `/input` travando a cena.
+- v19.85 (26/10/2026): `/produto-conceito` cobre a linha ou kit inteiro, s? o usu?rio exclui item; anti-repeti??o l? `Imagens\IA\` quando n?o h? `[CONCEITO]` no hist?rico.
+- v19.84 (26/10/2026): atalho `/produto-conceito` + `imagem-produto.md` ?5 + `references/conceito/` (biblioteca sob demanda; FUSAO.md = rastreabilidade); `imagem.md` B1 (exclus?o positiva, refer?ncias) e Pass?.
 ## Casos de teste ao alterar a skill
-- Card de citação com retrato, copy fechada e referência aprovada: três conceitos distintos, nenhum layout genérico ou cópia.
-- Seis cards do mesmo ensaio: gramática comum, sem repetir enquadramento.
-- Peça aprovada para Figma: a rota Figma cuida da estrutura nativa, sem duplicar o editor dentro de ads.
-- Referência editorial com pedido só de acabamento: tipografia, luz e paleta do KV não mudam.
-- Pedido que já tem capacidade instalada: estender o dono existente, não criar módulo paralelo.
-- Imagem anexada: descrever sem pedir chave ou SDK; texto pequeno incerto não é completado.
-- Produto com lado sem foto real: pedir referência antes de gerar esse lado.
-- Gerador falhou sem fallback automático: uma pergunta na ferramenta, só com opções verificadas (inclusive app da loja fora do PATH), recomendada primeiro, Modo Manual por último; motor local só aparece se o `detectar` disser que o PC aguenta.
-- Usuário novo: nada pesado baixa ao instalar a skill; 1ª oferta do motor = uma pergunta simples (a do `detectar`); com o sim, a IA instala e usa sem perguntar de novo, em qualquer IA; sem aval, `gerar` recusa. PC sem GPU NVIDIA = motor não é oferecido.
-- Motor local: `--ref` mantém o produto da imagem 1; motor ligado até a aprovação final, depois `parar`.
+- **Prova:** defeito corrigido = zoom real lado a lado com a fonte antes de dizer pronto; "falta foto" s? depois de buscar na origem em tamanho original; 3? tentativa s? depois de medir; vers?o em aprova??o n?o grava no pacote; exportado conferido decodificado (?K).
+- **Cria??o:** card de cita??o com retrato e copy fechada = tr?s conceitos distintos, sem layout gen?rico; seis cards do mesmo ensaio = gram?tica comum sem repetir enquadramento; refer?ncia editorial pedida s? para acabamento n?o muda tipografia, luz nem paleta do KV.
+- **Rotas:** pe?a aprovada para Figma vai pela rota Figma, sem duplicar editor em ads; capacidade j? instalada ? estendida no dono, sem m?dulo paralelo; imagem anexada ? descrita sem pedir chave ou SDK, e texto pequeno incerto n?o ? completado.
+- **360 e Conceito (`/360-produto` e `/produto-conceito`):** s? frente + fontes consultadas = gerar ?ngulos ausentes, marcar infer?ncias e mostrar prancha legendada; v?rios produtos = todos do escopo entram (s? o usu?rio exclui); em `/input` com cena de 3 itens e 4 pastas pedidas = adapta para 4 slots nas propor??es reais, aplica render oficial + arte vetorial do PDF em alta resolu??o com luz/refra??o da cena e valida na Prancha de Aprova??o por Slot (`Slot 1..N: Original ? Cena 1:1`); reprovou 1 item = refaz s? aquele slot a partir do 360/original. Giro: malha = Blender local; s? fotos = v?deo com pacote aprovado.
+- **Fus?o v19.83:** LP nova sem KV r?gido = invent?rio, argumento e ideia antes do layout; ajuste mec?nico n?o roda m?todo; "use a marca" n?o ativa logo e "quero uma nova logo" ativa com checkpoint de 3 conceitos; animar = gate de frequ?ncia e contexto, sem cota; slide segue HTML 1600?900, PPTX s? por pedido; duas falhas seguidas oferecem `alternativas.md`.
+- **Fatos, Gerador, V?deo e Fecho:** informa??o incerta = declarar incerteza e pesquisar; gerador falhou = pergunta ?nica com op??es verificadas; v?deo = plano de corte em tabela com a pr?via; fecho = bloco por task e ?ltima linha "? Parado, esperando voc?: ..." ou "? Conclu?do"; fonte do KV ausente = perguntar por fonte antes de instalar.
 
-## Pendências do agente
-- **Chave colada no chat:** decisão do usuário é ajudar a conectar do jeito certo (link oficial, comando que ele mesmo roda, teste depois do "pronto"); texto ainda não aplicado ao núcleo §6.
-- **Entregável completo desde o briefing:** áudio do motion já aplicado (`video.md` Parte C); falta o resto das camadas (estático = arte + legenda/CTA + formatos; licença da trilha).
-- **Insumo na resolução de saída:** pedir cedo arquivos em alta; captura do ambiente pode sair limitada.
-- Considerar OCR leve em `img_qa.py` para sinalizar texto acidental.
+## Pend?ncias do agente
+- v19.83 sem teste real: `draw.mjs` em projeto, `assets.mjs` (rede), `designlang` (`npm install` com aval), PPTX aberto no PowerPoint, `tweaks.js` em cliente, `svg_audit` em logo real.
+- `instalar` s? instala o ComfyUI; Blender, imagem-para-3D e v?deo local v?o pelo instalador oficial, na raiz, com aval ?nico.

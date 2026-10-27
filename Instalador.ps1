@@ -65,7 +65,7 @@ foreach ($entry in $legacyTargets) {
 # Toda e qualquer outra cópia no perfil (pasta designer-mestre com SKILL.md), para nenhuma IA ou cópia esquecida ficar para trás.
 $sourceFullPath = [System.IO.Path]::GetFullPath($source).TrimEnd('\')
 foreach ($top in Get-ChildItem -LiteralPath $homePath -Directory -Force -ErrorAction SilentlyContinue | Where-Object Name -ne 'AppData') {
-    foreach ($dir in Get-ChildItem -LiteralPath $top.FullName -Directory -Recurse -Depth 5 -Force -Filter 'designer-mestre' -ErrorAction SilentlyContinue) {
+    foreach ($dir in Get-ChildItem -LiteralPath $top.FullName -Directory -Recurse -Depth 7 -Force -Filter 'designer-mestre' -ErrorAction SilentlyContinue) {
         $path = $dir.FullName.TrimEnd('\')
         if ($path -match '\\(node_modules|\.git)\\') { continue }
         if (-not (Test-Path -LiteralPath (Join-Path $path 'SKILL.md') -PathType Leaf)) { continue }
@@ -176,6 +176,24 @@ foreach ($target in $targets) {
             throw "Verificacao SHA-256 falhou: $($mismatches -join ', ')"
         }
 
+        # Atalhos (/360-produto, /360-personagem) viram skills irmãs, porque as IAs só descobrem skills no primeiro nível da pasta.
+        $shortcutRoot = Join-Path $source 'atalhos'
+        $skillsDir = Split-Path -Parent $target.Path
+        if ((Test-Path -LiteralPath $shortcutRoot -PathType Container) -and (Split-Path -Leaf $skillsDir) -eq 'skills') {
+            foreach ($shortcut in Get-ChildItem -LiteralPath $shortcutRoot -Directory) {
+                $shortcutTarget = Join-Path $skillsDir $shortcut.Name
+                New-Item -ItemType Directory -Path $shortcutTarget -Force | Out-Null
+                foreach ($file in Get-ChildItem -LiteralPath $shortcut.FullName -File) {
+                    $destinationFile = Join-Path $shortcutTarget $file.Name
+                    Copy-Item -LiteralPath $file.FullName -Destination $destinationFile -Force
+                    if ((Get-FileHash -LiteralPath $file.FullName -Algorithm SHA256).Hash -ne (Get-FileHash -LiteralPath $destinationFile -Algorithm SHA256).Hash) {
+                        throw "Verificacao SHA-256 falhou no atalho: $($shortcut.Name)\$($file.Name)"
+                    }
+                }
+                Write-Host "[OK] Atalho /$($shortcut.Name) em '$shortcutTarget'."
+            }
+        }
+
         Write-Host "[OK] $($target.Name): $($sourceFiles.Count) arquivos conferidos por SHA-256."
         $installedTargets.Add($target)
     }
@@ -186,7 +204,23 @@ foreach ($target in $targets) {
 }
 
 $imageScript = Join-Path $source 'assets\tratar_imagem.mjs'
-if ($installedTargets.Count -gt 0 -and (Test-Path -LiteralPath $imageScript -PathType Leaf)) {
+# Com a raiz dos recursos definida (motor_local.py motores), o sharp mora uma vez so em <raiz>\Ferramentas\node.
+$recursosRaiz = $null
+$registro = Join-Path $homePath '.designer-mestre\motor_local.json'
+if (Test-Path -LiteralPath $registro -PathType Leaf) {
+    try { $recursosRaiz = (Get-Content -LiteralPath $registro -Raw -Encoding UTF8 | ConvertFrom-Json).motores } catch { Write-Host '[AVISO] registro de recursos ilegivel; sharp segue o modo por destino' }
+}
+if ($recursosRaiz) {
+    $nodeDir = Join-Path $recursosRaiz 'Ferramentas\node'
+    if (Test-Path -LiteralPath (Join-Path $nodeDir 'node_modules\sharp') -PathType Container) {
+        Write-Host "[OK] sharp compartilhado em '$nodeDir'."
+    }
+    else {
+        Write-Host "[INFO] sharp opcional ausente; para instalar 1 copia para todas as IAs: npm i --prefix `"$nodeDir`" sharp"
+    }
+    $imageScript = $null
+}
+if ($imageScript -and $installedTargets.Count -gt 0 -and (Test-Path -LiteralPath $imageScript -PathType Leaf)) {
     $npm = Get-Command 'npm.cmd' -ErrorAction SilentlyContinue
     if ($null -eq $npm) {
         Write-Host '[AVISO] npm.cmd nao encontrado; sharp opcional nao foi instalado.'
