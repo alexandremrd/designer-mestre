@@ -1,6 +1,25 @@
-﻿Clientes/
+# Clients: only the empty template ships with the skill; nothing generated for a client is pushed
+Clients/*
+!Clients/_CLIENT_TEMPLATE/
+
+# Folders and files born inside a delivery
+Trabalho/
+Aprovação/
+Exportados/
+_DESIGN/
+Compartilhada/
+output/
+_legado*/
+frames/
+qa/
+*.mp4
+*.mov
+*.zip
+
+# Environment and secrets
 __pycache__/
 *.pyc
 .env
+.env.*
 *.key
 node_modules/

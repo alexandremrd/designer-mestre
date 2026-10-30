@@ -1,5 +1,7 @@
 # Output Format
 
+> Nota da skill: os caminhos `references/...` citados neste arquivo apontam para esta pasta, `references\motion\`. Caminhos escritos assim valem a partir dela.
+
 The audit produces one of two outputs:
 
 - **HTML mode (default)** — a self-contained `.html` file written to the audited project's `motion-audits/` directory and opened in the user's default browser. Each Critical or Important finding gets a live, looping CSS demo card beside it.
