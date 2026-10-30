@@ -1,0 +1,14 @@
+# Alternative outputs (suggestion, never a silent swap)
+
+LPs, sites, and slides always come out as pixel-perfect single-file HTML, with no framework or build. This file lists what to offer the user in two cases: the request fits the need in the row, or the method in use failed or errored twice in a row (`delivery.md` §2, proof 3). The offer uses the question tool, states the cause of the failure and the effect of each path, and the user chooses. The chosen option counts as the yes to its spending or installation (`operations.md` §0.6).
+
+| Alternative | When it fits | How it enters | Cost |
+|---|---|---|---|
+| **Framework and build** (React, Vite, Tailwind, bundled into a single HTML) | App, dashboard with state, highly interactive prototype, client project that already uses that stack, or maintenance of several pages with repeated components | Build the project, bundle into a single `.html` with everything embedded, and run `check_html.py` and the full-size look on the final result. Pixel-perfect fidelity is checked on the bundled HTML, not on the project | Node and npm; dependencies require one-time approval. The JSX components for device frame and demo cursor (`assets/huashu/`) belong to this path |
+| **Three real directions** | Undecided user, stuck concept, or two rounds rejected as "generic" | Follow `references/huashu/directions.md`: six thumbnail candidates, three complete versions with different logics. In the ads route, `/fast` still skips it | More tokens per round |
+| **Art object** | Poster, cover, or one-off artwork without a rigid KV, or a brand piece rejected twice for lack of its own idea | `references/variants/art-object/METHOD.md`. Subordinate to the KV (U11) and Law 4: minimal text and a new piece without copy is a question. Fonts per U3, never embedded | No extra |
+| **Generative art (p5.js)** | Algorithmic, living background, texture, or hero, with a reproducible seed | `references/variants/generative/METHOD.md` and `templates/`. The `viewer.html` carries the Anthropic branding: swap the `--anthropic-*` variables and the fonts for the KV tokens before showing, or use only the `.js` generator | p5.js via CDN with a fixed version |
+| **Optimized GIF** | Light loop for chat, email, or social | GIF from an already approved video or motion: 2-pass palette recipe in `assets/huashu/convert-formats.sh` (`video.md` §6.3). GIF drawn from scratch, frame by frame: `references/variants/gif/METHOD.md` and `core/`. The 128 and 480 px limits are from the Slack case; for another channel, the channel's size applies | ffmpeg (or `imageio-ffmpeg`), or `pillow`, `imageio`, `numpy`: one-time approval |
+| **Motion audit in an HTML report** | The user asks for a visual report of the existing animation | `references/motion/output-format.md`, `demo-shell.html`, and `report-template.html`; the file goes out in `Trabalho\`, never at the root of the client's project | No extra |
+
+Provenance and licenses: `NOTICE.md`.

@@ -1,0 +1,74 @@
+/* ============================================================
+   Validacao Forms — stable, mobile-first layout
+   ------------------------------------------------------------
+   Solves 4 UX problems that kill conversion:
+     1. Form that "jumps" when the error message appears
+     2. Form taller than the screen pushing the whole page
+     3. Submit button disappearing below the fold
+     4. Form not responsive on mobile
+
+   Expected HTML structure:
+     <form class="v4-form">
+       <div class="v4-form-body"> ...fields... </div>
+       <div class="v4-form-footer"> <button type="submit">...</button> </div>
+     </form>
+   ============================================================ */
+
+/* Form shell: fluid width with a cap + locked height */
+.v4-form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 480px;            /* responsive: never goes past this */
+  margin-inline: auto;
+  box-sizing: border-box;
+  /* locks the height -> does not grow pushing the page; svh accounts for the browser bar on mobile */
+  max-height: min(88vh, 680px);
+  max-height: min(88svh, 680px);
+}
+
+/* Scrollable body: scrolling stays INSIDE the form, does not leak to the page */
+.v4-form-body {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  min-height: 0;               /* needed for flex to allow the inner scroll */
+}
+
+/* Fixed footer: CTA always visible, stuck to the end of the form */
+.v4-form-footer {
+  flex: 0 0 auto;
+  position: sticky;
+  bottom: 0;
+  background: inherit;         /* covers the content scrolling underneath */
+}
+
+/* Validation message with ALWAYS reserved space -> nothing jumps on validating */
+.v4-msg {
+  min-height: 16px;
+  font-size: 12px;
+  line-height: 1.3;
+  margin-top: 4px;
+}
+
+/* Mobile-first: comfortable touch targets */
+.v4-form input,
+.v4-form select,
+.v4-form button {
+  min-height: 44px;            /* minimum recommended touch area */
+  font-size: 16px;            /* avoids iOS automatic zoom when focusing the field */
+  box-sizing: border-box;
+}
+
+/* City select while the state has not been chosen (state->city cascade) */
+.v4-form select:disabled {
+  opacity: .55;
+  cursor: not-allowed;
+}
+
+/* Very short screens (landscape on a phone): uses more of the available height */
+@media (max-height: 560px) {
+  .v4-form { max-height: 94svh; }
+}

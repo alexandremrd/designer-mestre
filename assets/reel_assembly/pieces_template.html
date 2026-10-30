@@ -1,0 +1,108 @@
+<!doctype html>
+<!--
+PIECES OF A REELS (universal template). Copy to <delivery>\Trabalho\reel\pieces.html and rewrite the `agendar(...)` calls at the end of the file.
+- Time = second at which the word is spoken in the cut (see cut\cut_words.json). FIM_DAS_PECAS = second at which the pieces disappear.
+- Colors and fonts do NOT live here: they come from the client card (_DESIGN\mapa.md) and take the place of the marker /*FICHA_DO_CLIENTE*/
+  when render_frames.py runs. Without a card, the neutral colors below apply and a warning is shown on the terminal screen.
+- Positions assume a 1080x1920 Reels with the face above y 1100; adjust to the client's template and check with check_safe_zone.py.
+-->
+<html><head><meta charset="utf-8">
+<style>
+:root{--fundo:#101010;--fundo2:#1c1c1c;--acento:#8a8a8a;--acento2:#c0c0c0;--claro:#f5f5f5;--neve:#ffffff}
+/*FICHA_DO_CLIENTE*/
+html,body{margin:0;padding:0;background:transparent;width:1080px;height:1920px;overflow:hidden}
+.peca{position:absolute;opacity:0;will-change:transform,opacity,filter}
+.vidro{background:color-mix(in srgb,var(--fundo) 80%,transparent);border:1px solid color-mix(in srgb,var(--acento) 75%,transparent);box-shadow:0 6px 24px rgba(0,0,0,.35),0 0 18px color-mix(in srgb,var(--acento) 18%,transparent)}
+.numeral{left:242px;top:1150px;width:84px;height:84px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-family:'FT',Georgia,serif;font-style:italic;font-size:54px;color:var(--claro);line-height:1}
+.pilula{height:60px;border-radius:30px;display:flex;align-items:center;padding:0 26px;font-family:'FX',Arial,sans-serif;font-weight:600;font-size:28px;letter-spacing:.07em;color:var(--neve);text-transform:uppercase;white-space:nowrap}
+.pilula b{color:var(--acento2);font-weight:700}
+.letreiro{font-family:'FT',Georgia,serif;color:var(--claro);line-height:.98;padding:12px 28px 14px;border-radius:18px;background:color-mix(in srgb,var(--fundo) 82%,transparent);border:1px solid color-mix(in srgb,var(--acento) 75%,transparent);box-shadow:0 6px 24px rgba(0,0,0,.35)}
+.letreiro i{color:var(--acento2)}
+</style></head><body>
+<div id="stage"></div>
+<script>
+const criar=(html)=>{const d=document.createElement('div');d.innerHTML=html.trim();const e=d.firstChild;document.getElementById('stage').appendChild(e);return e};
+const limitar=(x,a=0,b=1)=>Math.min(b,Math.max(a,x));
+// motion curves: cubic ease-out (decelerates), quartic ease-out (decelerates more) and smooth ease-in-out
+const saida_cubica=x=>1-Math.pow(1-limitar(x),3), saida_quartica=x=>1-Math.pow(1-limitar(x),4), entrada_saida=x=>{x=limitar(x);return x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2};
+const pecas=[];
+const FIM_DAS_PECAS=20.0; // second at which the pieces disappear (the caption and the closing continue)
+// agendar(element, enters_at, leaves_at, options): options = {d: entry duration, dy: vertical offset, sc: initial scale, custom: function(el, t) for own animation}
+function agendar(el,a,b,o={}){if(a>=FIM_DAS_PECAS){el.style.display='none';return el}if(b==null||b>FIM_DAS_PECAS-0.25)b=FIM_DAS_PECAS-0.25;pecas.push(Object.assign({el,a,b,d:.38,dy:16,sc:.03,custom:null},o));return el}
+
+// ---- 1. Numeral in a glass circle
+agendar(criar(`<div class="peca numeral vidro">1</div>`),0.5,3.0);
+
+// ---- 2. Number with a closing ring + unit pill
+const anel=criar(`<div class="peca" style="left:242px;top:1150px;width:330px;height:84px;display:flex;align-items:center;gap:18px">
+  <div class="vidro" style="width:84px;height:84px;border-radius:50%;position:relative;flex:none">
+   <svg width="84" height="84" viewBox="0 0 84 84" style="position:absolute;left:-1px;top:-1px"><circle id="anel" cx="42" cy="42" r="37" fill="none" style="stroke:var(--acento2)" stroke-width="3" stroke-linecap="round" transform="rotate(-90 42 42)" stroke-dasharray="232.5" stroke-dashoffset="232.5"/></svg>
+   <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'FT',Georgia,serif;font-style:italic;font-size:44px;color:var(--claro)">15</div></div>
+  <div class="vidro pilula" style="height:52px">min</div></div>`);
+agendar(anel,3.2,6.4,{custom:(el,t)=>{el.querySelector('#anel').setAttribute('stroke-dashoffset',232.5*(1-saida_cubica((t-3.2)/0.6)))}});
+
+// ---- 3. Large two-line title (the video zoom is done in reels_script.json; here only the text)
+agendar(criar(`<div class="peca letreiro" style="left:242px;top:1146px;font-size:76px;letter-spacing:.04em">PALAVRA<br><i>DESTAQUE</i></div>`),7.0,8.6,{d:.3,dy:10});
+
+// ---- 4. Numeral + pill with a highlighted stretch
+agendar(criar(`<div class="peca numeral vidro">2</div>`),8.8,13.0);
+agendar(criar(`<div class="peca vidro pilula" style="left:346px;top:1162px;font-size:24px;padding:0 20px">Texto curto <b>&nbsp;com destaque</b></div>`),10.4,13.0);
+
+// ---- 5. Dots converging to a center + pill
+agendar(criar(`<div class="peca numeral vidro">3</div>`),13.2,17.8);
+const pontos=criar(`<div class="peca" style="left:346px;top:1150px;width:300px;height:84px">
+ <svg width="300" height="84" viewBox="0 0 300 84" fill="none" style="stroke:var(--acento2)" stroke-width="2.2" stroke-linecap="round">
+  <line class="l" x1="26" y1="14" x2="150" y2="42"/><line class="l" x1="40" y1="70" x2="150" y2="42"/><line class="l" x1="120" y1="8" x2="150" y2="42"/>
+  <line class="l" x1="270" y1="18" x2="150" y2="42"/><line class="l" x1="250" y1="72" x2="150" y2="42"/>
+  <g style="fill:var(--claro)" stroke="none"><circle cx="26" cy="14" r="6"/><circle cx="40" cy="70" r="6"/><circle cx="120" cy="8" r="6"/><circle cx="270" cy="18" r="6"/><circle cx="250" cy="72" r="6"/></g>
+  <circle cx="150" cy="42" r="11" style="fill:var(--acento2)" stroke="none"/></svg></div>`);
+agendar(pontos,14.0,17.0,{custom:(el,t)=>{el.querySelectorAll('.l').forEach((l,i)=>{const L=l.getTotalLength();const p=saida_cubica((t-14.0-i*0.14)/0.55);l.setAttribute('stroke-dasharray',L);l.setAttribute('stroke-dashoffset',L*(1-p))})}});
+agendar(criar(`<div class="peca vidro pilula" style="left:346px;top:1162px">Causa <b>&nbsp;central</b></div>`),17.1,17.8);
+
+// ---- 6. Short two-line title
+agendar(criar(`<div class="peca letreiro" style="left:346px;top:1150px;font-size:46px;letter-spacing:.05em;line-height:1.08">FRASE <i>CURTA</i><br>EM DESTAQUE</div>`),18.0,19.6,{d:.3,dy:10});
+
+// ---- 7. Word sequence with an arrow (one step per word)
+agendar(criar(`<div class="peca vidro pilula" style="left:242px;top:1162px">Antes</div>`),19.2,19.75);
+agendar(criar(`<div class="peca" style="left:470px;top:1178px;font:600 30px 'FX',Arial,sans-serif;color:var(--acento2)">&rarr;</div>`),19.4,19.75,{d:.25});
+
+// ---- 8. Item struck through at the moment of the negation
+const riscado=criar(`<div class="peca vidro pilula" style="left:242px;top:1162px;position:absolute">Item riscado<div class="risco" style="position:absolute;left:18px;right:18px;top:25px;height:3px;background:var(--acento2);transform-origin:left;transform:scaleX(0)"></div></div>`);
+agendar(riscado,20.3,22.0,{custom:(el,t)=>{el.querySelector('.risco').style.transform=`scaleX(${saida_cubica((t-21.2)/0.28)})`}});
+
+// ---- 9. Sentence letter by letter (the last DESTAQUE_FINAL letters take the highlight color)
+const frase='FRASE DE EXEMPLO', DESTAQUE_FINAL=3;
+const letras=criar(`<div class="peca letreiro" style="left:242px;top:1190px;font-size:50px;letter-spacing:.07em;white-space:nowrap">${[...frase].map(c=>`<span class="letra" style="display:inline-block;opacity:0">${c===' '?'&nbsp;':c}</span>`).join('')}</div>`);
+agendar(letras,22.5,25.5,{d:.01,dy:0,sc:0,custom:(el,t)=>{const n=frase.length;el.querySelectorAll('.letra').forEach((s,i)=>{const a=22.6+i*(1.05/n);s.style.opacity=saida_cubica((t-a)/0.12);s.style.transform=`translateY(${(1-saida_cubica((t-a)/0.18))*10}px)`;s.style.color=(i>=frase.length-DESTAQUE_FINAL)?'var(--acento2)':'var(--claro)'})}});
+
+// ---- 10. Light glint crossing the screen (subtle, below the chin)
+agendar(criar(`<div class="peca" style="left:-300px;top:1120px;width:300px;height:350px;background:linear-gradient(90deg,transparent,color-mix(in srgb,var(--acento2) 16%,transparent),transparent)"></div>`),25.9,26.7,{d:.001,dy:0,sc:0,custom:(el,t)=>{const p=limitar((t-25.9)/0.7);el.style.transform=`translateX(${p*1680}px)`;el.style.opacity=Math.sin(p*Math.PI)}});
+
+// ---- 11. Call to action with cursor and click (code word in contrast)
+const chamada=criar(`<div class="peca" style="left:290px;top:1406px;width:500px;height:56px;border-radius:28px;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,color-mix(in srgb,var(--acento) 85%,black),var(--acento2));box-shadow:0 6px 22px rgba(0,0,0,.4);font-family:'FX',Arial,sans-serif;font-weight:700;font-size:26px;letter-spacing:.08em;color:var(--neve)">COMENTE&nbsp;<span style="color:var(--fundo2)">PALAVRA</span>&nbsp;&rarr;</div>`);
+const cursor=criar(`<svg class="peca" width="30" height="36" viewBox="0 0 30 36" style="left:0;top:0"><path d="M3 2 L3 28 L10 22 L15 33 L20 31 L15 20 L25 20 Z" style="fill:var(--neve);stroke:var(--fundo)" stroke-width="1.6" stroke-linejoin="round"/></svg>`);
+const onda=criar(`<div class="peca" style="left:0;top:0;width:60px;height:60px;border-radius:50%;border:2px solid var(--neve)"></div>`);
+const CLIQUE=29.4;
+agendar(chamada,29.0,null,{dy:8,custom:(el,t)=>{const pr=limitar((t-CLIQUE)/0.12), rl=limitar((t-CLIQUE-0.12)/0.2);const s=t<CLIQUE?1:(pr<1?1-0.05*pr:0.95+0.05*saida_cubica(rl));el.style.transform+=` scale(${s})`}});
+agendar(cursor,29.0,null,{d:.2,dy:0,sc:0,custom:(el,t)=>{const p=entrada_saida((t-29.0)/0.42);el.style.left=(860+(690-860)*p)+'px';el.style.top=(1380+(1432-1380)*p)+'px'}});
+agendar(onda,CLIQUE,CLIQUE+0.47,{d:.001,dy:0,sc:0,custom:(el,t)=>{const p=saida_cubica((t-CLIQUE)/0.45);el.style.left=(690-30)+'px';el.style.top=(1434-30)+'px';el.style.opacity=t<CLIQUE?0:(1-p)*0.9;el.style.transform=`scale(${.4+p*1.1})`}});
+
+// ---- contract of the animated page: __render(t) positions instant t and returns whether a piece is visible; used by render_frames.py, check_safe_zone.py and export_motion.py
+window.__render=function(t){
+  let visivel=false;
+  for(const p of pecas){
+    const el=p.el, entrada=saida_cubica((t-p.a)/p.d), saida=p.b==null?0:entrada_saida((t-p.b)/0.22);
+    let opacidade=(t<p.a)?0:entrada*(1-saida);
+    el.style.opacity=opacidade;
+    el.style.transform=`translateY(${(1-entrada)*p.dy-saida*6}px) scale(${1-(1-entrada)*p.sc})`;
+    el.style.filter=opacidade>0.001&&p.sc>0?`blur(${((1-entrada)*8+saida*6).toFixed(2)}px)`:'none';
+    if(p.custom)p.custom(el,t);
+    if(parseFloat(el.style.opacity)>0.004)visivel=true;
+  }
+  return visivel;
+};
+window.__DUR=FIM_DAS_PECAS+0.5; // single contract of the animated page (video.md §6): __render(t) and __DUR
+window.__render(0);
+</script></body></html>

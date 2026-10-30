@@ -1,5 +1,7 @@
 # Anti-Checklist
 
+> Nota da skill: os caminhos `references/...` citados neste arquivo apontam para esta pasta, `references\motion\`. Caminhos escritos assim valem a partir dela.
+
 This file is the audit's quality gate. The categories below describe motion patterns to **flag** in audited code — AI-slop tells at the top (where most 2026 motion problems live), followed by perspective-specific anti-patterns from Emil, Jakub, and Jhey, then general motion mistakes and code-shaped red flags. When audited code matches a pattern here, the audit surfaces a finding and the agent generates a per-finding motion suggestion by reading the relevant philosophy reference (`emil-kowalski.md`, `jakub-krehel.md`, `jhey-tompkins.md`).
 
 The file frames patterns as "things to flag," not "mistakes to avoid" — language that makes the audit's adversarial posture explicit.

@@ -17,9 +17,9 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-/* ===== BASE LP BLINDADA - comentarios so em ASCII ===== */
+/* ===== ARMORED BASE LP - comments in ASCII only ===== */
 
-/* --- Tokens da marca (trocar pelo GUIA_DE_MARCA) --- */
+/* --- Brand tokens (replace from the GUIA_DE_MARCA) --- */
 :root{
   --cor-primaria:#0B3D5C;
   --cor-destaque:#F2A900;
@@ -32,10 +32,10 @@
   --fonte-titulo:'Inter',system-ui,-apple-system,'Segoe UI',Arial,sans-serif;
   --fonte-texto:'Inter',system-ui,-apple-system,'Segoe UI',Arial,sans-serif;
   --raio:10px;
-  --largura:1180px;
+  --width:1180px;
 }
 
-/* --- Blindagem do construtor --- */
+/* --- Builder armoring --- */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html,body{margin:0;padding:0;background:var(--cor-fundo)}
 #site{width:100%!important;min-width:0!important}
@@ -43,7 +43,7 @@ html,body{margin:0;padding:0;background:var(--cor-fundo)}
 [hidden]{display:none!important}
 .form-feedback:empty{display:none!important}
 
-/* --- Anti faixa branca --- */
+/* --- Anti white stripe --- */
 img,svg,video,iframe,picture{display:block;max-width:100%;height:auto;border:0}
 .lp{display:block;font-family:var(--fonte-texto);color:var(--cor-texto);font-size:clamp(1rem,0.95rem + 0.3vw,1.125rem);line-height:1.55;overflow-x:hidden;font-kerning:normal;-webkit-font-smoothing:antialiased}
 .lp-secao{margin:0;padding:72px 20px;background:var(--cor-fundo)}
@@ -51,16 +51,16 @@ img,svg,video,iframe,picture{display:block;max-width:100%;height:auto;border:0}
 .lp-secao--escura{background:var(--cor-primaria);color:#fff}
 .lp-secao > :first-child,.lp-container > :first-child{margin-top:0}
 .lp-secao > :last-child,.lp-container > :last-child{margin-bottom:0}
-.lp-container{max-width:var(--largura);margin:0 auto}
+.lp-container{max-width:var(--width);margin:0 auto}
 
-/* --- Anti borda azul na logo / links --- */
+/* --- Anti blue border on logo / links --- */
 .lp a{color:inherit;-webkit-tap-highlight-color:transparent}
 .lp a:focus{outline:none}
 .lp a:focus-visible,.lp button:focus-visible{outline:3px solid var(--cor-destaque);outline-offset:3px;border-radius:4px}
 .lp-logo{display:inline-block;line-height:0;text-decoration:none}
 .lp-logo svg,.lp-logo img{height:44px;width:auto}
 
-/* --- Tipografia --- */
+/* --- Typography --- */
 .lp h1,.lp h2,.lp h3{font-family:var(--fonte-titulo);line-height:1.15;margin:0 0 16px;text-wrap:balance}
 .lp h1{font-size:clamp(32px,5vw,56px);font-weight:700}
 .lp h2{font-size:clamp(26px,3.6vw,40px);font-weight:700}
@@ -76,18 +76,18 @@ img,svg,video,iframe,picture{display:block;max-width:100%;height:auto;border:0}
 .lp-hero__grade{display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:start}
 .lp-hero__sub{font-size:20px;opacity:.9}
 
-/* --- Animacao segura: base sempre visivel --- */
+/* --- Safe animation: base always visible --- */
 .js-anim .anima{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease}
 .js-anim .anima.visivel{opacity:1;transform:none}
-.js-anim h1.anima{opacity:1} /* H1 nunca some: anima so transform */
+.js-anim h1.anima{opacity:1} /* H1 never disappears: animates transform only */
 @media (prefers-reduced-motion:reduce){.js-anim .anima{opacity:1!important;transform:none!important;transition:none!important}}
 
-/* --- Botao --- */
+/* --- Button --- */
 .lp-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;width:100%;min-height:56px;padding:16px 32px;border:0;border-radius:var(--raio);background:var(--cor-destaque);color:#111;font:700 18px/1.2 var(--fonte-texto);cursor:pointer;text-decoration:none;transition:filter .2s}
 .lp-btn:hover{filter:brightness(1.06)}
 .lp-btn[disabled]{opacity:.65;cursor:wait}
 
-/* --- Formulario --- */
+/* --- Form --- */
 .lp-form{background:#fff;color:var(--cor-texto);border-radius:calc(var(--raio) + 4px);padding:32px;box-shadow:0 12px 40px rgba(0,0,0,.12)}
 .lp-form__titulo{font-size:22px;font-weight:700;margin:0 0 20px}
 .lp-campo{margin:0 0 16px}
@@ -103,7 +103,7 @@ img,svg,video,iframe,picture{display:block;max-width:100%;height:auto;border:0}
 .form-feedback.falha{background:#FDECEA;color:var(--cor-erro)}
 .lp-form__aviso{font-size:13px;color:var(--cor-texto-suave);margin-top:12px}
 
-/* --- Responsivo --- */
+/* --- Responsive --- */
 @media (max-width:900px){
   .lp-hero__grade{grid-template-columns:1fr;gap:32px}
   .lp-secao{padding:56px 16px}
@@ -119,7 +119,7 @@ img,svg,video,iframe,picture{display:block;max-width:100%;height:auto;border:0}
   <section class="lp-secao lp-secao--escura lp-hero">
     <div class="lp-container">
       <div class="lp-hero__topo">
-        <!-- LOGO: colar o SVG oficial com os paths originais. Nunca recriar. -->
+        <!-- LOGO: paste the official SVG with the original paths. Never recreate. -->
         <a class="lp-logo" href="#form-lead" aria-label="[CLIENTE]">
           <svg viewBox="0 0 200 44" preserveAspectRatio="xMidYMid meet" role="img" aria-label="LOGO [CLIENTE]"><rect x="1" y="1" width="198" height="42" fill="none" stroke="currentColor" stroke-dasharray="4 4"/><text x="100" y="27" text-anchor="middle" font-size="13" fill="currentColor" font-family="Arial">LOGO [CLIENTE]</text></svg>
         </a>
@@ -131,7 +131,7 @@ img,svg,video,iframe,picture{display:block;max-width:100%;height:auto;border:0}
           <p class="lp-hero__sub anima">[Subt&iacute;tulo aprovado]</p>
         </div>
 
-        <!-- FORMULARIO -->
+        <!-- FORM -->
         <form class="lp-form anima" id="form-lead" novalidate data-email="corporativo">
           <p class="lp-form__titulo">[T&iacute;tulo do formul&aacute;rio]</p>
 
@@ -159,10 +159,10 @@ img,svg,video,iframe,picture{display:block;max-width:100%;height:auto;border:0}
             <span class="lp-campo__erro">Informe a empresa.</span>
           </div>
 
-          <!-- Honeypot anti-spam -->
+          <!-- Anti-spam honeypot -->
           <div class="lp-hp" aria-hidden="true"><label>Site<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
 
-          <!-- UTMs + rastreio (preenchidos por JS) -->
+          <!-- UTMs + tracking (filled by JS) -->
           <input type="hidden" name="utm_source">
           <input type="hidden" name="utm_medium">
           <input type="hidden" name="utm_campaign">
@@ -179,7 +179,7 @@ img,svg,video,iframe,picture{display:block;max-width:100%;height:auto;border:0}
     </div>
   </section>
 
-  <!-- SECAO EXEMPLO -->
+  <!-- EXAMPLE SECTION -->
   <section class="lp-secao">
     <div class="lp-container">
       <h2 class="anima">[T&iacute;tulo da se&ccedil;&atilde;o]</h2>
@@ -200,9 +200,9 @@ img,svg,video,iframe,picture{display:block;max-width:100%;height:auto;border:0}
 (function(){
   'use strict';
 
-  /* ===== CONFIG (trocar pelo GUIA_DE_MARCA) ===== */
+  /* ===== CONFIG (replace from the GUIA_DE_MARCA) ===== */
   var WEBHOOK_URL = 'https://hook.us2.make.com/COLE_AQUI_O_ID_DO_WEBHOOK';
-  var URL_OBRIGADO = ''; /* ex.: 'https://site.com/obrigado' ou vazio */
+  var URL_OBRIGADO = ''; /* e.g. 'https://site.com/obrigado' or empty */
   var MSG_OK = 'Recebemos seus dados! Em breve nossa equipe entra em contato.';
   var MSG_FALHA = 'N\u00e3o foi poss\u00edvel enviar agora. Tente novamente em instantes.';
 
@@ -212,7 +212,7 @@ img,svg,video,iframe,picture{display:block;max-width:100%;height:auto;border:0}
   var root = document.getElementById('lp-root');
   var form = document.getElementById('form-lead');
 
-  /* ===== Animacao segura ===== */
+  /* ===== Safe animation ===== */
   var anims = root.querySelectorAll('.anima');
   var reduz = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   function revelarTudo(){ for (var i=0;i<anims.length;i++) anims[i].classList.add('visivel'); }
@@ -222,7 +222,7 @@ img,svg,video,iframe,picture{display:block;max-width:100%;height:auto;border:0}
       ents.forEach(function(e){ if (e.isIntersecting){ e.target.classList.add('visivel'); io.unobserve(e.target); } });
     }, {threshold:0.12, rootMargin:'0px 0px -40px 0px'});
     for (var i=0;i<anims.length;i++) io.observe(anims[i]);
-    setTimeout(revelarTudo, 2500); /* rede de seguranca */
+    setTimeout(revelarTudo, 2500); /* safety net */
   }
 
   if (!form) return;
@@ -238,7 +238,7 @@ img,svg,video,iframe,picture{display:block;max-width:100%;height:auto;border:0}
   form.elements.page_url.value = location.href;
   form.elements.referrer.value = document.referrer || '';
 
-  /* ===== Mascara de telefone (nao bloqueia digitacao) ===== */
+  /* ===== Phone mask (does not block typing) ===== */
   var tel = form.elements.telefone;
   function formataTel(d){
     d = d.slice(0,11);
@@ -258,7 +258,7 @@ img,svg,video,iframe,picture{display:block;max-width:100%;height:auto;border:0}
     try{ tel.setSelectionRange(p,p); }catch(e){}
   });
 
-  /* ===== Validacao ===== */
+  /* ===== Validation ===== */
   function campo(el){ return el.closest('.lp-campo'); }
   function marca(el, ok){ var c = campo(el); if (c) c.classList.toggle('erro', !ok); return ok; }
   function validaEmail(v){
@@ -287,7 +287,7 @@ img,svg,video,iframe,picture{display:block;max-width:100%;height:auto;border:0}
     visiveis[j].addEventListener('input', function(){ if (campo(this).classList.contains('erro')) valida(this); });
   }
 
-  /* ===== Envio para webhook ===== */
+  /* ===== Send to webhook ===== */
   var btn = form.querySelector('button[type="submit"]');
   var fb = form.querySelector('.form-feedback');
   var txtBtn = btn.innerHTML;

@@ -1,0 +1,21 @@
+{
+  "_readme": "Data for ONE video. Copy to <delivery>\\Trabalho\\reel\\reels_script.json and replace with the timings and words of the cut (see cut\\cut_words.json). Fields that start with _ are ignored.",
+  "highlighted_words": ["exemplo", "importante"],
+  "uppercase_words": ["palavra"],
+  "joined_words": [["sete", "minutos", "sete-minutos"]],
+  "caption_font_size": 46,
+  "opening_s": 2.8,
+  "closing_s": 3.9,
+  "zoom": {
+    "_readme": "base = fixed zoom; vertical_anchor = crop position (0 top, 1 bottom; pins the chin); pulses = quick push-ins at the moment of strong speech",
+    "base": 1.06,
+    "vertical_anchor": 0.573,
+    "pulses": [
+      {"start": 7.1, "intensity": 0.08, "in_s": 0.001, "end_s": 8.6, "out_s": 0.4}
+    ]
+  },
+  "sound_effects": [
+    {"time": 2.9, "name": "tick", "db_below_voice": 20},
+    {"time": 7.1, "name": "stamp", "db_below_voice": 17}
+  ]
+}
