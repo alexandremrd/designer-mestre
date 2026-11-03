@@ -49,7 +49,7 @@ python3 $B/4-review.py corte --prompt "<proper names in the video>" && cat cut/r
 ```
 Criterion (R5): all `review.txt` blocks approved; **no clipped word**; no pause > 0.25 s.
 Clipped word → protect the interval (`raw`/`force`) and cut again. If the person says the video is **already
-clean**, skip: `cp "<video>" cut/clean.mp4` and transcribe with `$S/tools/prepare.py cut/clean.mp4 preparo`.
+clean**, skip: `cp "<video>" cut/clean.mp4` and transcribe with `$S/tools/prepare.py cut/clean.mp4 prep`.
 Outputs: `cut/clean.mp4`, `cut.wav`, `edl.json`, `cut_words.json`.
 
 ### 2 · VSL engine · prepare
@@ -62,7 +62,7 @@ tracking and the 1st assembly. Without `skin-resolved.json` the skin is the **na
 ### 3 · Phase 1 · plan (`template/README.md`)
 1. **Transcript** (R6): correct `assets/transcript.json` by hand (Cloud → Claude, A → IA, names as the brand
    writes them, CTA code word in UPPERCASE); the original stays in `transcript-whisper.json`.
-2. **Framing**: `python3 $S/tools/face.py assets/clean.mp4 ../preparo --916` and measure on a frame
+2. **Framing**: `python3 $S/tools/face.py assets/clean.mp4 ../prep --916` and measure on a frame
    with the punch applied → `vsl.json` (`punch`, `face`, `head`, `fullPos`, `splitPos`; color and grade do **not** change).
    Less than ~300 px free above the head → nothing at the top in FULL: lettering, kicker and stamp on the chest (R1).
 3. **Real material** (R3): official screenshots and logos in `assets/img/` + `../assets/SOURCES.md` (origin, license,

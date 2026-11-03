@@ -6,7 +6,7 @@ Output in the folder:
   meta.json        fps, duration, width, height, frames
   audio16k.wav     mono 16 kHz (analysis)
   voz48k.wav       stereo 48 kHz (mix)
-  palavras.json    [{"i": start, "f": end, "t": "word"}] in seconds of the input video
+  spoken_words.json    [{"i": start, "f": end, "t": "word"}] in seconds of the input video
   texto.txt        the running speech, one sentence per line (fix by hand: R6)
   pauses.json      pauses > 0.4 s between words
 Needs ffmpeg/ffprobe and whisper-cli (whisper.cpp) with a ggml model; the WHISPER_MODEL variable points to the model.
@@ -53,7 +53,7 @@ def main():
         for s in dados["transcription"]:
             t = s["text"].strip()
             if t: palavras.append({"i": round(s["offsets"]["from"] / 1000, 3), "f": round(s["offsets"]["to"] / 1000, 3), "t": t})
-    json.dump(palavras, open(os.path.join(a.pasta, "palavras.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=0)
+    json.dump(palavras, open(os.path.join(a.pasta, "spoken_words.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=0)
     # running text, breaking at final punctuation
     frases, atual = [], []
     for p in palavras:

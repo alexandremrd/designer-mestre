@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 # prepare.sh — prepares the style 03 · VSL composition inside the engine folder (<P>/motor, the copy of this template/).
 # Run in <P>/motor:   bash prepare.sh
-# Standalone (outside the studio):   bash prepare.sh --video clean.mp4 [--words cut_words.json|palavras.json|transcript.json] [--audio cut.wav]
+# Standalone (outside the studio):   bash prepare.sh --video clean.mp4 [--words cut_words.json|spoken_words.json|transcript.json] [--audio cut.wav]
 #
 # Reads from the studio project (the parent folder, P):
 #   camera   P/cut/clean-916-grade.mp4 (9:16 already graded, if any) → else clean-916.mp4 → else cut/clean.mp4
 #   voice    P/cut/cut.wav (else the camera's own audio)
-#   words    P/preparo/palavras.json (corrected, R6) → else P/cut/cut_words.json
-#   fonts    P/assets/fonts/ (skin's fontes.css) · real material P/assets/oficiais/ and P/assets/gerados/ → assets/img/
+#   words    P/prep/spoken_words.json (corrected, R6) → else P/cut/cut_words.json
+#   fonts    P/assets/fonts/ (skin's fonts.css) · real material P/assets/oficiais/ and P/assets/gerados/ → assets/img/
 # Writes here (in the engine folder):
 #   assets/clean.mp4        1080×1920, 30 fps, keyframe every 1 s (-g 30), with the voice (horizontal → center crop)
 #   assets/transcript.json  {"words":[{"text","start","end"}],"audio_duration_secs"} (+ transcript-whisper.json, the original copy)
@@ -30,7 +30,7 @@ if [[ -z "$VIDEO" ]]; then
 fi
 [[ -z "$AUDIO" && -f "$P/cut/cut.wav" ]] && AUDIO="$P/cut/cut.wav"
 if [[ -z "$PALAVRAS" ]]; then
-  for f in "$P/preparo/palavras.json" "$P/cut/cut_words.json"; do [[ -f "$f" ]] && { PALAVRAS="$f"; break; }; done
+  for f in "$P/prep/spoken_words.json" "$P/cut/cut_words.json"; do [[ -f "$f" ]] && { PALAVRAS="$f"; break; }; done
 fi
 [[ -f "${VIDEO:-}" ]] || { echo "camera not found (cut/clean-916-grade.mp4 or --video)"; exit 1; }
 echo "camera: $VIDEO"; echo "voice: ${AUDIO:-(from the camera itself)}"; echo "words: ${PALAVRAS:-(none — transcribe first)}"
@@ -56,7 +56,7 @@ src, video, out = sys.argv[1:4]
 d = json.load(open(src, encoding="utf-8"))
 if isinstance(d, dict) and "words" in d: W = [{"text": w["text"], "start": w["start"], "end": w["end"]} for w in d["words"]]
 elif d and isinstance(d[0], list): W = [{"text": t, "start": a, "end": b} for a, b, t in d]          # cut_words.json
-else: W = [{"text": w["t"], "start": w["i"], "end": w["f"]} for w in d]                            # preparo/palavras.json
+else: W = [{"text": w["t"], "start": w["i"], "end": w["f"]} for w in d]                            # prep/spoken_words.json
 W = [w for w in W if str(w["text"]).strip()]
 dur = float(subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", video], capture_output=True, text=True).stdout)
 t = {"words": [{"text": str(w["text"]).strip(), "start": round(float(w["start"]), 3), "end": round(float(w["end"]), 3)} for w in W], "audio_duration_secs": round(dur, 3)}

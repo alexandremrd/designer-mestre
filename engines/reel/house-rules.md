@@ -101,6 +101,6 @@ never from fixed user folders. Problems already seen: transcription "finishing" 
 exist → create it before downloading.
 
 ## R11 · Presenter profile
-Name, @ and avatar come from the presenter's `perfil.json`. The avatar may be a frame from the video itself,
+Name, @ and avatar come from the presenter's `profile.json`. The avatar may be a frame from the video itself,
 cropped. Follower count only if the presenter provides it. **No third-party name** (another
 creator, course or product that is not the presenter's) appears in the video or in the project files.

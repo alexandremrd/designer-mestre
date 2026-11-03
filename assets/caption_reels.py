@@ -9,6 +9,8 @@
 # fix the .srt and run again with --srt <out>.srt (skips transcription).
 import argparse, json, os, re, shutil, subprocess, sys, tempfile
 
+import caption_core
+
 def achar_ffmpeg():
     if shutil.which("ffmpeg"):
         return "ffmpeg"
@@ -172,23 +174,11 @@ def ler_srt(path):
             pal.append({"s": round(t, 3), "e": round(t + d, 3), "t": p}); t += d
     return pal
 
-def fmt_srt(t):
-    ms = int(round(t * 1000)); h, ms = divmod(ms, 3600000); m, ms = divmod(ms, 60000); s, ms = divmod(ms, 1000)
-    return f"{h:02}:{m:02}:{s:02},{ms:03}"
+fmt_srt = caption_core.srt_time
 
 # ---------- caption blocks ----------
 def blocos(pal, max_pal, max_car):
-    out, cur = [], []
-    for i, w in enumerate(pal):
-        cur.append(w)
-        fim_frase = re.search(r"[.!?,;:]$", w["t"])
-        pausa = i + 1 < len(pal) and pal[i + 1]["s"] - w["e"] > 0.35
-        texto = " ".join(x["t"] for x in cur)
-        if len(cur) >= max_pal or len(texto) >= max_car or fim_frase or pausa:
-            out.append(cur); cur = []
-    if cur:
-        out.append(cur)
-    return out
+    return caption_core.group(pal, max_pal, max_car)
 
 def salvar_srt(bl, path):
     with open(path, "w", encoding="utf-8") as f:
@@ -266,16 +256,7 @@ def remapear(pal, segs, fade=0.0):
     return out
 
 # ---------- ASS ----------
-def ass_cor(hexc, alpha="00"):
-    h = hexc.lstrip("#")
-    return f"&H{alpha}{h[4:6]}{h[2:4]}{h[0:2]}".upper()
-
-def ass_t(t):
-    cs = int(round(t * 100)); h, cs = divmod(cs, 360000); m, cs = divmod(cs, 6000); s, cs = divmod(cs, 100)
-    return f"{h}:{m:02}:{s:02}.{cs:02}"
-
-def esc(t):
-    return t.replace("\\", "").replace("{", "(").replace("}", ")")
+ass_cor, ass_t, esc = caption_core.ass_color, caption_core.ass_time, caption_core.escape
 
 def gerar_ass(bl, a, path):
     # --box: BorderStyle 3 = solid box behind each line, in the --outline color, with --border as padding
@@ -299,11 +280,12 @@ def gerar_ass(bl, a, path):
             fim = b[i + 1]["s"] if i + 1 < len(b) else fim_bloco
             if fim - ini < 0.04:
                 continue
-            partes = []
+            partes, simples = [], []
             for j, x in enumerate(b):
                 txt = esc(x["t"].upper() if a.caixa_alta else x["t"])
+                simples.append(txt)
                 partes.append(f"{{\\c{ass_cor(a.destaque)}}}{txt}{{\\c{ass_cor(a.cor)}}}" if (a.destaque and j == i) else txt)
-            ev.append(f"Dialogue: 0,{ass_t(ini)},{ass_t(fim)},L,,0,0,0,,{' '.join(partes)}")
+            ev.append(f"Dialogue: 0,{ass_t(ini)},{ass_t(fim)},L,,0,0,0,,{caption_core.split_lines(partes, getattr(a, 'linhas', 1), simples)}")
     with open(path, "w", encoding="utf-8") as f:
         f.write("[Script Info]\nScriptType: v4.00+\nPlayResX: 1080\nPlayResY: 1920\nWrapStyle: 2\n"
                 "ScaledBorderAndShadow: yes\n\n[V4+ Styles]\nFormat: Name, Fontname, Fontsize, PrimaryColour, "
@@ -319,6 +301,7 @@ ESTILOS = {
     "standard": {},                                                      # 1 line, up to 3 words that follow the speech, highlight if a color is given
     "stable": {"palavras": 8, "max_car": 34, "tamanho": 54},          # short 1-line phrases, calm reading (explainer, longer video)
     "box": {"palavras": 6, "max_car": 30, "tamanho": 54, "caixa": True},  # short phrases in a solid box in the --outline color
+    "two-lines": {"palavras": 8, "max_car": 44, "tamanho": 56, "linhas": 2},  # up to 8 words split in 2 balanced lines (more text per screen)
 }
 
 
@@ -326,7 +309,7 @@ ESTILOS = {
 def main():
     p = argparse.ArgumentParser(description="Caption + overlay + soundtrack for 1080x1920 Reels")
     p.add_argument("--video", required=True); p.add_argument("--out", required=True)
-    p.add_argument("--style", dest="estilo", choices=list(ESTILOS), default="standard", help="default caption variant: standard, stable or box; options passed by hand override the variant")
+    p.add_argument("--style", dest="estilo", choices=list(ESTILOS), default="standard", help="default caption variant: standard, stable, box or two-lines; options passed by hand override the variant")
     p.add_argument("--overlay", help="PNG 1080x1920 with transparency (frame/logo from Figma)")
     p.add_argument("--intro", help="PNG shown over the video for the first --intro-s seconds")
     p.add_argument("--intro-s", type=float, default=2.0)
@@ -342,6 +325,7 @@ def main():
     p.add_argument("--uppercase", dest="caixa_alta", action="store_true")
     p.add_argument("--y", type=int, default=1400, help="caption baseline in px (Reels safe zone: <= 1470)")
     p.add_argument("--margin-x", dest="margem_x", type=int, default=90)
+    p.add_argument("--lines", dest="linhas", type=int, choices=[1, 2], default=1, help="1 or 2 caption lines per block (2 = balanced break)")
     p.add_argument("--words", dest="palavras", type=int, default=3); p.add_argument("--max-chars", dest="max_car", type=int, default=24)
     p.add_argument("--fade", type=float, default=0.25, help="cross dissolve at each cut (s); 0 = hard cut")
     p.add_argument("--cut-pauses", dest="cortar_pausas", type=float, default=0.45, help="cuts silences longer than N s (default 0.45; 0 = no cut). A natural pause of ~0.36 s remains")
@@ -371,7 +355,7 @@ def main():
         sys.exit("No speech found.")
     if not a.srt:
         salvar_srt(blocos(pal, a.palavras, a.max_car), base + ".srt")
-        json.dump(pal, open(base + "_palavras.json", "w", encoding="utf-8"), ensure_ascii=False)
+        json.dump(pal, open(base + "_words.json", "w", encoding="utf-8"), ensure_ascii=False)
         print(f"[ok] transcription: {base}.srt (review it; if you fix it, run again with --srt)")
     if a.so_transcrever:
         return

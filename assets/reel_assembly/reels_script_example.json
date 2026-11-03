@@ -4,6 +4,7 @@
   "uppercase_words": ["palavra"],
   "joined_words": [["sete", "minutos", "sete-minutos"]],
   "caption_font_size": 46,
+  "caption_lines": 1,
   "opening_s": 2.8,
   "closing_s": 3.9,
   "zoom": {

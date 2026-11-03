@@ -386,7 +386,7 @@ example of what "aggressive" × "soft" means).
 ```bash
 S=${REEL_SKILL:-~/.claude/skills/reel}; cd <P>
 cp -R "$S/template" motor && cd motor
-bash prepare.sh      # 9:16 camera (cut/clean-916-grade.mp4) + voice (cut/cut.wav), transcript (preparo/palavras.json),
+bash prepare.sh      # 9:16 camera (cut/clean-916-grade.mp4) + voice (cut/cut.wav), transcript (prep/spoken_words.json),
                       # skin fonts, material from assets/oficiais, npm install, mouth tracking, 1st assembly
 ```
 Then, the sequence of phases 1 and 2 of `template/README.md`:
@@ -394,7 +394,7 @@ Then, the sequence of phases 1 and 2 of `template/README.md`:
   `node assemble.mjs` + lint → `../entrega/plan.json` → `node tools/cards.mjs`.
 - **Phase 2:** snapshots → safe zone → render → camera-only → `tools/final-audio-vsl.sh` → `sounds.json` → sheet → `verify.py`.
 
-`assemble.mjs` applies the skin (`skin-resolved.json`): colors → kit variables; fonts → `fontes.css`; sound → mode and
+`assemble.mjs` applies the skin (`skin-resolved.json`): colors → kit variables; fonts → `fonts.css`; sound → mode and
 volume. With the native skin, the result has the reference's colors. Steps 10.1–10.13 below detail each stage and the
 criteria.
 
@@ -415,7 +415,7 @@ criteria.
 
 ### 10.3 Transcription and correction
 - **In:** `clean.mp4` (or `cut16k.wav`) → `tools/prepare.py <video> <folder>`.
-- **Out:** `palavras.json` (word by word with times), pauses > 0.4 s, `meta.json`; plus a legible `words.txt`
+- **Out:** `spoken_words.json` (word by word with times), pauses > 0.4 s, `meta.json`; plus a legible `words.txt`
   (words with times and pauses) for reading the map.
 - **Criterion:** transcript corrected by hand (R6) with the original kept in `transcript-raw.json`; the
   correction is by time when the word repeats; the CTA code word in uppercase.

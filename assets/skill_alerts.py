@@ -80,6 +80,8 @@ def avisos_da_ficha(entrega):
 
 
 def principal():
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8")  # the warnings carry emoji; cp1252 consoles crashed
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--delivery", dest="entrega", help="delivery folder, to check the client card")
     a = ap.parse_args()

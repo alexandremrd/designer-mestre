@@ -21,7 +21,7 @@ function Get-CentralSkillTargets([string]$Skill) {
  }
  return @($paths | Sort-Object -Unique)
 }
-function Set-CentralSkillLinks([string]$Skill,[string]$Source,[string[]]$Targets,[switch]$RemoverDuplicatas,[switch]$Planejar) {
+function Set-CentralSkillLinks([string]$Skill,[string]$Source,[string[]]$Targets,[switch]$RemoveDuplicates,[switch]$Plan) {
  $Source=Resolve-CentralSkillPath $Source
  if(!(Get-Command Get-SyncManifest -ErrorAction SilentlyContinue)){. (Join-Path $PSScriptRoot sync_guard.ps1)}
  $registry=Join-Path $env:USERPROFILE ".skill-sync\$Skill.json"
@@ -51,10 +51,10 @@ function Set-CentralSkillLinks([string]$Skill,[string]$Source,[string[]]$Targets
    $special=@(Get-ChildItem -LiteralPath $full -Directory -Force -Recurse | Where-Object {($_.Attributes -band [IO.FileAttributes]::ReparsePoint) -or $_.Name -eq '.git' -or $_.Name -eq 'node_modules'})
    if($special.Count){throw "Preserve runtime/repository/link before replacing $full : $($special.FullName -join ', ')"}
   }
-  if((Test-Path -LiteralPath $full) -and !$RemoverDuplicatas -and !$Planejar){throw "Use the Desktop BAT to convert the existing copy: $full"}
+  if((Test-Path -LiteralPath $full) -and !$RemoveDuplicates -and !$Plan){throw "Use the Desktop BAT to convert the existing copy: $full"}
   $replace.Add($full)
  }
- if($Planejar){Write-Output "[PLAN OK] $Skill : $($replace.Count) conversions, $($Targets.Count) accesses, source $Source";return}
+ if($Plan){Write-Output "[PLAN OK] $Skill : $($replace.Count) conversions, $($Targets.Count) accesses, source $Source";return}
  # Entire inventory is checked before replacing the first directory.
  foreach($full in $replace){
   $parent=Split-Path $full -Parent;New-Item -ItemType Directory -Path $parent -Force | Out-Null

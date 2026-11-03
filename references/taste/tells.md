@@ -46,7 +46,7 @@ inspector fails the page; **warned** means it flags it and you need a reason.
 | Floating rounded pill navigation with blur | warned | A plain bar |
 | Fake dashboard hero built from grey bars and donut charts | no rule; see imagery.md §7 | A real interface fragment, or no image |
 | Decorative status dot ("Available for work", pulsing "live") | lint: bounce | Remove |
-| Fade-and-rise on every section | no rule; see motion.md | One signature move |
+| Fade-and-rise on every section | no rule; see references/motion/ | One signature move |
 
 ## 3. Third wave (2025–2026): the "fix" that became the look
 
@@ -104,7 +104,7 @@ effortless, cutting-edge, all-in-one …); the correction ("not just X, it's Y")
 ## 7. Motion tells
 
 Identical fade-up on every block; a dozen staggered hero entrances; hover lift on every card; bounce
-easing; infinite loops that mean nothing; reveals that fail and leave a blank band. See `motion.md` §9.
+easing; infinite loops that mean nothing; reveals that fail and leave a blank band. See `references/motion/`.
 
 ## 8. Why removal is not enough
 

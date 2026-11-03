@@ -5,6 +5,7 @@
 - If the collection does not meet the need, research and download on your own free resources suited to the narrative and the KV, verifying commercial use and recording origin/license. Free search and download do not require new confirmation; spending, sign-ups, and sending private material require authorization.
 - H1 without a final period, in every piece (static, motion, carousel), even when the doc's copy carries the period. Applies to the headline and to on-screen phrases in the H1 role; supporting text and narration keep the punctuation. (23/10/2026)
 - Video: caption on 1 line, max. 3 words per block; visual cuts with a short cross dissolve, preserving whole words and pauses; audio transition only in silence. Holds above the briefing. (23/10/2026)
+- CTA or button: at most 3 words in every format; it hugs its text with the same inner spacing and never stretches. If the briefing's copy is longer, keep the verb and object and say what was cut. Holds above the briefing. (03/11/2026)
 - Pulse = smooth scale with a light glow behind; the element changes neither color nor opacity. (24/10/2026)
 
 ## Tends to work

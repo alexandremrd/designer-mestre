@@ -34,6 +34,11 @@ li svg{flex:0 0 24px;width:24px;height:24px;fill:none;stroke:currentColor;stroke
 .progress{position:fixed;left:0;bottom:0;height:4px;width:100%;background:var(--hairline);z-index:5}
 .progress-fill{height:100%;width:0;background:var(--accent);transition:width .35s}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+/* all slides stacked at full size: for PPTX/PDF export and screenshots (#all, or any automated browser) */
+html.all-slides,html.all-slides body{height:auto;overflow:visible}
+.all-slides #deck{position:static;transform:none;height:auto}
+.all-slides .slide{position:relative;display:flex;flex-direction:column}
+.all-slides .nav,.all-slides .progress{display:none}
 </style>
 </head>
 <body>
@@ -59,6 +64,7 @@ li svg{flex:0 0 24px;width:24px;height:24px;fill:none;stroke:currentColor;stroke
 <div class="progress"><div class="progress-fill"></div></div>
 <script>
 (function(){'use strict';
+if(navigator.webdriver||location.hash==='#all'){document.documentElement.classList.add('all-slides');return;}
 var S=[].slice.call(document.querySelectorAll('.slide')),i=0,
 P=document.querySelector('[data-testid="prev-slide"]'),N=document.querySelector('[data-testid="next-slide"]'),
 F=document.querySelector('.progress-fill'),C=document.getElementById('count');

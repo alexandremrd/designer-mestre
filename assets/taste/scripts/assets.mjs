@@ -319,17 +319,60 @@ function useRendition(it, pick, largest) {
 }
 
 // ---------- Openverse ----------
+// Anonymous searches with licence and size filters take ~35 s (measured 2026-10); a free OAuth key (client credentials)
+// moves them out of the anonymous queue. Key: OPENVERSE_CLIENT_ID and OPENVERSE_CLIENT_SECRET in the environment or in
+// %USERPROFILE%\.designer-mestre\.env.local (KEY=value lines, never printed); the token (10 h) is cached next to it.
+const OV_DIR = join(process.env.USERPROFILE || process.env.HOME || '.', '.designer-mestre');
+function ovCredentials() {
+  const env = { ...process.env };
+  try {
+    for (const line of readFileSync(join(OV_DIR, '.env.local'), 'utf8').split(/\r?\n/)) {
+      const m = line.match(/^\s*(OPENVERSE_CLIENT_ID|OPENVERSE_CLIENT_SECRET)\s*=\s*"?([^"\s]+)"?\s*$/);
+      if (m && !env[m[1]]) env[m[1]] = m[2];
+    }
+  } catch {}
+  return env.OPENVERSE_CLIENT_ID && env.OPENVERSE_CLIENT_SECRET ? { id: env.OPENVERSE_CLIENT_ID, secret: env.OPENVERSE_CLIENT_SECRET } : null;
+}
+let ovAuthCache;
+async function ovAuthHeaders() {
+  if (ovAuthCache !== undefined) return ovAuthCache;
+  ovAuthCache = {};
+  const cred = ovCredentials();
+  if (!cred) return ovAuthCache;
+  const cacheFile = join(OV_DIR, 'openverse_token.json');
+  try {
+    const c = JSON.parse(readFileSync(cacheFile, 'utf8'));
+    if (c.client_id === cred.id && c.expires_at > Date.now() + 60000) return (ovAuthCache = { Authorization: `Bearer ${c.access_token}` });
+  } catch {}
+  try {
+    const r = await fetch('https://api.openverse.org/v1/auth_tokens/token/', {
+      method: 'POST', signal: AbortSignal.timeout(20000),
+      headers: { 'User-Agent': UA, 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({ grant_type: 'client_credentials', client_id: cred.id, client_secret: cred.secret }),
+    });
+    if (!r.ok) throw new Error(`HTTP ${r.status}`);
+    const t = await r.json();
+    try { mkdirSync(OV_DIR, { recursive: true }); writeFileSync(cacheFile, JSON.stringify({ client_id: cred.id, access_token: t.access_token, expires_at: Date.now() + (t.expires_in || 36000) * 1000 })); } catch {}
+    ovAuthCache = { Authorization: `Bearer ${t.access_token}` };
+  } catch (e) {
+    console.error(`[openverse] key found but no token (${e.message}); searching anonymously`);
+  }
+  return ovAuthCache;
+}
 async function searchOpenverse(q, opts) {
   const lic = opts.licences.filter((l) => l !== 'other').map((l) => (l === 'pd' ? 'pdm' : l));
   if (!lic.length) return { total: 0, items: [], note: 'Openverse filters by Creative Commons licences and marks only.' };
+  const auth = await ovAuthHeaders();
+  const anonymous = !auth.Authorization;
   const call = (large) => {
     const p = new URLSearchParams({ q, license: lic.join(','), page_size: '20' });
     if (opts.orientation) p.set('aspect_ratio', { landscape: 'wide', portrait: 'tall', square: 'square' }[opts.orientation]);
     if (large) p.set('size', 'large');
-    return getJson(`https://api.openverse.org/v1/images/?${p}`, 30000);
+    return getJson(`https://api.openverse.org/v1/images/?${p}`, anonymous ? 60000 : 30000, auth);
   };
-  // Its default order is led by 1024px Flickr files. Ask for the large ones first, and fill up from the rest only if needed.
-  const first = await call(true);
+  // Its default order is led by 1024px Flickr files. Ask for the large ones first, and fill up from the rest only if needed;
+  // the size filter is the slow part, so a timeout on it falls back to the plain search once.
+  const first = await call(true).catch((e) => (/no answer/.test(e.message) ? call(false) : Promise.reject(e)));
   let rows = first.results || []; let total = first.result_count ?? null;
   if (rows.filter((r) => !r.width || r.width >= opts.minWidth).length < opts.limit + 2) {
     const rest = await call(false).catch(() => null);
@@ -591,10 +634,12 @@ function fits(it, opts, skipped) {
 }
 async function search(query, opts) {
   const runners = opts.video ? { commons: searchCommonsVideo, archive: searchArchive, nasa: searchNasa } : { openverse: searchOpenverse, commons: searchCommons, aic: searchAic, met: searchMet };
-  // a slow service never holds the whole search: each source gets 45 s, the check 30 s
+  // a slow service never holds the whole search: each source gets 45 s (anonymous Openverse 130 s: its filtered search
+  // alone takes ~35 s and may need a second call), the check 30 s
   const deadline = (ms, message) => new Promise((_, reject) => setTimeout(() => reject(new Error(message)), ms).unref());
+  const limit = (key) => (key === 'openverse' && !ovCredentials() ? 130000 : 45000);
   const results = await Promise.all(opts.sources.map(async (key) => {
-    try { return { key, ...(await Promise.race([runners[key](query, opts), deadline(45000, 'no complete answer within 45 s; try again or search another --source')])) }; }
+    try { return { key, ...(await Promise.race([runners[key](query, opts), deadline(limit(key), `no complete answer within ${limit(key) / 1000} s; try again or search another --source`)])) }; }
     catch (e) { return { key, error: e.message, items: [] }; }
   }));
   // short clips first, then longer ones, then anything over the size cap; the source's own order within each

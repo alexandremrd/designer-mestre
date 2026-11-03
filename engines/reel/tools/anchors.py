@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-"""Finds the time of a phrase (or word) in palavras.json: every element entry is anchored to speech.
+"""Finds the time of a phrase (or word) in spoken_words.json: every element entry is anchored to speech.
 
-Usage: tools/anchors.py <folder with palavras.json> "exact phrase" ["another phrase" ...] [--n 1] [--end] [--json]
+Usage: tools/anchors.py <folder with spoken_words.json> "exact phrase" ["another phrase" ...] [--n 1] [--end] [--json]
   Prints the start (or the end, with --end) of the Nth occurrence of the phrase, in seconds. Error (exit 2) if the
   phrase does not exist: never guess a time. Compares ignoring accents, case or punctuation.
   With --json prints {"frase": {"i":…, "f":…, "palavras": […]}} for all the requested phrases.
-In code (style generator): `from ancoras import Ancoras; A = Ancoras("preparo"); t = A.at("três ferramentas")`.
+In code (style generator): `from anchors import Ancoras; A = Ancoras("prep"); t = A.at("três ferramentas")`.
 """
 import argparse, json, os, re, sys, unicodedata
 
@@ -13,7 +13,7 @@ def norm(s): return re.sub(r"[^\w ]", "", unicodedata.normalize("NFD", s).encode
 
 class Ancoras:
     def __init__(self, pasta_ou_arquivo):
-        arq = pasta_ou_arquivo if pasta_ou_arquivo.endswith(".json") else os.path.join(pasta_ou_arquivo, "palavras.json")
+        arq = pasta_ou_arquivo if pasta_ou_arquivo.endswith(".json") else os.path.join(pasta_ou_arquivo, "spoken_words.json")
         self.pal = json.load(open(arq, encoding="utf-8")); self.tok = [norm(p["t"])[0] if norm(p["t"]) else "" for p in self.pal]
     def achar(self, frase, n=1):
         alvo = norm(frase); k = 0

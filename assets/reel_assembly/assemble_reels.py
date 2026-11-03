@@ -30,6 +30,7 @@ AQUI = pathlib.Path(__file__).resolve().parent
 RAIZ_SKILL = AQUI.parents[1]
 sys.path.insert(0, str(AQUI.parent))
 import resources  # noqa: E402
+import caption_core  # noqa: E402
 import client_card  # noqa: E402
 import gpu_acceleration  # noqa: E402
 
@@ -125,16 +126,11 @@ def etapa_legenda():
         nucleo = re.sub(r"[^\w-]", "", texto).lower()
         unidas.append([inicio, fim, texto.upper() if nucleo in caixa_alta else texto])
 
-    grupos, atual = [], []
-    for palavra in unidas:
-        atual.append(palavra)
-        if len(atual) == 3 or re.search(r"[.,?]$", palavra[2]):
-            grupos.append(atual)
-            atual = []
-    if atual:
-        grupos.append(atual)
+    linhas = int(roteiro.get("caption_lines", 1))
+    blocos = caption_core.group([{"s": s, "e": e, "t": x} for s, e, x in unidas], 3 * linhas, None, caption_core.PUNCT_SHORT, pause=None)
+    grupos = [[[w["s"], w["e"], w["t"]] for w in b] for b in blocos]
 
-    tempo = lambda t: f"{int(t // 3600)}:{int(t % 3600 // 60):02d}:{t % 60:05.2f}"
+    tempo = caption_core.ass_time
     eventos, srt = [], []
     for i, grupo in enumerate(grupos):
         inicio = grupo[0][0]
@@ -144,15 +140,16 @@ def etapa_legenda():
         for palavra in grupo:
             nucleo = re.sub(r"[^\w-]", "", palavra[2]).lower()
             partes.append((marca + palavra[2] + normal) if nucleo in destaque else palavra[2])
-        eventos.append(f"Dialogue: 0,{tempo(inicio)},{tempo(fim)},C,,0,0,0,,{{\\fad(120,70)}}{' '.join(partes)}")
-        srt.append(f"{i + 1}\n{tempo(inicio).replace('.', ',')} --> {tempo(fim).replace('.', ',')}\n{' '.join(p[2] for p in grupo)}\n")
+        texto = caption_core.split_lines(partes, linhas, [p[2] for p in grupo])
+        eventos.append(f"Dialogue: 0,{tempo(inicio)},{tempo(fim)},C,,0,0,0,,{{\\fad(120,70)}}{texto}")
+        srt.append(f"{i + 1}\n{caption_core.srt_time(inicio)} --> {caption_core.srt_time(fim)}\n{' '.join(p[2] for p in grupo)}\n")
     contorno = "&H99" + client_card.cor_para_legenda(cor_contorno)[4:]
     cabecalho = ("[Script Info]\nScriptType: v4.00+\nPlayResX: 1080\nPlayResY: 1920\nWrapStyle: 2\n[V4+ Styles]\n"
                  "Format: Name,Fontname,Fontsize,PrimaryColour,SecondaryColour,OutlineColour,BackColour,Bold,Italic,Underline,StrikeOut,ScaleX,ScaleY,Spacing,Angle,BorderStyle,Outline,Shadow,Alignment,MarginL,MarginR,MarginV,Encoding\n"
                  f"Style: C,{fonte},{roteiro['caption_font_size']},{ass_texto},{ass_texto},{contorno},&H00000000,-1,0,0,0,100,100,0,0,1,3,1,2,140,140,530,1\n"
                  "[Events]\nFormat: Layer,Start,End,Style,Name,MarginL,MarginR,MarginV,Effect,Text\n")
     (reel / "caption.ass").write_text(cabecalho + "\n".join(eventos) + "\n", encoding="utf-8")
-    (reel / "legenda.srt").write_text("\n".join(srt), encoding="utf-8")
+    (reel / "caption.srt").write_text("\n".join(srt), encoding="utf-8")
     print("caption:", len(grupos), "groups")
 
 
@@ -183,20 +180,35 @@ def etapa_corpo():
     moldura = caminho_da_matriz("Reels template - frame and logo", "Trabalho/moldura_logo.png")
     fontes = pasta_de_fontes_para_ffmpeg()
     opcao_fontes = f":fontsdir='{fontes}'" if fontes else ""
-    filtro = (
-        f"[0:v]scale=1080:1920:flags=lanczos,setsar=1,fps=30,"
+    resto = (
+        f"setsar=1,fps=30,"
         f"scale=w='trunc(1080*({z})/2)*2':h='trunc(1920*({z})/2)*2':eval=frame:flags=bicubic,"
         f"crop=1080:1920:'(in_w-1080)/2':'(in_h-1920)*{ancora}'[b];"
         "[1:v]format=rgba,fade=t=in:st=0:d=0.6:alpha=1[g];[b][g]overlay=0:0[b1];[b1][2:v]overlay=0:0[b2];"
         "[b2][3:v]overlay=0:0:shortest=1[b3];"
         f"[b3]subtitles=Trabalho/reel/caption.ass{opcao_fontes},scale=out_color_matrix=bt709:out_range=tv,format=yuv420p[v]"
     )
-    comando = [FF, "-y", "-i", str(corte / "clean.mp4"),
-               "-loop", "1", "-t", f"{duracao:.3f}", "-i", str(degrade),
-               "-loop", "1", "-t", f"{duracao:.3f}", "-i", str(moldura),
-               "-framerate", "30", "-i", str(reel / "frames" / "%04d.png"),
-               "-filter_complex", filtro, "-map", "[v]", "-t", f"{duracao:.3f}", "-an"] + codec_de_video() + [str(reel / "body_video.mp4")]
-    rodar(comando)
+    def comando(gpu):
+        # GPU: decode and the source -> 1080x1920 scale (the heaviest step) run on CUDA; the per-frame zoom, the overlays and
+        # the caption have no CUDA filter, so they continue on the CPU, and the encode goes to NVENC
+        entrada = (["-hwaccel", "cuda", "-hwaccel_output_format", "cuda"] if gpu else []) + ["-i", str(corte / "clean.mp4")]
+        inicio = "[0:v]scale_cuda=1080:1920:interp_algo=lanczos,hwdownload,format=nv12," if gpu else "[0:v]scale=1080:1920:flags=lanczos,"
+        return ([FF, "-y"] + entrada +
+                ["-loop", "1", "-t", f"{duracao:.3f}", "-i", str(degrade),
+                 "-loop", "1", "-t", f"{duracao:.3f}", "-i", str(moldura),
+                 "-framerate", "30", "-i", str(reel / "frames" / "%04d.png"),
+                 "-filter_complex", inicio + resto, "-map", "[v]", "-t", f"{duracao:.3f}", "-an"] + codec_de_video() + [str(reel / "body_video.mp4")])
+    if gpu_acceleration.cuda_scale_ok(FF):
+        r = subprocess.run(comando(True), capture_output=True, text=True, encoding="utf-8", errors="replace")
+        if r.returncode == 0:
+            print("[gpu] body: CUDA decode and scale", flush=True)
+        else:
+            motivo = next((l for l in r.stderr.splitlines() if re.search(r"rror|nvalid|ailed", l)), "unknown error")[:160]
+            print(f"[gpu] body on CUDA failed ({motivo}); repeating on the CPU", flush=True)
+            rodar(comando(False))
+    else:
+        print("[gpu] scale_cuda unavailable in this ffmpeg; body scale on the CPU", flush=True)
+        rodar(comando(False))
     rodar([FF, "-y", "-sseof", "-0.1", "-i", str(reel / "body_video.mp4"), "-frames:v", "1", "-update", "1", str(reel / "last_frame.png")])
     print("body_video.mp4 ok")
 

@@ -224,4 +224,3 @@ Keep it short: the image does the work. Don't attach variants, boards or icon se
 | `references/identity-system.md` | Kit of parts, sub-brands, dynamic identities, patterns, motion, guidelines, rollout |
 | `references/redesign.md` | Refresh vs. rebrand, equity audit, refresh techniques |
 | `references/critique.md` | Structured logo critique with scorecard and fixes |
-| `references/library-guide.md` | What's in the 1,400+ logo library, insights, curated examples by technique |

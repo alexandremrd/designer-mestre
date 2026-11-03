@@ -15,6 +15,7 @@ Index of everything the skill executes. Look here before creating a new function
 | `check_deck.py` | Checks the HTML deck (structure, file contract) before delivering | `html.md` §8.5 | `validate_deck.py` |
 | `check_export.py` | Checks the exported file: format, color, audio, dimensions | `quality.md` §K | — |
 | `check_html.py` | Checks the HTML page: non-ASCII bytes, single file, placeholders, SEO, images without alt text, horizontal scroll, screen captures | `html.md` §9 | `qa_html.py` |
+| `text_to_svg_path.py` | Turns a word into one SVG path with overlapping contours unioned (display lettering without inner lines, gradient shine); needs `fonttools` and `skia-pathops` | `html.md` §4 Typography | — |
 | `check_image.py` | Visual checking tools: contrast between colors, comparison board, palette of an image, preview × Figma parity, object bounding-box crop | `quality.md` §G | `img_qa.py` |
 | `check_video.py` | Checks the MP4 before showing: format, frame 0, pauses, animated entrance and exit | `video.md` §8 | `gate_video.py` |
 | `consent.py` | Records and queries the user's one-time "yes" per capability | `operations.md` §0.6, `html.md` | — |
@@ -22,6 +23,7 @@ Index of everything the skill executes. Look here before creating a new function
 | `generate_audio.py` | Voiceover and sound effects via voice API | `video.md` §3 | — |
 | `generate_image.py` | Generates an image through the available engine, upscales and logs it in `IA\` | `image.md` Part A | — |
 | `caption_reels.py` | Captions, overlay, and closing on already-cut video; syncs captions; transcribes on the GPU with `--whisper-engine auto` (faster-whisper large-v3-turbo, whisper.cpp as reserve) and caption `--style` | `video.md` §6.2 | `reels_legenda.py` |
+| `caption_core.py` | Caption engine shared by `caption_reels.py` and `assemble_reels.py`: word blocks, 1 or 2 balanced lines, ASS colors and times | `video.md` §2, §6.2 | — |
 | `product_mask.py` | Finds the product in the original and returns the mask for cutout and treatment | `treat_image.mjs` | — |
 | `local_engine.py` | Analyzes the PC, installs and starts the local image generator (with the user's approval) | `image.md` Part A | — |
 | `resources.py` | Registry of the resource root paths and **catalog** of what the skill uses: `catalog` (installed, real size, what is missing), `explain <chave>` (the short download question), and `outside` (what stayed outside the root) | all; `operations.md` §0.7 | — |
@@ -61,4 +63,4 @@ The whole folder was called `reel_matriz` and held the assembly of a client's vi
 | `treat_image.mjs` | uses `sharp` (libvips), which has no GPU acceleration; it is the last resort without a generator |
 | `product_mask.py` | CPU OpenCV template matching; the whole image is processed at once and the task is short |
 | `check_*` (`deck`, `export`, `video`), `client_card.py`, `verify_package.py`, `skill_alerts.py` | light analysis of text, files, and frames with Pillow, numpy, or stdlib |
-| `ffmpeg` filters of `assemble_reels.py` (scale, composition) | run on CPU; the encode goes to NVENC. Moving the scale to the GPU is a pending item |
+| `ffmpeg` filters of `assemble_reels.py` | the body scale runs on the GPU (`scale_cuda`, CPU fallback with the reason printed); the per-frame zoom (`eval=frame`) and the subtitle burn-in have no CUDA filter and run on the CPU; the encode goes to NVENC |

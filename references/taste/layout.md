@@ -121,7 +121,7 @@ void with the picture, the type, a step in ground tone or a field of flat colour
 - No stretch of the page taller than about half a screen holds nothing at all. In the study, runs of a
   screen or more with nothing in the page were almost always scroll distance for a pinned scene; the
   pinned stage must then hold something at every scroll position.
-- Content is in place on the first paint. An entrance moves what is already there (see `motion.md`);
+- Content is in place on the first paint. An entrance moves what is already there (see `references/motion/` (design-motion-principles; the upstream motion.md is not shipped));
   it never leaves a screen of bare ground while the words arrive.
 - Size a section to its content. `min-height: 100vh` belongs to a section that fills the screen, not
   to a footer or a lone heading.

@@ -1,6 +1,37 @@
 # KV, Brand Book, Logo and Design System Module (84 Reference Design Systems)
 
-Unified module for extracting/validating Visual Identity (Cold Start), creating a Brand Book and a new Logo, consulting the 84 real bundled design systems (`engines\uiux`) and structuring/exporting Design System tokens (`tokens.css` and `DESIGN.md`). Extract only what is accessible (`operations.md` §6).
+One flow: extract/validate Visual Identity (Cold Start), brand asset protocol, Brand Book, new Logo, the 84 real bundled design systems (`engines\uiux`) and Design System token export (`tokens.css`, `DESIGN.md`). Extract only what is accessible (`operations.md` §6).
+
+## 0. Input profile (decides what switches on)
+| Situation | Switches on | Skipped |
+|---|---|---|
+| New client / `CLIENTE_NOVO: SIM` / no `_DESIGN\design_system.md` | Part A §1, §1.1, §2 in full (once); then `CLIENTE_NOVO: NÃO` | B, C (unless requested) |
+| KV partial or empty (existing client) | Part A §2 only for the pending items relevant to the request (§2.9); §1 only what the request needs; full review only if requested | B, C |
+| KV validated (`STATUS_KV: VALIDADO`, fast-track) | read `design_system.md` and go; no Cold Start, no new analysis (§2.10) | A §2, B, C |
+| Brand asset for a named brand in any piece | Part A §1.1 | rest of A |
+| Brand book request | Part B §1 | B §2 |
+| New logo request (only with "new"/create verb) | Part B §2 | B §1 |
+| Design system or token export | Part C §1, §2 (source: `design_system.md` `VALIDADO`); A §2.7 if the client has no KV | A §2 beyond §2.7 |
+| Site extraction | Part A §2.4 (+ §2.5 if positioning); Part C §2 if export is requested | B |
+
+**Conflicts decided:**
+- Reference, inspiration (84 systems, `--design-system` suggestion) or user reference vs the client's approved KV: **KV wins** (U11). Territories from §2.5 are hypotheses, never a new approved KV.
+- Asset vs rule: logo, product image and interface capture outweigh color and font (§1.1). Official channel outweighs aggregator; aggregator only for a third-party brand merely cited.
+- "Brand"/"identity" without "new" or a create verb: apply the existing KV; in doubt, ask in 1 line (B §2).
+- New empty fields in an old template vs `VALIDADO`: no downgrade (§2.10). Partial KV vs full study: pending items only.
+- Blocked access: `operations.md` §6. Paid or broad scraping: confirm first (§2.5).
+
+**Gates (single table; failed = do not show, do not say done):**
+| Gate | Command or method | Fails when | See |
+|---|---|---|---|
+| Asset check | open the file; logo light + dark; product image ≥ 2000 px, more than one angle; current capture without third-party data | empty page of a few bytes; silhouette or generic gradient used instead | A §1.1 |
+| Logo present | Law 3: use the original | not found and no stop-and-ask | A §1.1, B §2 |
+| KV status | `STATUS_KV` / `CLIENTE_NOVO` tags and `## 5. Decisões Pendentes` | pending item hidden, or tag not updated | A §2.9 |
+| Brand book asset review | audit `✓` / `⚠` / `✗` + page estimate before composing | generated without audit; invented Pantone | B §1 |
+| Logo SVG | `python -I assets\logo\svg_audit.py`; `preview_sheet.py` (16/32 px, backgrounds, 1 color, blur) | fails the audit or at 16 px; `<text>` left in final file | B §2 |
+| Concept checkpoint | show the 3 concepts and wait for the yes | kit delivered before the yes | B §2 |
+| Contrast | `check_image.py contrast`; `*-foreground` pair ≥ 4.5:1 | contrast below 4.5:1 | C §1, §2 |
+| Design system preview | single HTML preview approved before export | export without approval | C §2 |
 
 ---
 
@@ -61,8 +92,8 @@ Total failure: no logo, stop and ask; physical product, ask the user or use an i
 8. Extract and consolidate in `_DESIGN\design_system.md`:
    - concept, feeling and symbol;
    - logo versions (name · layout · color · bbox);
-   - palette by role (HEX, RGB, CMYK, **4-level Surface Ladder** `canvas` → `surface-1`..`surface-4` + `hairline`, semantic colors, WCAG contrast, accent scarcity rule and forbidden colors);
-   - typography by level (official with weight, case, **tracking polarity** — negative in display, neutral in body, positive in eyebrow/label — + Google Fonts substitute for Figma/SVG);
+   - palette by role (HEX, RGB, CMYK, **4-level Surface Ladder** `canvas` → `surface-1`..`surface-4` + `hairline` (Part C §1), semantic colors, WCAG contrast, accent scarcity rule and forbidden colors);
+   - typography by level (official with weight, case, **tracking polarity** — negative in display, neutral in body, positive in eyebrow/label; values in Part C §1 — + Google Fonts substitute for Figma/SVG);
    - graphics, SVG archetypes, composition/breathing room/logo position/footer, photography (theme · people · framing · light · treatment · relation to the copy), safe zones, tone of voice and pillars, What to Do (Approved) and What Not to Do (Vetoes);
    - offers/products mentioned in the sources, in 1–3 lines per item with the origin and degree of confirmation; separate observed commercial description from confirmed technical attribute. This guides the next scene without inventing benefits.
 9. Contradictions or essential missing items (logo, palette or font) go to `## 5. Decisões Pendentes` keeping `PARCIAL`; when complete, mark `STATUS_KV: VALIDADO`.
@@ -176,3 +207,17 @@ components:
 8. `Do's and Don'ts` (derived from the client's `## 2. O QUE FAZER` and `## 1. NÃO FAZER`)
 9. `Responsive Behavior & Iteration Guide` (Breakpoints `1440 / 1280 / 1024 / 768 / 480 px`, Touch Targets `≥ 44px`, Collapsing Strategy).
 3. **Single HTML preview:** visual catalog with `#HEX` swatches and WCAG contrast (`check_image.py contrast` (contrast, palette, board and image parity)), typographic scale, buttons in all states (`Primary`, `Hover`, `Secondary`, `Ghost`, `Disabled`), cards on the surface ladder and Light/Dark toggle.
+
+---
+
+## Recurring errors and what prevents them
+| Error | Prevention |
+|---|---|
+| Silhouette or generic gradient instead of the real product; color and font without logo, product or interface | Part A §1.1: asset first; total failure = stop and ask |
+| Aggregator logo for the client; demo color from a capture taken as brand color | client's own file (Law 3); colors only from the official file |
+| Existing logo altered, or a new logo created when the user said only "brand"/"identity" | Part B §2 trigger; Law 3 |
+| Third-party brand imitated; library search that does not exist (`search_library.py`, `--refs-industry`) | study category by internet research only, never copy or trace |
+| Invented Pantone, market share, audience, result, offer or technical attribute | omit (`✗`) or record as Gap; never fill by plausibility |
+| Inference or territory saved as KV; raw research dumped into memory | evidence matrix; durable synthesis only; report separate |
+| Reading only 2–3 pieces; loose adjectives ("premium", "modern") | board of all pertinent pieces; verifiable elements only |
+| Heavy black drop-shadows in dark mode; tokens named by color; accent spread | Part C §1: surface ladder + hairline; name by function; chromatic scarcity |
